@@ -96,6 +96,14 @@ class phpbb_infractions
 		$data['duration'] = (int) $infraction['duration'];
 		$data['expire'] = time() + ($data['duration'] * 60); // Expire is in minutes
 		
+		if(!is_numeric($infraction['user_id']))
+		{
+			throw new Exception('user id not number');
+		}
+		
+		$sql = 'SELECT username FROM ' . PHPBB_USERS . ' WHERE user_id = ' . $infraction['user_id'];
+		$db->sql_query($sql);
+		
 	
 		
 	}
