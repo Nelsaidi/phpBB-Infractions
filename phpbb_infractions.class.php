@@ -8,6 +8,7 @@ class phpbb_infractions
 	// Infraction types
 	const WARNING = 0;
 	const INFRACTION = 1;
+	// const NOTE = 2;
 	
 	// Status levels for an infraction
 	const ACTIVE = 0;
@@ -33,6 +34,7 @@ class phpbb_infractions
 	 * @param $user_id 
 	 * @param $template_id
 	 * @return array
+	 * @since 0.1
 	 */
 	public function build_from_template($user_id, $template_id)
 	{
@@ -66,15 +68,26 @@ class phpbb_infractions
 	{
 		// All permision checks done outside of function, so no $user here, unlike build template which is a make easy function.
 			
-		global $db;
+		global $db, $config;
 				
 		// Make sure the main stuff exists - Careful of what ! means, = zero and not only blank.
-		if(!isset($infraction['issuer_id'], $infraction['user_id'], $infraction['infraction_text'], $infraction['infraction_type']))
+		if(!isset($infraction['issuer_id'], $infraction['user_id'], $infraction['text'], $infraction['type']))
 		{
 			throw new Exception('$infraction insufficient data')
 		}
 		
+		if($infraction['type'] !== (0 OR 1 OR 2))
+		{
+			throw new Exception('Invalid type');
+		}
 		
+		// Duration zero implies infinite duration, so,  if it doesnt exist then take the default duration time (default selected on entry screen)
+		if(!isset($infraction['duration']))
+		{
+			$infraction['duration'] = (int) $config['infraction_default_time'];
+		}
+		
+		// ==== EXPIRE
 		if(!is_numeric($infraction['duration']))
 		{
 			throw new Exception();
@@ -82,6 +95,8 @@ class phpbb_infractions
 		
 		$data['duration'] = (int) $infraction['duration'];
 		$data['expire'] = time() + ($data['duration'] * 60); // Expire is in minutes
+		
+	
 		
 	}
 	

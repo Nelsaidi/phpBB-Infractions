@@ -1,5 +1,5 @@
 <?php
-
+// @since 0.3
 class phpbb_infraction_actions
 {
 	/**

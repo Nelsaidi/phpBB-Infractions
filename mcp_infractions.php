@@ -1,17 +1,15 @@
 <?php
 
+/**
+ * The controller
+ */
 
-class mcp_warn
+class mcp_infractions
 {
-	var $p_master;
-	var $u_action;
+	public $p_master;
+	public  $u_action;
 
-	function mcp_warn(&$p_master)
-	{
-		$this->p_master = &$p_master;
-	}
-
-	function main($id, $mode)
+	public function main($id, $mode)
 	{
 		global $auth, $db, $user, $template;
 		global $config, $phpbb_root_path, $phpEx;
@@ -23,6 +21,28 @@ class mcp_warn
 			list($action, ) = each($action);
 		}
 
-		$this->page_title = 'MCP_WARN';
+		$this->page_title = 'MCP_INFRACTION';
 
 		add_form_key('mcp_warn');
+		
+		switch($mode)
+		{
+			case 'warn_user':
+				$this->warn_user_view();
+				$this->tpl_name = 'mcp_warn_front';			
+			break;
+				
+			// case 'warn_post':
+		}
+	}
+	
+	/**
+	 * The view method for warning a user
+	 *
+	 * @since 0.1
+	 */
+	public function warn_user_view()
+	{
+	
+	
+	}
