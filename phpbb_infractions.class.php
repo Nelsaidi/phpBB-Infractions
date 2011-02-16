@@ -74,12 +74,14 @@ class phpbb_infractions
 			throw new Exception('$infraction insufficient data')
 		}
 		
-		$sql_data = array(
-			'issuer_id'	=> (int) $infraction['issuer_id'],
-			'user_id'		=> (int) $infraction['user_id'],
-				
 		
-		);
+		if(!is_numeric($infraction['duration']))
+		{
+			throw new Exception();
+		}
+		
+		$data['duration'] = (int) $infraction['duration'];
+		$data['expire'] = time() + ($data['duration'] * 60); // Expire is in minutes
 		
 	}
 	
