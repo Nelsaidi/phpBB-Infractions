@@ -14,6 +14,7 @@ Notes
 
 v0.1.1
 ----------
+- **DOCUMENTED CODE**
 - Basic implementation of infraction points
 - Warn a user for a post
 - Warn a user
@@ -34,6 +35,7 @@ v0.2
 - Meaningful error dealing
 - Actions, ban or move to group on meeting conditions
 - Possible infraction + warning durations
+- Basic documentation
 
 ==> Release onto eUK
 ==> An even better infraction system now exists
@@ -63,6 +65,7 @@ v0.4-beta
 v0.5
 ----------
 - Final bugfixes/cleanup/etc
+- Finalise documentation
 
 v1.0
 ----------

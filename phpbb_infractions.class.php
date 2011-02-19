@@ -62,7 +62,9 @@ class phpbb_infractions
 	}
 	
 	/**
-	 * 
+	 *
+	 * We need to centralise to things, a main issue function, and a wrapper for it which deals with permissions
+	 * This will help because we will have multiple places infractions can be issued.
 	 */
 	public function issue(array $infraction)
 	{
@@ -76,7 +78,7 @@ class phpbb_infractions
 			throw new Exception('$infraction insufficient data')
 		}
 		
-		if($infraction['type'] !== (0 OR 1 OR 2))
+		if($infraction['type'] !== (0 OR 1))
 		{
 			throw new Exception('Invalid type');
 		}
@@ -101,10 +103,46 @@ class phpbb_infractions
 			throw new Exception('user id not number');
 		}
 		
-		$sql = 'SELECT username FROM ' . PHPBB_USERS . ' WHERE user_id = ' . $infraction['user_id'];
-		$db->sql_query($sql);
+		// === uSER
+		// Option of username or user ID
 		
-	
+		if(!isset($infraction['user_id'])
+		{
+			// Find the user id
+			// Make username "clean", compare to user DB
+			
+			// **TODO**
+			
+			// ....
+			$row = $db->sql_fetchrow($result);
+			$username = $row['username']; // Take it out of the DB
+		}
+		else
+		{
+			// User ID supplied, find the username
+			// Also counts as the check of both the infraction and username are added
+			$sql = 'SELECT username FROM ' . PHPBB_USERS . ' WHERE user_id = ' . $infraction['user_id'];
+			$result = $db->sql_query($sql);
+			$username = $db->sql_fetchfield('username', $result);
+			
+			if($username === false)
+			{
+				throw new Exception('invalid user');
+			}
+			
+			if(isset($infraction['username']) && $username != $infraction['username'])
+			{
+				throw new Exception('Mismatch of username');
+			}
+		}
+		
+		// Dealth with expiry, duration, username, userid
+		
+		// === PERSON ADDING BAN
+		// Hmmm, we need to validate the person adding the ban right?
+		
+		// === REASONS
+		
 		
 	}
 	
