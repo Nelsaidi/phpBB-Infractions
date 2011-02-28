@@ -63,20 +63,90 @@ class phpbb_infractions
 	
 	
 	/**
-	 * Issues an infraction
-	 * Uses $user array, so, yeah.
-	 * Checks for permissions too
-	 *
+	 * Core of add an infraction
+	 * Validates data is of correct type, adds to database and sends a PM
+	 * To add an infraction, use $user and phpbb_infractions::issue
+	 * 
+	 * @param array $infraction
 	 * @return bool 
 	 */
-	private function issue()
+	private function issue(array $infraction)
 	{
-		global $auth, $user, $db, $config;
-	
-		// Does the user have the permision?
+		// All permision checks done outside of function, so no $user here, unlike build template which is a make easy function.
+			
+		global $db, $config;
+				
+		// Make sure the main stuff exists - Careful of what ! means, = zero and not only blank.
+		if(!isset($infraction['issuer_id'], $infraction['user_id'], $infraction['text'], $infraction['type']))
+		{
+			throw new Exception('$infraction insufficient data')
+		}
+		
+		if($infraction['type'] !== (0 OR 1))
+		{
+			throw new Exception('Invalid type');
+		}
+		
+		// Duration zero implies infinite duration, so,  if it doesnt exist then take the default duration time (default selected on entry screen)
+		if(!isset($infraction['duration']))
+		{
+			$infraction['duration'] = (int) $config['infraction_default_time'];
+		}
+		
+		// ==== EXPIRE
+		if(!is_numeric($infraction['duration']))
+		{
+			throw new Exception();
+		}
+		
+		$data['duration'] = (int) $infraction['duration'];
+		$data['expire'] = time() + ($data['duration'] * 60); // Expire is in minutes
+		
+		if(!is_numeric($infraction['user_id']))
+		{
+			throw new Exception('user id not number');
+		}
+		
+			
+			
+		// === PERSON ADDING BAN
+		// Coming from $user, assume safe.
+		
+		// Post
+		if(isset($infraction['post_id']))
+		{
+			if(!is_numeric($infraction['post_id']))
+			{
+				throw new Exception('post id not int');
+			}
+			
+			$data['post_id'] = $infraction['post_id'];
+			
+			// We can use this to quote part of the user's post, issue is that what if its already been fixeD?
+		}
+			
+		
+		// === Adding to DB
+		$
+		
+		// Update users table
+		$sql = "UPDATE ..";
 		
 		
-	
+		// === Informing the user, send them a PM
+		
+		// Add to admin log AND MOD LOG
+		/*
+		// We add this to the mod log too for moderators to see that a specific user got warned.
+		$sql = 'SELECT forum_id, topic_id
+			FROM ' . POSTS_TABLE . '
+			WHERE post_id = ' . $post_id;
+		$result = $db->sql_query($sql);
+		$row = $db->sql_fetchrow($result);
+		$db->sql_freeresult($result);
+
+		add_log('mod', $row['forum_id'], $row['topic_id'], 'LOG_USER_WARNING', $user_row['username']);
+		*/
 	}
 	
 	/**
