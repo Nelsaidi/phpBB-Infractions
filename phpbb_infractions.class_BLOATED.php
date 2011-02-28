@@ -63,14 +63,10 @@ class phpbb_infractions
 	
 	
 	/**
-	 * Core of add an infraction
-	 * Validates data is of correct type, adds to database and sends a PM
-	 * To add an infraction, use $user and phpbb_infractions::issue
-	 * 
-	 * @param array $infraction
-	 * @return bool 
+	 * We need to centralise to things, a main issue function, and a wrapper for it which deals with permissions
+	 * This will help because we will have multiple places infractions can be issued.
 	 */
-	private function add_infraction(array $infraction)
+	public function issue(array $infraction)
 	{
 		// All permision checks done outside of function, so no $user here, unlike build template which is a make easy function.
 			
@@ -107,10 +103,48 @@ class phpbb_infractions
 			throw new Exception('user id not number');
 		}
 		
+		// === uSER
+		// Option of username or user ID
+		
+		if(!isset($infraction['user_id'])
+		{
+			// Find the user id
+			// Make username "clean", compare to user DB
 			
+			// **TODO**
 			
+			// ....
+			$row = $db->sql_fetchrow($result);
+			$username = $row['username']; // Take it out of the DB
+		}
+		else
+		{
+			// User ID supplied, find the username
+			// Also counts as the check of both the infraction and username are added
+			$sql = 'SELECT username FROM ' . PHPBB_USERS . ' WHERE user_id = ' . $infraction['user_id'];
+			$result = $db->sql_query($sql);
+			$username = $db->sql_fetchfield('username', $result);
+			
+			if($username === false)
+			{
+				throw new Exception('invalid user');
+			}
+			
+			if(isset($infraction['username']) && $username != $infraction['username'])
+			{
+				throw new Exception('Mismatch of username');
+			}
+		}
+		
+		// Dealth with expiry, duration, username, userid
+		
 		// === PERSON ADDING BAN
-		// Coming from $user, assume safe.
+		// Hmmm, we need to validate the person adding the ban right? We assume its been validated and is allowed, because most will use the $user?
+		// But this is the underlying function, so all we check is the person exists?
+		
+		
+		// === Reason
+		// We assume its already clean (request var and what not, we will escape, however
 		
 		// Post
 		if(isset($infraction['post_id']))
@@ -120,14 +154,13 @@ class phpbb_infractions
 				throw new Exception('post id not int');
 			}
 			
-			$data['post_id'] = $infraction['post_id'];
-			
-			// We can use this to quote part of the user's post, issue is that what if its already been fixeD?
-		}
+			// Can potentially use this to quote the message, maybe a setting for it? Issue is mods editting the post first and then warning - maybe post title?
+			// ATM just validation post exists and is by user.
+			$sql = 'SELECT text, title, poster_id FROM ' . PHPBB_POSTS . ' WHERE post_id = ' . $infraction['post_id'];
+			$
 			
 		
 		// === Adding to DB
-		$
 		
 		// Update users table
 		$sql = "UPDATE ..";
