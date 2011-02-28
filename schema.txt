@@ -7,10 +7,10 @@ phpbb_infractions
 	post_id INT(20)
 	issuer_id INT(20)
 	
-	ponts INT(11) 
+	points INT(11) 
 	duration INT(11)
-	issue_date INT(11)
-	expire_date INT(11)
+	issue_time INT(11)
+	expire_time INT(11)
 	
 	reason TEXT
 
