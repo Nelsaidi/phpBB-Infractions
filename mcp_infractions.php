@@ -1,9 +1,25 @@
 <?php
 
 /**
- * The controller
+ * Main Infractions Module
+ *
+ * @todo Put it into classes, I have my reasons for why I done it like this, it'll be nicer ... eventually.
+ * @author Nelsaidi
  */
 
+// For sake of simplicity (for development)
+define('INFRACTIONS_TABLE', 'phpbb_infractions');
+define('INFRACTIION_TEMPLATES_TABLE', 'phpbb_infraction_templates');
+
+define('INFRACTIONS_WARNING', 0);
+define('INFRACTIONS_INFRACTION', 1);
+// const NOTE = 2;
+
+define('INFRACTIONS_ACTIVE', 0);
+define('INFRACTIONS_EXPIRED', 1);
+define('INFRACTIONS_REMOVED', 2);
+
+ 
 class mcp_infractions
 {
 	public $p_master;
@@ -67,7 +83,7 @@ class mcp_infractions
 			$post_data = $db->sql_fetchrow($result);
 			$db->sql_freeresult($result);
 			
-			if(empty($post_data))
+			if(sizeof($post_data) == 0)
 			{
 				trigger_error('post does not exist');
 			}
@@ -80,7 +96,7 @@ class mcp_infractions
 		}
 		
 		// Get user data
-		$sql = "SELECT * FROM " . USERS_TABLE . " WHERE user_id = $user_id";
+		$sql = 'SELECT * FROM ' . USERS_TABLE . " WHERE user_id = $user_id";
 		$result = $db->sql_query($sql);
 		$user_row = $db->sql_fetchrow($result);
 		$db->sql_freeresult($result);
@@ -125,12 +141,111 @@ class mcp_infractions
 			'issue_time'	=> time()
 		);
 		
+		// Assign a post ID if it exists
 		if(isset($post_data))
 		{
 			$infraction['post_id'] = $post_data['post_id'];
 		}
 		
-		// Get additional 
+		// Load additional information
+		$infraction_template = request_var('infraction_template', 0);
 		
-	
-	}
+		if($infraction_template != 0)
+		{
+			// User has selected a template and not custom, load it
+			$sql = 'SELECT * FROM ' . INFRACTIION_TEMPLATES_TABLE . " WHERE template_id = $infraction_template";
+			$result = $db->sql_query($sql);
+			$template_row = $db->sql_fetchrow($result);
+			$db->sql_freeresult($result);
+			
+			if(sizeof($template_row) == 0)
+			{
+				trigger_error('invalid template selected');
+			}
+			
+			// RHS already validated pre db insertion.
+			$infraction = array_merge($infraction, array(
+				'type'		=> $template_row['type'],
+				'points'		=> $template_row['points'],
+				'duration'	=> $template_row['duration'],
+				'reason'		=> $template_row['reason']
+			));
+		
+		}
+		else
+		{
+			// User chose custom, validate correctness
+		
+			$infraction_type = request_var('type', 0);
+			if($infraction_type > INFRACTIONS_INFRACTION)
+			{
+				trigger_error('invalid type');
+			}
+			
+			$infraction_points = request_var('points', 0);
+			// Negative infraction or zero points?
+			if($infraction_points < 1)
+			{
+				if($infraction_type == INFRACTIONS_INFRACTION)
+				{
+					trigger_error('cannot issue infraction with zero points, try a warning');
+				}
+				else
+				{
+					trigger_error('dude, negative points??');
+				}
+			}
+
+			// Make sure points are in range with maximum
+			/*
+			if($infraction_points > $config['infraction_max_points_issue'])
+			{
+				trigger_error('points too large');
+			}
+			*/
+			
+			$infraction_duration = request_var('duration', 0);
+			
+			$infraction_reason = request_var('reason', '');
+			
+			// Empty reason? Maybe config var?
+			/*
+			if(strlen($infraction_reason) == 0 && $config['infraction_empty_reason'] == false)
+			{
+				trigger_error('reason cannot be empty');
+			}
+			*/
+			
+			// Validated, merge
+			$infraction = array_merge($infraction, array(
+				'type'		=> $infraction_type,
+				'points'		=> $infraction_points,
+				'duration'	=> $infraction_duration,
+				'reason'		=> $infraction_reason,
+			));
+		}
+		
+		// Calculate expire from duration, 0 = non expiring
+		$infraction['expire_time'] = ($infraction['duration'] == 0) ? 0 : time() + $infraction['duration'] * 60;
+		
+		if($infraction['duration'] == 0)
+		{
+			$infraction['expire_time'] = 0;
+		}
+		else
+		{
+			$infraction['expire_time'] = $infraction['duration'] * 60 + time(); // Duration in minutes
+		}
+		
+		// Add the thing
+		// TODO : Move this into the class ma tings
+		$sql = 'INSERT INTO ' . TABLE_INFRACTIONS . ' WHERE ' . $db->sql_build_array('SELECT', $infraction);
+		$infraction_saved = $db->sql_query($sql);
+		
+		if($infraction_saved === false)
+		{
+			throw new Exception('failed - check if phpBB handles failure');
+		}
+		
+		// Notify the user
+		

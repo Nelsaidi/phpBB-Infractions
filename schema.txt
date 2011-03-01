@@ -13,7 +13,6 @@ phpbb_infractions
 	expire_time INT(11)
 	
 	reason TEXT
-
 	
 	## Was the user banned? The banned flag tells us this
 	## No ID Because bans expire/are removed, duration leaves some record as to how long it was banned for, and the reason
@@ -34,4 +33,5 @@ phpbb_infraction_templates
 phpbb_infraction_actions
 	## ...
 	
+
 	
