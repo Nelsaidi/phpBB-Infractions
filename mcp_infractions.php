@@ -76,21 +76,21 @@ class mcp_infractions
 			// Check if the user has already been warned for this post
 			// TODO
 			
-			$sql = "SELECT poster_id, post_id FROM " . POSTS_TABLE . " WHERE post_id = $post_id";
+			$sql = "SELECT * FROM " . POSTS_TABLE . " WHERE post_id = $post_id";
 			
 			$result = $db->sql_query($sql); // Do we cache it for ~60 seconds, saves querying again but maybe another mod updates the post?
 			
-			$post_data = $db->sql_fetchrow($result);
+			$post_row = $db->sql_fetchrow($result);
 			$db->sql_freeresult($result);
 			
-			if(sizeof($post_data) == 0)
+			if(sizeof($post_row) == 0)
 			{
 				trigger_error('post does not exist');
 			}
 			
 			if($user_id == 0)
 			{
-				$user_id = $post_data['poster_id'];
+				$user_id = $post_row['poster_id'];
 			}
 			
 		}
@@ -114,18 +114,42 @@ class mcp_infractions
 		// Is someone being warned? If not, then just show them the view
 		if(!isset($_POST['submit']))
 		{
-			// Being warned for a post
 			$template->assign_vars(array(
 				'INFRACTION_USERNAME'	=> $user_row['username'],
 				'INFRACTION_USER_ID'	=> $user_row['user_id'],
 				'INFRACTION_TYPE'		=> $type,
 			));
 			
+			/**
+			Future release, display a nice user info bar, like
+			[AVATAR] USERNAME
+			[      ] INFRACTION POINTS
+			[      ] 
+			
+			<-- ADD INFRACTion FORM -->
+			(implies nice use of jquery and one page, I LIKE!!)
+			
+			<-- INFRACTION HISTORY?? -->
+			with them banded row colours
+			*/
+			// Being warned for a post
 			if(isset($post_data))
 			{
+				// Get the mssage and parse it, for display
+				$message = censor_text($post_row['post_text']);
+				if ($user_row['bbcode_bitfield'])
+				{
+					include_once($phpbb_root_path . 'includes/bbcode.' . $phpEx);
+
+					$bbcode = new bbcode($post_row['bbcode_bitfield']);
+					$bbcode->bbcode_second_pass($message, $post_row['bbcode_uid'], $post_row['bbcode_bitfield']);
+				}
+				$message = bbcode_nl2br($message);
+				$message = smiley_text($message);
+		
 				$template->assign_vars(array(
 					'INFRACTION_POST'		=> true,
-					'INFRACTION_POST_TEXT'	=> $post_data['post_text'],
+					'INFRACTION_POST_TEXT'	=> $message,
 				));
 			}
 			
@@ -133,6 +157,8 @@ class mcp_infractions
 		}
 		
 		// Ok, we are creating an infraction
+		
+		// TODO form keys for security!!
 		
 		// Populate with already validated stuff
 		$infraction = array(
@@ -240,12 +266,15 @@ class mcp_infractions
 		// Add the thing
 		// TODO : Move this into the class ma tings
 		$sql = 'INSERT INTO ' . TABLE_INFRACTIONS . ' WHERE ' . $db->sql_build_array('SELECT', $infraction);
-		$infraction_saved = $db->sql_query($sql);
+		$db->sql_query($sql);
+
+		// Update users table
+		$sql = 'UPDATE ' . TABLE_USERS . " SET infraction_points = infraction_points + {$infraction['points']} WHERE user_id = {$user_row['user_id']}";
+		$sql->sql_query($sql);
 		
-		if($infraction_saved === false)
-		{
-			throw new Exception('failed - check if phpBB handles failure');
-		}
+		// Notify the user, PM them, skip auth checks tbh, surely theyre a mod they can :/ ??
+		// TODO
+		// Lets test the main beauty stuff then test if the PM function works, it gets here it does it, just shamelessly copy ;-)
 		
-		// Notify the user
+	}
 		
