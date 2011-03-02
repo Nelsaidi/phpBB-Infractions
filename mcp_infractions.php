@@ -37,18 +37,16 @@ class mcp_infractions
 			list($action, ) = each($action);
 		}
 
-		$this->page_title = 'MCP_INFRACTION';
-
-		add_form_key('mcp_warn');
+		add_form_key('mcp_infractions');
 		
 		switch($mode)
 		{
 			case 'issue_infraction':
-				$this->warn_user_view();
-				$this->tpl_name = 'mcp_warn_front';			
+				$this->issue_infraction();
+				$this->tpl_name = 'issue_infraction';	
+				$this->page_title = 'Issue Infraction';
 			break;
 				
-			// case 'warn_post':
 		}
 	}
 	
@@ -115,41 +113,63 @@ class mcp_infractions
 		if(!isset($_POST['submit']))
 		{
 			$template->assign_vars(array(
-				'INFRACTION_USERNAME'	=> $user_row['username'],
+				'U_POST_ACTION'		=> append_sid("{$phpbb_root_path}mcp.$phpEx", 'i=infractions&amp;mode=&amp;u=' . $user_id),
 				'INFRACTION_USER_ID'	=> $user_row['user_id'],
 				'INFRACTION_TYPE'		=> $type,
 			));
 			
-			/**
-			Future release, display a nice user info bar, like
-			[AVATAR] USERNAME
-			[      ] INFRACTION POINTS
-			[      ] 
+			// Get user info like avatar, infractions SHAMELESSLY STOLEN :D
+			// Generate the appropriate user information for the user we are looking at
+			if (!function_exists('get_user_avatar'))
+			{
+				include($phpbb_root_path . 'includes/functions_display.' . $phpEx);
+			}
+
+			$rank_title = $rank_img = '';
+			$avatar_img = get_user_avatar($user_row['user_avatar'], $user_row['user_avatar_type'], $user_row['user_avatar_width'], $user_row['user_avatar_height']);
+
+			// OK, they didn't submit a warning so lets build the page for them to do so
+			$template->assign_vars(array(
+				// 'U_POST_ACTION'	=> $this->u_action,
+
+				'RANK_TITLE'		=> $rank_title,
+				'JOINED'			=> $user->format_date($user_row['user_regdate']),
+				'POSTS'			=> ($user_row['user_posts']) ? $user_row['user_posts'] : 0,
+				'WARNINGS'		=> ($user_row['user_warnings']) ? $user_row['user_warnings'] : 0,
+
+				'USERNAME_FULL'	=> get_username_string('full', $user_row['user_id'], $user_row['username'], $user_row['user_colour']),
+				'USERNAME_COLOUR'	=> get_username_string('colour', $user_row['user_id'], $user_row['username'], $user_row['user_colour']),
+				'USERNAME'		=> get_username_string('username', $user_row['user_id'], $user_row['username'], $user_row['user_colour']),
+				'U_PROFILE'		=> get_username_string('profile', $user_row['user_id'], $user_row['username'], $user_row['user_colour']),
+
+				'AVATAR_IMG'		=> $avatar_img,
+				'RANK_IMG'		=> $rank_img,
+			));
+
 			
-			<-- ADD INFRACTion FORM -->
-			(implies nice use of jquery and one page, I LIKE!!)
-			
-			<-- INFRACTION HISTORY?? -->
-			with them banded row colours
-			*/
 			// Being warned for a post
 			if(isset($post_data))
 			{
 				// Get the mssage and parse it, for display
 				$message = censor_text($post_row['post_text']);
+				
 				if ($user_row['bbcode_bitfield'])
 				{
-					include_once($phpbb_root_path . 'includes/bbcode.' . $phpEx);
-
+					if(class_exists(bbcode))
+					{
+						include_once($phpbb_root_path . 'includes/bbcode.' . $phpEx);
+					}
+					
 					$bbcode = new bbcode($post_row['bbcode_bitfield']);
 					$bbcode->bbcode_second_pass($message, $post_row['bbcode_uid'], $post_row['bbcode_bitfield']);
 				}
+				
 				$message = bbcode_nl2br($message);
 				$message = smiley_text($message);
 		
 				$template->assign_vars(array(
 					'INFRACTION_POST'		=> true,
-					'INFRACTION_POST_TEXT'	=> $message,
+					'POST_TEXT'	=> $message,
 				));
 			}
 			
@@ -251,6 +271,8 @@ class mcp_infractions
 			));
 		}
 		
+		// Custom syntax? Ie, One month = time() + one month, etc etc? or generic 30 days
+		// NOTE
 		// Calculate expire from duration, 0 = non expiring
 		$infraction['expire_time'] = ($infraction['duration'] == 0) ? 0 : time() + $infraction['duration'] * 60;
 		
@@ -272,9 +294,24 @@ class mcp_infractions
 		$sql = 'UPDATE ' . TABLE_USERS . " SET infraction_points = infraction_points + {$infraction['points']} WHERE user_id = {$user_row['user_id']}";
 		$sql->sql_query($sql);
 		
+		// Perform Actions
+		
 		// Notify the user, PM them, skip auth checks tbh, surely theyre a mod they can :/ ??
 		// TODO
-		// Lets test the main beauty stuff then test if the PM function works, it gets here it does it, just shamelessly copy ;-)
 		
+		// TODO RUN HOOK: infraction_issued !!
 	}
+	
+	/**
+	 * access via GET uri, maybe a are you sure you wanna do this too?
+	 */
+	public function delete_infraction()
+	{
+	
 		
+		// TODO RUN HOOK: infraction_deleted
+	}
+	
+}
+
+// EOF
