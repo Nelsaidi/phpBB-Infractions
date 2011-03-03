@@ -169,7 +169,7 @@ class mcp_infractions
 		
 				$template->assign_vars(array(
 					'INFRACTION_POST'		=> true,
-					'POST_TEXT'	=> $message,
+					'POST_TEXT'			=> $message,
 				));
 			}
 			
@@ -304,10 +304,61 @@ class mcp_infractions
 	
 	/**
 	 * access via GET uri, maybe a are you sure you wanna do this too?
+	 * Major issue, if the guy is banned, it needs to be unbanned, but what if he already had a ban before the autoaction ban?
+	 * This gets complicated, we have to revert a ban thats made, and then check if they're eligible for a ban, if yes and its the same continue it.
+	 * And if they are unbanned we should hook it to update this status?
 	 */
 	public function delete_infraction()
 	{
-	
+		$infraction_id = request_var('infraction_id', 0);
+		
+		if($infraction_id == 0)
+		{
+			trigger_error('bad id');
+		}
+		
+		// Get a copy of the infraction to allow for full reversal
+		$sql = 'SELECT * FROM ' . TABLE_INFRACTIONS . " WHERE infraction_id = $infraction_id";
+		$result = $db->sql_query($sql);
+		$infraction = $db->sql_fetchrow($result);
+		$db->sql_freeresult($result);
+			
+		// Generate the SQL statement for what we are doing to it (hide[or void] or delete)
+		$delete_mode = request_var('delete_mode', '');
+		if($delete_mode == 'void')
+		{
+			$removal_sql = 'UPDATE ' . TABLE_INFRACTIONS . ' SET status = ' . INFRACTION_REMOVED . " WHERE infraction_id = $infraction_id";
+		}
+		else if($delete_mode == 'remove')
+		{
+			// Out of DB
+			$removal_sql = 'DELETE FROM ' . TABLE_INFRACTIONS . " WHERE infraction_id = $infraction_id";
+		}
+		else
+		{
+			trigger_error('unknown mode');
+		}
+		
+		$db->sql_query($removal_sql);
+		unset($removal_sql);
+		
+		// Infraction now doesnt exist, lets reverse its actions
+		// Remove points from users table
+		$user_id = (int) $infraction['user_id']; // Lets not trust the DB too
+		$points = (int) $infraction['points']; 
+		
+		if($user_id == 0)
+		{
+			trigger_error('bad db, very bad');
+		}
+		
+		if($points > 0)
+		{
+			$sql = 'UPDATE ' . TABLE_USERS . " SET points = points - {$points} WHERE user_id = {$user_id}";
+			$db->sql_query($sql);
+		}
+		
+		// Reverse any actions, or continue if they still apply
 		
 		// TODO RUN HOOK: infraction_deleted
 	}
