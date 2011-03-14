@@ -1,0 +1,74 @@
+ROADMAP
+----------
+The roadmap for this project
+Should be updated regularly to keep a constant log
+
+eUK Forums many many version ahead of public releases!!
+----------
+
+Notes
+----------
+- Each infraction has its own duration , <= Unconfirmed
+- Hooks/events on actions
+
+
+v0.1.1
+----------
+- **DOCUMENTED CODE**
+- Basic implementation of infraction points
+- Warn a user for a post
+- Warn a user
+- Warning templates
+- Permisions
+- Basic API for permissions adding
+
+v0.1.2
+----------
+- Integrate into users, so they actually recieve infractions, etc
+- Infractions homepage
+
+==> An infraction system is now done
+==> At this stage, be done by end of April max
+
+v0.2
+----------
+- Meaningful error dealing
+- Actions, ban or move to group on meeting conditions
+- Possible infraction + warning durations
+- Basic documentation
+
+==> Release onto eUK
+==> An even better infraction system now exists
+==> At this stage in summer
+
+
+>>> More or less feature freeze <<<
+>>> Now only quick bug fixings <<<
+
+v0.3-maintenance
+----------
+- Fix bugs, security audit
+- Take on suggestions from eUK mods
+
+==> Release v0.3.0 or less depending on version numbers to public, whilst eUK runs on v0.4
+
+v0.4-beta
+----------
+- Privately maintained and only on eUK whilst recomendations, bugs/etc are sorted out based on v0.3.0 release
+
+~v.0.4.5
+----------
+- eUK on this,
+
+===> Release 0.4-beta to public
+
+v0.5
+----------
+- Final bugfixes/cleanup/etc
+- Finalise documentation
+
+v1.0
+----------
+Done
+
+==> This stage by September

@@ -1,0 +1,43 @@
+phpbb_infractions
+	infraction_id AUTOINT ## Chances are $row = $db->sql_fetch ... , so, $row['infraction_id'] tells us what its the ID of.
+	type INT(1)
+	status << index
+	
+	## For ID's, look at other tables
+	user_id INT(20)
+	post_id INT(20)
+	issuer_id INT(20)
+	
+	points INT(11) 
+	duration INT(11)
+	issue_time INT(11)
+	expire_time INT(11)
+	
+	reason TEXT
+	
+	## Was the user banned? The banned flag tells us this
+	## No ID Because bans expire/are removed, duration leaves some record as to how long it was banned for, and the reason
+	## This allows a full log, at the thing of added db size
+	## TODO - Is necesary? bloated much?
+	banned INT(1)
+	ban_id
+	ban_duration
+	ban_reason
+	
+	new_groups ##serialised array of groups added by this infraction
+	
+	## ban id + new_Groups to allow nice reversal of infractions.
+	
+phpbb_infraction_templates
+	template_id
+	type
+	reason
+	duration
+	points
+
+
+phpbb_infraction_actions
+	## ...
+	
+
+	
