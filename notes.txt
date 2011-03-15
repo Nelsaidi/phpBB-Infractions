@@ -9,3 +9,8 @@ We need a class for 'garbage' doing, like, a function for checking and recalcula
 
 I should move it into classes!!
 Damnnn
+
+
+
+Our phpbb_infraction api class, we use magic method to overwrite all access calls, a validation array will automatically check and validate all data - NO SQL THING.
+our phpbb_infractions::save(phpbb_infraction $infraction) - we ensure only this api can be passed which contains clean data

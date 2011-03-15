@@ -8,7 +8,7 @@
  */
 
 // For sake of simplicity (for development)
-define('TABLE_INFRACTIONS', 'phpbb_infractions');
+define('INFRACTIONS_TABLE', 'phpbb_infractions');
 define('TABLE_INFRACTION_TEMPLATES', 'phpbb_infraction_templates');
 
 define('INFRACTIONS_WARNING', 0);
@@ -305,12 +305,12 @@ class mcp_infractions
 		
 		// Add the thing
 		// TODO : Move this into the class ma tings
-		$sql = 'INSERT INTO ' . TABLE_INFRACTIONS . ' ' . $db->sql_build_array('INSERT', $infraction);
+		$sql = 'INSERT INTO ' . INFRACTIONS_TABLE . ' ' . $db->sql_build_array('INSERT', $infraction);
 		$db->sql_query($sql);
 
 		// Update users table
-		$sql = 'UPDATE ' . TABLE_USERS . " SET infraction_points = infraction_points + {$infraction['points']} WHERE user_id = {$user_row['user_id']}";
-		$sql->sql_query($sql);
+		$sql = 'UPDATE ' . USERS_TABLE . " SET infraction_points = infraction_points + {$infraction['points']} WHERE user_id = {$user_row['user_id']}";
+		$db->sql_query($sql);
 		
 		// Perform Actions
 		
@@ -318,6 +318,12 @@ class mcp_infractions
 		// TODO
 		
 		// TODO RUN HOOK: infraction_issued !!
+		
+		// Redirect
+		// A possible message that that the user was banned, etc etc
+		$redirect = append_sid("{$phpbb_root_path}mcp.$phpEx", "i=infractions&amp;mode=issue&amp;user_id=$user_id");
+		meta_refresh(2, $redirect);
+		trigger_error($msg . '<br /><br />' . sprintf($user->lang['RETURN_PAGE'], '<a href="' . $redirect . '">', '</a>'));
 	}
 	
 	/**
@@ -336,7 +342,7 @@ class mcp_infractions
 		}
 		
 		// Get a copy of the infraction to allow for full reversal
-		$sql = 'SELECT * FROM ' . TABLE_INFRACTIONS . " WHERE infraction_id = $infraction_id";
+		$sql = 'SELECT * FROM ' . INFRACTIONS_TABLE . " WHERE infraction_id = $infraction_id";
 		$result = $db->sql_query($sql);
 		$infraction = $db->sql_fetchrow($result);
 		$db->sql_freeresult($result);
@@ -345,12 +351,12 @@ class mcp_infractions
 		$delete_mode = request_var('delete_mode', '');
 		if($delete_mode == 'void')
 		{
-			$removal_sql = 'UPDATE ' . TABLE_INFRACTIONS . ' SET status = ' . INFRACTION_REMOVED . " WHERE infraction_id = $infraction_id";
+			$removal_sql = 'UPDATE ' . INFRACTIONS_TABLE . ' SET status = ' . INFRACTION_REMOVED . " WHERE infraction_id = $infraction_id";
 		}
 		else if($delete_mode == 'remove')
 		{
 			// Out of DB
-			$removal_sql = 'DELETE FROM ' . TABLE_INFRACTIONS . " WHERE infraction_id = $infraction_id";
+			$removal_sql = 'DELETE FROM ' . INFRACTIONS_TABLE . " WHERE infraction_id = $infraction_id";
 		}
 		else
 		{
@@ -372,13 +378,15 @@ class mcp_infractions
 		
 		if($points > 0)
 		{
-			$sql = 'UPDATE ' . TABLE_USERS . " SET points = points - {$points} WHERE user_id = {$user_id}";
+			$sql = 'UPDATE ' . USERS_TABLE . " SET points = points - {$points} WHERE user_id = {$user_id}";
 			$db->sql_query($sql);
 		}
 		
 		// Reverse any actions, or continue if they still apply
 		
 		// TODO RUN HOOK: infraction_deleted
+		
+
 	}
 	
 }
