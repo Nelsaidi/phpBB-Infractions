@@ -7,6 +7,9 @@
  * @author Nelsaidi
  */
 
+// Move into constants.php
+// TODO
+
 // For sake of simplicity (for development)
 define('INFRACTIONS_TABLE', 'phpbb_infractions');
 define('TABLE_INFRACTION_TEMPLATES', 'phpbb_infraction_templates');
@@ -23,17 +26,37 @@ define('INFRACTIONS_REMOVED', 2);
 class mcp_infractions
 {
 	public $p_master;
-	public  $u_action;
+	public $u_action;
 
 	public function main($id, $mode)
 	{
 		global $auth, $db, $user, $template;
 		global $config, $phpbb_root_path, $phpEx;
+		global $infractions;
 
 		// Block Users
 		if($user->data['user_id'] != 87)
 		{
 			trigger_error('Sorry dudes, still in development');
+		}
+		
+		
+		// Load our phpbb_infractions class
+		if(!class_exists('phpbb_infractions'))
+		{
+			include($phpbb_root_path . 'includes/phpbb_infractions.' . $phpEx);
+			
+		}
+		if(is_object($phpbb_infractions))
+		{
+			if(get_class($phpbb_infractions) != 'phpbb_infractions')
+			{
+				die('$phpbb_infractions already set');
+			}
+		}
+		else
+		{
+			$phpbb_infraction = new phpbb_infraction; 
 		}
 		
 		
@@ -54,8 +77,14 @@ class mcp_infractions
 				$this->page_title = 'Issue Infraction';
 			break;
 			
+			case 'delete':
+				$this->delete_infraction();
+				$this->tpl_name = 'delete_infraction';	
+				$this->page_title = 'Delete Infraction';
+			break;
 			
-				
+	
+			
 		}
 	}
 	
@@ -67,6 +96,7 @@ class mcp_infractions
 	{
 		global $auth, $db, $user, $template;
 		global $config, $phpbb_root_path, $phpEx;
+		global $phpbb_infractions;
 		
 		// Check if the user can issue an infraction
 		/*
@@ -87,27 +117,12 @@ class mcp_infractions
 		
 		// Get post data
 		if($post_id != 0)
-		{
-			// Check if the user has already been warned for this post
-			// TODO
-			
-			$sql = "SELECT * FROM " . POSTS_TABLE . " WHERE post_id = $post_id";
-			
-			$result = $db->sql_query($sql); // Do we cache it for ~60 seconds, saves querying again but maybe another mod updates the post?
-			
-			$post_row = $db->sql_fetchrow($result);
-			$db->sql_freeresult($result);
-			
-			if(sizeof($post_row) == 0)
+		{			
+			$post_row = $phpbb_infractions->get_post_for_infraction($post_id);
+			if(!is_array($post_row))
 			{
-				trigger_error('post does not exist');
+				trigger_error($post_row);
 			}
-			
-			if($user_id == 0)
-			{
-				$user_id = $post_row['poster_id'];
-			}
-			
 		}
 		
 		// Get user data
@@ -127,6 +142,7 @@ class mcp_infractions
 		}	
 		*/
 
+		// 21-6 : This is a seperate method tbnh - also ,this code - reusable. so put it in a function
 		// Is someone being warned? If not, then just show them the view
 		if(!isset($_POST['submit']))
 		{
@@ -166,7 +182,7 @@ class mcp_infractions
 
 			
 			// Being warned for a post
-			if(isset($post_data))
+			if(isset($post_row))
 			{
 				// Get the mssage and parse it, for display
 				$message = censor_text($post_row['post_text']);
@@ -206,9 +222,10 @@ class mcp_infractions
 		);
 		
 		// Assign a post ID if it exists
-		if(isset($post_data))
+		if(isset($post_row))
 		{
-			$infraction['post_id'] = $post_data['post_id'];
+			$infraction['post_id'] = $post_row['post_id'];
+			$infraction['forum_id'] = $post_row['forum_id'];
 		}
 		
 		// Load additional information
@@ -216,6 +233,8 @@ class mcp_infractions
 		
 		if($infraction_template != 0)
 		{
+			// COMING SOON
+			
 			// User has selected a template and not custom, load it
 			$sql = 'SELECT * FROM ' . INFRACTIION_TEMPLATES_TABLE . " WHERE template_id = $infraction_template";
 			$result = $db->sql_query($sql);
@@ -334,6 +353,9 @@ class mcp_infractions
 	 */
 	public function delete_infraction()
 	{
+		global $auth, $db, $user, $template;
+		global $config, $phpbb_root_path, $phpEx;
+		
 		$infraction_id = request_var('infraction_id', 0);
 		
 		if($infraction_id == 0)
@@ -348,6 +370,7 @@ class mcp_infractions
 		$db->sql_freeresult($result);
 			
 		// Generate the SQL statement for what we are doing to it (hide[or void] or delete)
+		// 21-6: hide/void isnt the right word
 		$delete_mode = request_var('delete_mode', '');
 		if($delete_mode == 'void')
 		{
@@ -356,6 +379,10 @@ class mcp_infractions
 		else if($delete_mode == 'remove')
 		{
 			// Out of DB
+			// And check the permisions here eenit
+			
+			if(!$auth
+			
 			$removal_sql = 'DELETE FROM ' . INFRACTIONS_TABLE . " WHERE infraction_id = $infraction_id";
 		}
 		else
@@ -373,7 +400,7 @@ class mcp_infractions
 		
 		if($user_id == 0)
 		{
-			trigger_error('bad db, very bad');
+			trigger_error('bad db, very very bad'); // though impossible, just think of BEY
 		}
 		
 		if($points > 0)
@@ -388,6 +415,35 @@ class mcp_infractions
 		
 
 	}
+	
+	/**
+	View infractions for a user, could be extended to view for a certain forum or topic
+	Note - plural 
+	Permisions are fine, post has an infraction any mod can view it?
+	*/
+	public function view_infractions()
+	{
+		global $auth, $db, $user, $template;
+		global $config, $phpbb_root_path, $phpEx;
+		
+		$user_id = request_var('user', 0);
+		$mode = request_var('mode', 'index');
+		
+		switch $mode
+		{	
+			// index - so most recent?
+			case 'index':
+			
+			break;
+			
+			// Infractions for user - here we display an add infraction section
+			case 'user':
+			
+			break;
+		}
+		
+	}
+	
 	
 }
 
