@@ -381,7 +381,10 @@ class mcp_infractions
 			// Out of DB
 			// And check the permisions here eenit
 			
-			if(!$auth
+			if(!$auth->acl_get('m_infractions_delete'))
+			{
+				trigger_error('NOT_AUTHORISED');
+			}
 			
 			$removal_sql = 'DELETE FROM ' . INFRACTIONS_TABLE . " WHERE infraction_id = $infraction_id";
 		}
@@ -400,7 +403,7 @@ class mcp_infractions
 		
 		if($user_id == 0)
 		{
-			trigger_error('bad db, very very bad'); // though impossible, just think of BEY
+			trigger_error('bad db, very very bad'); // though impossible
 		}
 		
 		if($points > 0)
@@ -427,12 +430,15 @@ class mcp_infractions
 		global $config, $phpbb_root_path, $phpEx;
 		
 		$user_id = request_var('user', 0);
-		$mode = request_var('mode', 'index');
+		$view = request_var('view', 'index');
 		
-		switch $mode
+		switch $view
 		{	
 			// index - so most recent?
 			case 'index':
+				
+				$sql = "SELECT * FROM " . INFRACTIONS_TABLE . ' WHERE void = 0 ORDER BY date_issued DESC ';
+			
 			
 			break;
 			
