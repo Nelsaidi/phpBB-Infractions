@@ -437,7 +437,23 @@ class mcp_infractions
 			// index - so most recent?
 			case 'index':
 				
-				$sql = "SELECT * FROM " . INFRACTIONS_TABLE . ' WHERE void = 0 ORDER BY date_issued DESC ';
+				// Do pagination
+				// TODO
+				
+				// Config - per page, etc etc
+				
+				$infractions = $phpbb_infractions->get_infractions();
+				
+				if(!$infractions)
+				{
+					// Something templatey about no infractions
+				}
+				
+				foreach($infractions as $infraction)
+				{
+					// Set templates!
+				}
+				
 			
 			
 			break;

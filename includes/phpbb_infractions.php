@@ -51,7 +51,8 @@ class phpbb_infractions
 	 */
 	public function clear_expired_infractions($user_id = '')
 	{
-		global $db;
+		global $auth, $db, $user, $template;
+		global $config, $phpbb_root_path, $phpEx;
 		
 		$sql = 'SELECT * FROM ' . INFRACTIONS_TABLE  . ' WHERE expire_date < ' . time() . ' AND void = 0 ';
 		
@@ -109,26 +110,64 @@ class phpbb_infractions
 	 * @param $forum_id - forum id to sele
 	 * @return array infractions demanded
 	 */
-	public function get_infractions($records = 25, $offset = 0, $start_date = 0, $user_id = false, $forum_id = false, $topic_id = false, $active_only = true)
+	public function get_infractions($limit = 25, $offset = 0, $start_date = 0,  $user_id = false, $forum_id = false,  $active_only = true)
 	{
+		global $auth, $db, $user, $template;
+		global $config, $phpbb_root_path, $phpEx;
+		
 		// Records + offset for pagination - which i should learn how to dodododo
 		$sql = 'SELECT * FROM ' . INFRACTIONS_TABLE . ' WHERE ';
 		
-		// TODO
-		// We need to join this to posts, so post info is obtained!! - Which join to use so ones without a relation ship are also included?
+		// TODO - set the right select from options
+		// TODO - Maybe have an order by var?
 		
+		$sql_array = array(
+			'SELECT'		=> 'i.*, p.*',
+			
+			'FROM'		=> array(
+				INFRACTIONS_TABLE	=> 'i',
+			),
+			
+			'LEFT_JOIN'	=> array(
+				array(
+					'FROM'	=> array(POSTS_TABLE => 'p'),
+					'ON'		=> 'i.post_id = p.post_id'
+				)
+			),
+			
+			'WHERE'	=> 'void <> ' . $active_only . ' ' ,
+			
+			'ORDER_BY'	=> 'issue_time DESC',
+		);
+		
+		// TODO
+		// Check relation ship works
+		
+		// TODO - Imnplement forum_id in schema
 		
 		if(is_numeric($user_id) && $user_id > 0)
 		{
-			$sql .= "user_id =  $user_id ";
+			$sql_array['WHERE'] .= " AND user_id =  $user_id ";
 		}
 		
 		if(is_numeric($forum_id) && $forum_id > 0)
 		{
-			
+			$sql_array['WHERE'] .= " AND forum_id =  $forum_id ";
 		}
 		
-	
+		
+		$sql = $db->sql_build_query('SELECT', $sql_array);
+		$result = $db->sql_query_limit($sql, $limit, $offset);
+		
+		$infractions = $db->sql_fetchrowset($result);
+		$db->sql_freeresult($result);
+		
+		if(sizeof($infractions) == 0)
+		{
+			return false;
+		}
+		
+		return $infractions;
 	}
 	
 	
