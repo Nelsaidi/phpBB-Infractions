@@ -447,11 +447,25 @@ class mcp_infractions
 				if(!$infractions)
 				{
 					// Something templatey about no infractions
+					$template->assign_var('S_INFRACTIONS_NUMBER', 0);
+					return;
 				}
 				
 				foreach($infractions as $infraction)
 				{
 					// Set templates!
+					
+					$template->assign_block_vars('infraction', array(
+						'POST_ID'			=>
+						'TIME_ISSUED'	 	=>
+						'USERNAME'		=>
+						'REASON'			=>
+						'POINTS_ISSUED'	=>	
+						'TOTAL_POINTS'		=>
+						
+						// TODO actions
+						
+					));
 				}
 				
 			

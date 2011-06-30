@@ -2,6 +2,7 @@
 
 class phpbb_infractions
 {
+	
 	/**
 	 * Load the data for a post, checking that the user has read permissions for it too
 	 * @return mixed - array success, else string error
@@ -121,8 +122,9 @@ class phpbb_infractions
 		// TODO - set the right select from options
 		// TODO - Maybe have an order by var?
 		
+		// TODO - Choose only required feelms, TBC later
 		$sql_array = array(
-			'SELECT'		=> 'i.*, p.*',
+			'SELECT'		=> 'i.*, p.post_subject, u.username, u.infractions',
 			
 			'FROM'		=> array(
 				INFRACTIONS_TABLE	=> 'i',
@@ -132,7 +134,12 @@ class phpbb_infractions
 				array(
 					'FROM'	=> array(POSTS_TABLE => 'p'),
 					'ON'		=> 'i.post_id = p.post_id'
-				)
+				),
+				// NOTE : Need to link to users too - impact on performance now?
+				array(
+					'FROM'	=> array(USERS_TABLE => 'u'),
+					'ON'		=> 'i.user_id = u.user_id',
+				),
 			),
 			
 			'WHERE'	=> 'void <> ' . $active_only . ' ' ,
@@ -162,7 +169,18 @@ class phpbb_infractions
 		$infractions = $db->sql_fetchrowset($result);
 		$db->sql_freeresult($result);
 		
-		if(sizeof($infractions) == 0)
+		// used for pagination
+		$this->last_get_infraction_sql = $sql;
+		
+		$row_count = sizeof($infractions)
+		$this->last_get_infraction_count = $row_count;
+		
+		if($row_count < $limit)
+		{
+			$this->last_get_infraction_total = $row_count; // Our total rows!
+		}
+		
+		if($row_count == 0)
 		{
 			return false;
 		}
@@ -170,6 +188,31 @@ class phpbb_infractions
 		return $infractions;
 	}
 	
+	/**
+	 * A function to get total row count for last infraction view select
+	 * NOTE this way its optional if pagination is required, - needs a better way though?
+	 */
+	public function last_get_infraction_total()
+	{
+		global $auth, $db, $user, $template;
+		global $config, $phpbb_root_path, $phpEx;
+		
+		// NOTE - if the return was less than the limit, then that is our total rows - performance!!
+		// Argh this is messing with my mind - its getting VERY messy, need to optimise approach
+		
+		if($this->last_get_infraction_count == 0)
+		{
+			return 0;
+		}
+		
+		$sql = $this->last_get_infraction_sql;
+		$sql['WHERE'] = 'count(i.infraction_id) AS total_infractions';
+		$result = $db->sql_query($sql);
+		$total_infractions = $db->sql_fetchfield('total_infractions');
+		$db->sql_freeresult($result);
+		
+		return $total_infractions;
+	}
 	
 
 	
