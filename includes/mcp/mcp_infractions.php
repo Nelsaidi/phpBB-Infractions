@@ -12,7 +12,7 @@
 
 // For sake of simplicity (for development)
 define('INFRACTIONS_TABLE', 'phpbb_infractions');
-define('TABLE_INFRACTION_TEMPLATES', 'phpbb_infraction_templates');
+define('INFRACTION_TEMPLATES_TABLE', 'phpbb_infraction_templates');
 
 define('INFRACTIONS_WARNING', 0);
 define('INFRACTIONS_INFRACTION', 1);
@@ -32,10 +32,10 @@ class mcp_infractions
 	{
 		global $auth, $db, $user, $template;
 		global $config, $phpbb_root_path, $phpEx;
-		global $infractions;
+		global $phpbb_infractions;
 
 		// Block Users
-		if($user->data['user_id'] != 87)
+		if($user->data['user_id'] != 2)
 		{
 			trigger_error('Sorry dudes, still in development');
 		}
@@ -44,20 +44,24 @@ class mcp_infractions
 		// Load our phpbb_infractions class
 		if(!class_exists('phpbb_infractions'))
 		{
-			include($phpbb_root_path . 'includes/phpbb_infractions.' . $phpEx);
+			require($phpbb_root_path . 'includes/phpbb_infractions.' . $phpEx);
 			
 		}
+		$phpbb_infractions = new phpbb_infractions; 
+		
+		/*
 		if(is_object($phpbb_infractions))
 		{
 			if(get_class($phpbb_infractions) != 'phpbb_infractions')
 			{
-				die('$phpbb_infractions already set');
+				$phpbb_infraction = new phpbb_infraction; 
 			}
 		}
 		else
 		{
 			$phpbb_infraction = new phpbb_infraction; 
 		}
+		*/
 		
 		
 		$action = request_var('action', array('' => ''));
@@ -83,7 +87,10 @@ class mcp_infractions
 				$this->page_title = 'Delete Infraction';
 			break;
 			
-	
+			default:
+				$this->view_infractions();
+				$this->tpl_name = 'infractions_index';
+				$this->page_title = 'Index';
 			
 		}
 	}
@@ -302,7 +309,7 @@ class mcp_infractions
 			// Validated, merge
 			$infraction = array_merge($infraction, array(
 				'type'		=> $infraction_type,
-				'points'		=> $infraction_points,
+				'infraction_points'		=> $infraction_points,
 				'duration'	=> $infraction_duration,
 				'reason'		=> $infraction_reason,
 			));
@@ -328,7 +335,7 @@ class mcp_infractions
 		$db->sql_query($sql);
 
 		// Update users table
-		$sql = 'UPDATE ' . USERS_TABLE . " SET infraction_points = infraction_points + {$infraction['points']} WHERE user_id = {$user_row['user_id']}";
+		$sql = 'UPDATE ' . USERS_TABLE . " SET infraction_points = infraction_points + {$infraction['infraction_points']} WHERE user_id = {$user_row['user_id']}";
 		$db->sql_query($sql);
 		
 		// Perform Actions
@@ -408,7 +415,7 @@ class mcp_infractions
 		
 		if($points > 0)
 		{
-			$sql = 'UPDATE ' . USERS_TABLE . " SET points = points - {$points} WHERE user_id = {$user_id}";
+			$sql = 'UPDATE ' . USERS_TABLE . " SET infraction_points = infraction_points - {$points} WHERE user_id = {$user_id}";
 			$db->sql_query($sql);
 		}
 		
@@ -428,11 +435,12 @@ class mcp_infractions
 	{
 		global $auth, $db, $user, $template;
 		global $config, $phpbb_root_path, $phpEx;
+		global $phpbb_infractions;
 		
 		$user_id = request_var('user', 0);
 		$view = request_var('view', 'index');
 		
-		switch $view
+		switch($view)
 		{	
 			// index - so most recent?
 			case 'index':
@@ -456,17 +464,22 @@ class mcp_infractions
 					// Set templates!
 					
 					$template->assign_block_vars('infraction', array(
-						'POST_ID'			=>
-						'TIME_ISSUED'	 	=>
-						'USERNAME'		=>
-						'REASON'			=>
-						'POINTS_ISSUED'	=>	
-						'TOTAL_POINTS'		=>
-						
+						'POST_ID'			=> $infraction['post_id'],
+						'ISSUE_TIME'	 	=> $infraction['issue_time'],
+						'USERNAME'		=> $infraction['username'],
+						'USER_ID'			=> $infraction['user_id'],
+						'REASON'			=> $infraction['reason'],
+						'POINTS_ISSUED'	=> $infraction['infraction_points'],
+						'TOTAL_POINTS'		=> $infraction['infractions'],
+						'ACTIONS'			=> '',
 						// TODO actions
 						
 					));
 				}
+				
+				// Do pagination
+				$total_infractions = $phpbb_infractions->last_get_infraction_total();
+				
 				
 			
 			

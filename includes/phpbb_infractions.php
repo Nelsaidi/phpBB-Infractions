@@ -5,6 +5,7 @@ class phpbb_infractions
 	
 	/**
 	 * Load the data for a post, checking that the user has read permissions for it too
+	 * @param $id post id
 	 * @return mixed - array success, else string error
 	 */
 	public function get_post_for_infraction($id)
@@ -42,7 +43,10 @@ class phpbb_infractions
 			return 'NO_PERMISIONS';
 		}
 		
-		return $post_row
+		// TODO - is there a better way to check permisions? - maybe first, since we already have the forum id from the infraction!
+		
+		
+		return $post_row;
 	}
 	
 	/**
@@ -97,7 +101,7 @@ class phpbb_infractions
 		// Or does another script handle that? a cron job perhaps
 		// Yep, that sounds best - we just set a flag
 		
-		$sql = "DELETE FROM " . USERS_TABLE . " WHERE expire_date < " . time() . ' AND void = 0 '
+		$sql = "DELETE FROM " . USERS_TABLE . " WHERE expire_date < " . time() . ' AND void = 0 ';
 		$deleted = $db->sql_query($sql);
 		
 		return $deleted;
@@ -123,6 +127,8 @@ class phpbb_infractions
 		// TODO - Maybe have an order by var?
 		
 		// TODO - Choose only required feelms, TBC later
+		
+		// TODO TESTING - Run this query in PHP My admin to get the right syntax 
 		$sql_array = array(
 			'SELECT'		=> 'i.*, p.post_subject, u.username, u.infractions',
 			
@@ -142,10 +148,14 @@ class phpbb_infractions
 				),
 			),
 			
-			'WHERE'	=> 'void <> ' . $active_only . ' ' ,
+			'WHERE'	=> '' ,
 			
 			'ORDER_BY'	=> 'issue_time DESC',
 		);
+		
+		// TODO Do the active only
+		// 'WHERE'	=> 'void <> ' . $active_only . ' ' ,
+		
 		
 		// TODO
 		// Check relation ship works
@@ -172,7 +182,7 @@ class phpbb_infractions
 		// used for pagination
 		$this->last_get_infraction_sql = $sql;
 		
-		$row_count = sizeof($infractions)
+		$row_count = sizeof($infractions);
 		$this->last_get_infraction_count = $row_count;
 		
 		if($row_count < $limit)
