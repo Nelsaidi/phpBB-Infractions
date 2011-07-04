@@ -130,7 +130,7 @@ class phpbb_infractions
 		
 		// TODO TESTING - Run this query in PHP My admin to get the right syntax 
 		$sql_array = array(
-			'SELECT'		=> 'i.*, p.post_subject, u.username, u.infractions',
+			'SELECT'		=> 'i.*, p.post_subject, u.username, u.infraction_points AS total_points',
 			
 			'FROM'		=> array(
 				INFRACTIONS_TABLE	=> 'i',
@@ -173,14 +173,14 @@ class phpbb_infractions
 		}
 		
 		
+		// used for pagination
+		$this->last_sql_array = $sql_array;
+		
 		$sql = $db->sql_build_query('SELECT', $sql_array);
 		$result = $db->sql_query_limit($sql, $limit, $offset);
 		
 		$infractions = $db->sql_fetchrowset($result);
 		$db->sql_freeresult($result);
-		
-		// used for pagination
-		$this->last_get_infraction_sql = $sql;
 		
 		$row_count = sizeof($infractions);
 		$this->last_get_infraction_count = $row_count;
@@ -215,8 +215,10 @@ class phpbb_infractions
 			return 0;
 		}
 		
-		$sql = $this->last_get_infraction_sql;
-		$sql['WHERE'] = 'count(i.infraction_id) AS total_infractions';
+		$sql_array = $this->last_sql_array;
+		$sql_array['SELECT'] = 'count(i.infraction_id) AS total_infractions';
+		$sql = $db->sql_build_query('SELECT', $sql_array);
+		
 		$result = $db->sql_query($sql);
 		$total_infractions = $db->sql_fetchfield('total_infractions');
 		$db->sql_freeresult($result);

@@ -308,10 +308,10 @@ class mcp_infractions
 			
 			// Validated, merge
 			$infraction = array_merge($infraction, array(
-				'type'		=> $infraction_type,
+				'type'				=> $infraction_type,
 				'infraction_points'		=> $infraction_points,
-				'duration'	=> $infraction_duration,
-				'reason'		=> $infraction_reason,
+				'duration'			=> $infraction_duration,
+				'reason'				=> $infraction_reason,
 			));
 		}
 		
@@ -455,7 +455,7 @@ class mcp_infractions
 				if(!$infractions)
 				{
 					// Something templatey about no infractions
-					$template->assign_var('S_INFRACTIONS_NUMBER', 0);
+					$template->assign_var('S_INFRACTIONS_NONE', 1);
 					return;
 				}
 				
@@ -470,7 +470,7 @@ class mcp_infractions
 						'USER_ID'			=> $infraction['user_id'],
 						'REASON'			=> $infraction['reason'],
 						'POINTS_ISSUED'	=> $infraction['infraction_points'],
-						'TOTAL_POINTS'		=> $infraction['infractions'],
+						'TOTAL_POINTS'		=> $infraction['total_points'],
 						'ACTIONS'			=> '',
 						// TODO actions
 						

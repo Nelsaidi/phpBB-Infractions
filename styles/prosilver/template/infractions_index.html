@@ -1,11 +1,14 @@
 <!-- INCLUDE mcp_header.html -->
+<h2>Infractions Index</h2>
 <div class="panel">
 	<div class="inner"><span class="corners-top"><span></span></span>
-	<!-- IF S_INFRACTIONS_NUMBER eq 0 -->
+	<!-- IF S_INFRACTIONS_NONE eq 1 -->
 	<p>No infractions available</p>
 	<!-- ELSE -->
 	<!-- TODO a form for filtering options? -->
+	
 	<!-- INCLUDE infractions_view_table.html -->
+	
 	<!-- ENDIF -->
 	
 	<!-- TODO Pagination here! -->
