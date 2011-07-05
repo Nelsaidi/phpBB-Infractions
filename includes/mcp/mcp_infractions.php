@@ -73,6 +73,10 @@ class mcp_infractions
 
 		add_form_key('mcp_infractions');
 		
+		$template->assign_vars(array(
+			'S_IN_INFRACTIONS'		=> 1,
+		));
+		
 		switch($mode)
 		{
 			case 'issue':
@@ -175,13 +179,11 @@ class mcp_infractions
 
 				'RANK_TITLE'		=> $rank_title,
 				'JOINED'			=> $user->format_date($user_row['user_regdate']),
-				'POSTS'			=> ($user_row['user_posts']) ? $user_row['user_posts'] : 0,
-				'WARNINGS'		=> ($user_row['user_warnings']) ? $user_row['user_warnings'] : 0,
+				'POSTS'			=> $user_row['user_posts'],
+				'WARNINGS'		=> $user_row['user_warnings'] ,
 
-				'USERNAME_FULL'	=> get_username_string('full', $user_row['user_id'], $user_row['username'], $user_row['user_colour']),
-				'USERNAME_COLOUR'	=> get_username_string('colour', $user_row['user_id'], $user_row['username'], $user_row['user_colour']),
-				'USERNAME'		=> get_username_string('username', $user_row['user_id'], $user_row['username'], $user_row['user_colour']),
-				'U_PROFILE'		=> get_username_string('profile', $user_row['user_id'], $user_row['username'], $user_row['user_colour']),
+				'USERNAME'		=> $user_row['username'],
+				'USER_PROFILE'		=> get_username_string('full', $user_row['user_id'], $user_row['username'], $user_row['user_colour']),
 
 				'AVATAR_IMG'		=> $avatar_img,
 				'RANK_IMG'		=> $rank_img,
@@ -225,7 +227,7 @@ class mcp_infractions
 		$infraction = array(
 			'user_id'		=> $user_id,
 			'issuer_id'	=> $user->data['user_id'],
-			'issue_time'	=> time()
+			'issue_time'	=> time(), 
 		);
 		
 		// Assign a post ID if it exists
@@ -465,15 +467,18 @@ class mcp_infractions
 					
 					$template->assign_block_vars('infraction', array(
 						'POST_ID'			=> $infraction['post_id'],
-						'ISSUE_TIME'	 	=> $infraction['issue_time'],
+						'ISSUE_TIME'	 	=> $user->format_date($infraction['issue_time']),
+						
 						'USERNAME'		=> $infraction['username'],
+						'USER_PROFILE'		=> get_username_string('full', $infraction['user_id'], $infraction['username'], $infraction['user_colour']),
+						
 						'USER_ID'			=> $infraction['user_id'],
 						'REASON'			=> $infraction['reason'],
 						'POINTS_ISSUED'	=> $infraction['infraction_points'],
 						'TOTAL_POINTS'		=> $infraction['total_points'],
 						'ACTIONS'			=> '',
-						// TODO actions
 						
+						// TODO actions
 					));
 				}
 				

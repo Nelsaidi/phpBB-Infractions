@@ -130,7 +130,7 @@ class phpbb_infractions
 		
 		// TODO TESTING - Run this query in PHP My admin to get the right syntax 
 		$sql_array = array(
-			'SELECT'		=> 'i.*, p.post_subject, u.username, u.infraction_points AS total_points',
+			'SELECT'		=> 'i.*, p.post_subject, u.username, u.user_colour, u.infraction_points AS total_points',
 			
 			'FROM'		=> array(
 				INFRACTIONS_TABLE	=> 'i',

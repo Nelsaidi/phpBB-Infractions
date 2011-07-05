@@ -1,6 +1,6 @@
  <!-- This is a general one for the table of infractions ?? -->
- <div class="infractions-table">
-	 <table>
+ <div>
+	 <table class="infractions-table">
 		<tr class="infractions-table-header">
 			<!-- click row to expand more detail - think of source mod bans system -->
 			<!-- nah, open in a new page - also for sql details, for actions we need group names no? -->
@@ -16,8 +16,8 @@
 		
 		<!-- BEGIN infraction -->
 			<tr class="<!-- IF infraction.S_ROW_COUNT is even -->bg1<!-- ELSE -->bg2<!-- ENDIF -->">
-				<td>{infraction.TIME_ISSUED}</td>
-				<td>{infraction.USERNAME}</td>
+				<td>{infraction.ISSUE_TIME}</td>
+				<td>{infraction.USER_PROFILE}</td>
 				<td>{infraction.REASON}</td>
 				<td>{infraction.POINTS_ISSUED}</td>
 				<td>{infraction.TOTAL_POINTS}</td>
