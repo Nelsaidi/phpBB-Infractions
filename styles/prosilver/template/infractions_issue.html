@@ -1,12 +1,38 @@
 <!-- INCLUDE mcp_header.html -->
+<!-- IF S_INFRACTIONS_NO_USER eq 1 -->
 <form method="post" id="mcp" action="{U_POST_ACTION}">
 
-<h2>{L_MCP_WARN_POST}</h2>
+<h2>Issue Infraction</h2>
+
+<div class="panel">
+	<div class="inner"><span class="corners-top"><span></span></span>
+	<p>Please use this form to enter a username or use the Issue Infraction button on posts to issue for posts </p>
+	<fieldset>
+	<dl>
+		<dt><label for="username">{L_SELECT_USER}:</label></dt>
+		<dd><input name="username" id="username" type="text" class="inputbox" /></dd>
+		<dd><strong><a href="{U_FIND_USERNAME}" onclick="find_username(this.href); return false;">{L_FIND_USERNAME}</a></strong></dd>
+	</dl>
+	</fieldset>
+
+	<span class="corners-bottom"><span></span></span></div>
+</div>
+
+<fieldset class="submit-buttons">
+	<input type="reset" value="{L_RESET}" name="reset" class="button2" />&nbsp; 
+	<input type="submit" name="submituser" value="{L_SUBMIT}" class="button1" />
+	{S_FORM_TOKEN}
+</fieldset>
+</form>
+<!-- ELSE -->
+<form method="post" id="mcp" action="{U_POST_ACTION}">
+
+<h2>Issue Infraction</h2>
 
 <div class="panel">
 	<div class="inner"><span class="corners-top"><span></span></span>
 
-	<h3><!-- IF USER_COLOR --><span style="color: #{USER_COLOR}">{USERNAME}</span><!-- ELSE -->{USERNAME}<!-- ENDIF --></h3>
+	<h3>{USERNAME}</h3>
 
 	<div>
 		<div class="column1">
@@ -49,37 +75,57 @@
 	<div class="inner"><span class="corners-top"><span></span></span>
 
 	<h3>Issue Infraction</h3>
-	<p>A description of what this page is.</p>
+	<p>Enter infraction details</p>
 
-	<label>Template</label>
-	<select name="template">
-		<option value="0" checked="checked">Custom</option>
-	</select>
 	
-	<label>Reason</label>
-	<input type="text" name="reason" value="" style="width:300px;"/>
+	<fieldset>
+	<dl>
+		<dt><label for="template">Template</label></dt>
+		<dd><select name="template" onchange="">
+			<option value="1" checked="checked">[WARN] Spam</option>
+			<option value="0" >Custom</option>
+		</select></dd>
+		<dd>You could have something here too!</dd>
+	</dl>
 	
-	<label>Duration</label>
-	<select name="duration">
-		<option value="1440" checked="checked">1 Day</option>
-		<option value="0" checked="checked">Permanent</option>
-	</select>
-	
-	<label>Points</label>
-	<select name="points">
-		<option value="1" checked="checked">1</option>
-		<option value="5" checked="checked">5</option>
-	</select>
+	<fieldset id="infraction-details" >
+		<dl>
+			<dt><label for="reason">Reason</label></dt>
+			<dd><textarea rows="2" cols="40" class="inputbox" id="ban" name="reason"></textarea></dd>
+			
+		</dl>
+		
+		
+		<dl>
+			<dt><label for="duration">Duration</label></dt>
+			<dd><select name="duration">
+				<option value="1440">1 Day</option>
+				<option value="10080">7 Days</option>
+				<option value="43200" checked="checked">30 Days</option>
+				<option value="86400">60 Days</option>
+				<option value="0">Permanent</option>
+				<option value="custom">Custom</option>
+				<!-- You know what, show a calendar and let JS calculate the duration by difference from now till then --> 
+			</select></dd>
+		</dl>
+		
+		<dl>
+			<dt><label for="points">Infraction Points</label></dt>
+			<dd><input type="text" maxlength="255" class="inputbox" name="points"></dd>
+			
+		</dl>
+	</fieldset>
 
+	</fieldset>
+	
 	<span class="corners-bottom"><span></span></span></div>
 </div>
 
 <form method="post" id="mcp" action="{U_POST_ACTION}">
 <fieldset class="submit-buttons">
 	<input type="reset" value="{L_RESET}" name="reset" class="button2" />&nbsp; 
-	<input type="submit" name="submit" value="{L_SUBMIT}" class="button1" />
+	<input type="submit" name="issue_infraction" value="Submit" class="button1" />
 	{S_FORM_TOKEN}
 </fieldset>
-
-
+<!-- ENDIF -->
 <!-- INCLUDE mcp_footer.html -->

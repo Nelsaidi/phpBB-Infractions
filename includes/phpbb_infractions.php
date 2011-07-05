@@ -8,7 +8,7 @@ class phpbb_infractions
 	 * @param $id post id
 	 * @return mixed - array success, else string error
 	 */
-	public function get_post_for_infraction($id)
+	public function get_post_for_infraction($post_id)
 	{
 		global $auth, $db, $user, $template;
 		global $config, $phpbb_root_path, $phpEx;
@@ -16,7 +16,7 @@ class phpbb_infractions
 		// Check if the user has already been warned for this post
 		// TODO
 			
-		if(!is_numeric($id))
+		if(!is_numeric($post_id))
 		{
 			return 'POST_NOT_EXIST';
 		}

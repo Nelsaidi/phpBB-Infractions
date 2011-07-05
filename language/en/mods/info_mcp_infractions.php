@@ -20,9 +20,11 @@ if (empty($lang) || !is_array($lang))
 
     
 $lang = array_merge($lang, array(
-	'MCP_INFRACTIONS'		=> 'Infractions',
-	'MCP_INFRACTIONS_LIST'	=> 'List Infractions',
-	'MCP_INFRACTIONS_ISSUE'	=> 'Issue Infraction',
+	'MCP_INFRACTIONS'			=> 'Infractions',
+	'MCP_INFRACTIONS_LIST'		=> 'List Infractions',
+	'MCP_INFRACTIONS_ISSUE'		=> 'Issue Infraction',
+	
+	'L_INFRACTIONS_ISSUE_POST'	=> 'Issue Infraction for Post',
 ));
 
 ?>

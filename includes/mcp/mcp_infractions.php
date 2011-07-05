@@ -117,13 +117,36 @@ class mcp_infractions
 		}
 		*/
 		
+		$username = request_var('username', '');
+		
 		$user_id = request_var('user_id', 0);
 		$post_id = request_var('post_id', 0);
 		$type = request_var('type', 0);
 		
-		if($user_id == 0)
+		if($user_id == 0 && $post_id == 0 && $username == '')
 		{
-			trigger_error('No user selected');
+			$template->assign_vars(array(
+				'S_INFRACTIONS_NO_USER'		=> 1,
+			));
+			
+			return;
+		}
+		
+		// We want no usernames in URL
+		if($username != '')
+		{
+			$sql = 'SELECT user_id FROM ' . USERS_TABLE . ' WHERE username_clean = "' . $db->sql_escape(utf8_clean_string($username)) . '"';
+			$result = $db->sql_query($sql);
+			$user_row = $db->sql_fetchrow($result);	
+			$db->sql_freeresult($result);
+			
+			if(!isset($user_row['user_id']))
+			{
+				trigger_error('user does not exist');
+			}
+			
+			redirect(append_sid("{$phpbb_root_path}mcp.$phpEx", "i=infractions&mode=issue&user_id={$user_row['user_id']}"));
+			exit;
 		}
 		
 		// Get post data
@@ -135,11 +158,12 @@ class mcp_infractions
 				trigger_error($post_row);
 			}
 		}
+
 		
-		// Get user data
+
 		$sql = 'SELECT * FROM ' . USERS_TABLE . " WHERE user_id = $user_id";
 		$result = $db->sql_query($sql);
-		$user_row = $db->sql_fetchrow($result);
+		$user_row = $db->sql_fetchrow($result);	
 		$db->sql_freeresult($result);
 		
 		if(!isset($user_row['user_id']))
@@ -155,7 +179,7 @@ class mcp_infractions
 
 		// 21-6 : This is a seperate method tbnh - also ,this code - reusable. so put it in a function
 		// Is someone being warned? If not, then just show them the view
-		if(!isset($_POST['submit']))
+		if(!isset($_POST['issue_infraction']))
 		{
 			$template->assign_vars(array(
 				'U_POST_ACTION'		=> append_sid("{$phpbb_root_path}mcp.$phpEx", 'i=infractions&amp;mode=issue&amp;user_id=' . $user_id),
@@ -196,7 +220,7 @@ class mcp_infractions
 				// Get the mssage and parse it, for display
 				$message = censor_text($post_row['post_text']);
 				
-				if ($user_row['bbcode_bitfield'])
+				if ($post_row['bbcode_bitfield'])
 				{
 					if(class_exists(bbcode))
 					{
@@ -349,9 +373,11 @@ class mcp_infractions
 		
 		// Redirect
 		// A possible message that that the user was banned, etc etc
-		$redirect = append_sid("{$phpbb_root_path}mcp.$phpEx", "i=infractions&amp;mode=issue&amp;user_id=$user_id");
-		meta_refresh(2, $redirect);
-		trigger_error($msg . '<br /><br />' . sprintf($user->lang['RETURN_PAGE'], '<a href="' . $redirect . '">', '</a>'));
+		$redirect = append_sid("{$phpbb_root_path}mcp.$phpEx", "i=infractions");
+		
+		// Instant - its better that way
+		redirect($redirect);
+		exit;
 	}
 	
 	/**
@@ -466,6 +492,7 @@ class mcp_infractions
 					// Set templates!
 					
 					$template->assign_block_vars('infraction', array(
+						'INFRACTION_ID'	=> $infraction['infraction_id'],
 						'POST_ID'			=> $infraction['post_id'],
 						'ISSUE_TIME'	 	=> $user->format_date($infraction['issue_time']),
 						
