@@ -11,7 +11,7 @@
 // TODO
 
 // For sake of simplicity (for development)
-define('INFRACTIONS_TABLE', 'phpbb_infractions');
+// define('INFRACTIONS_TABLE', 'phpbb_infractions');
 define('INFRACTION_TEMPLATES_TABLE', 'phpbb_infraction_templates');
 
 define('INFRACTIONS_WARNING', 0);
@@ -44,7 +44,7 @@ class mcp_infractions
 		// Load our phpbb_infractions class
 		if(!class_exists('phpbb_infractions'))
 		{
-			require($phpbb_root_path . 'includes/phpbb_infractions.' . $phpEx);
+			require($phpbb_root_path . 'includes/phpbb_infractions.class.' . $phpEx);
 			
 		}
 		$phpbb_infractions = new phpbb_infractions; 
@@ -127,6 +127,8 @@ class mcp_infractions
 		{
 			$template->assign_vars(array(
 				'S_INFRACTIONS_NO_USER'		=> 1,
+				'U_FIND_USERNAME'	=> append_sid("{$phpbb_root_path}memberlist.$phpEx", 'mode=searchuser&amp;form=mcp&amp;field=username&amp;select_single=true'),
+			
 			));
 			
 			return;

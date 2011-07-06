@@ -59,11 +59,11 @@ class phpbb_infractions
 		global $auth, $db, $user, $template;
 		global $config, $phpbb_root_path, $phpEx;
 		
-		$sql = 'SELECT * FROM ' . INFRACTIONS_TABLE  . ' WHERE expire_date < ' . time() . ' AND void = 0 ';
+		$sql = 'SELECT * FROM ' . INFRACTIONS_TABLE  . ' WHERE expire_time < ' . time() . ' AND void = 0 AND expire_time <> 0 ';
 		
 		if(is_numeric($user_id))
 		{
-			$sql .= "AND user_id = $user_id ";
+			$sql .= " AND user_id = $user_id ";
 		}
 		
 		
@@ -87,9 +87,9 @@ class phpbb_infractions
 			// TODO - Undo groups once groups are implemented
 			// check if new groups -  iterate through infraction new groups , do group_user_del(4, 53);
 			
-			if($infraction['points'] > 0)
+			if($infraction['infraction_points'] > 0)
 			{
-				$sql = "UPDATE " . USERS_TABLE . " SET infraction_points = infraction_points - {$infraction['points']} WHERE user_id = {$infraction['user_id']}";
+				$sql = "UPDATE " . USERS_TABLE . " SET infraction_points = infraction_points - {$infraction['infraction_points']} WHERE user_id = {$infraction['user_id']}";
 				$db->sql_query($sql);
 			}
 			
@@ -101,7 +101,7 @@ class phpbb_infractions
 		// Or does another script handle that? a cron job perhaps
 		// Yep, that sounds best - we just set a flag
 		
-		$sql = "DELETE FROM " . USERS_TABLE . " WHERE expire_date < " . time() . ' AND void = 0 ';
+		$sql = "DELETE FROM " . INFRACTIONS_TABLE . " WHERE expire_time < " . time() . ' AND void = 0 ';
 		$deleted = $db->sql_query($sql);
 		
 		return $deleted;
