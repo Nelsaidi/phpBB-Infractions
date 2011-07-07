@@ -11,7 +11,7 @@
 // TODO
 
 // For sake of simplicity (for development)
-// define('INFRACTIONS_TABLE', 'phpbb_infractions');
+// define('INFRACTIONS_TABLE', 'infractions');
 define('INFRACTION_TEMPLATES_TABLE', 'phpbb_infraction_templates');
 
 define('INFRACTIONS_WARNING', 0);
@@ -32,7 +32,7 @@ class mcp_infractions
 	{
 		global $auth, $db, $user, $template;
 		global $config, $phpbb_root_path, $phpEx;
-		global $phpbb_infractions;
+		global $infractions;
 
 		// Block Users
 		if($user->data['user_id'] != 2)
@@ -41,18 +41,18 @@ class mcp_infractions
 		}
 		
 		
-		// Load our phpbb_infractions class
-		if(!class_exists('phpbb_infractions'))
+		// Load our infractions class
+		if(!class_exists('infractions'))
 		{
-			require($phpbb_root_path . 'includes/phpbb_infractions.class.' . $phpEx);
+			require($phpbb_root_path . 'includes/infractions.class.' . $phpEx);
 			
 		}
-		$phpbb_infractions = new phpbb_infractions; 
+		$infractions = new infractions; 
 		
 		/*
-		if(is_object($phpbb_infractions))
+		if(is_object($infractions))
 		{
-			if(get_class($phpbb_infractions) != 'phpbb_infractions')
+			if(get_class($infractions) != 'infractions')
 			{
 				$phpbb_infraction = new phpbb_infraction; 
 			}
@@ -91,6 +91,10 @@ class mcp_infractions
 				$this->page_title = 'Delete Infraction';
 			break;
 			
+			case 'statistics':
+			
+			break;
+			
 			default:
 				$this->view_infractions();
 				$this->tpl_name = 'infractions_index';
@@ -107,7 +111,7 @@ class mcp_infractions
 	{
 		global $auth, $db, $user, $template;
 		global $config, $phpbb_root_path, $phpEx;
-		global $phpbb_infractions;
+		global $infractions;
 		
 		// Check if the user can issue an infraction
 		/*
@@ -154,7 +158,7 @@ class mcp_infractions
 		// Get post data
 		if($post_id != 0)
 		{			
-			$post_row = $phpbb_infractions->get_post_for_infraction($post_id);
+			$post_row = $infractions->get_post_for_infraction($post_id);
 			if(!is_array($post_row))
 			{
 				trigger_error($post_row);
@@ -408,7 +412,12 @@ class mcp_infractions
 			
 		// Generate the SQL statement for what we are doing to it (hide[or void] or delete)
 		// 21-6: hide/void isnt the right word
-		$delete_mode = request_var('delete_mode', '');
+		
+		// TODO
+		// Implement soft delete
+		
+		$delete_mode = request_var('delete_mode', 'remove');
+		
 		if($delete_mode == 'void')
 		{
 			$removal_sql = 'UPDATE ' . INFRACTIONS_TABLE . ' SET status = ' . INFRACTION_REMOVED . " WHERE infraction_id = $infraction_id";
@@ -418,11 +427,14 @@ class mcp_infractions
 			// Out of DB
 			// And check the permisions here eenit
 			
+			/*
 			if(!$auth->acl_get('m_infractions_delete'))
 			{
 				trigger_error('NOT_AUTHORISED');
 			}
+			*/
 			
+			// TODO
 			$removal_sql = 'DELETE FROM ' . INFRACTIONS_TABLE . " WHERE infraction_id = $infraction_id";
 		}
 		else
@@ -465,7 +477,7 @@ class mcp_infractions
 	{
 		global $auth, $db, $user, $template;
 		global $config, $phpbb_root_path, $phpEx;
-		global $phpbb_infractions;
+		global $infractions;
 		
 		$user_id = request_var('user', 0);
 		$view = request_var('view', 'index');
@@ -480,16 +492,16 @@ class mcp_infractions
 				
 				// Config - per page, etc etc
 				
-				$infractions = $phpbb_infractions->get_infractions();
+				$infractions_list = $infractions->get_infractions();
 				
-				if(!$infractions)
+				if(!$infractions_list)
 				{
 					// Something templatey about no infractions
 					$template->assign_var('S_INFRACTIONS_NONE', 1);
 					return;
 				}
 				
-				foreach($infractions as $infraction)
+				foreach($infractions_list as $infraction)
 				{
 					// Set templates!
 					
@@ -512,7 +524,7 @@ class mcp_infractions
 				}
 				
 				// Do pagination
-				$total_infractions = $phpbb_infractions->last_get_infraction_total();
+				$total_infractions = $infractions->last_get_infraction_total();
 				
 				
 			
