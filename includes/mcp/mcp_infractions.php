@@ -210,7 +210,7 @@ class mcp_infractions
 				'RANK_TITLE'		=> $rank_title,
 				'JOINED'			=> $user->format_date($user_row['user_regdate']),
 				'POSTS'			=> $user_row['user_posts'],
-				'WARNINGS'		=> $user_row['user_warnings'] ,
+				'INFRACTIONS'		=> $user_row['infraction_points'] ,
 
 				'USERNAME'		=> $user_row['username'],
 				'USER_PROFILE'		=> get_username_string('full', $user_row['user_id'], $user_row['username'], $user_row['user_colour']),
@@ -246,6 +246,12 @@ class mcp_infractions
 				));
 			}
 			
+			// Get Infraction Templates
+			$sql = 'SELECT * FROM ' . INFRACTION_TEMPLATES_TABLE;
+			$result = $db->sql_query($sql);
+			
+			while
+			
 			return true;
 		}
 		
@@ -275,7 +281,7 @@ class mcp_infractions
 			// COMING SOON
 			
 			// User has selected a template and not custom, load it
-			$sql = 'SELECT * FROM ' . INFRACTIION_TEMPLATES_TABLE . " WHERE template_id = $infraction_template";
+			$sql = 'SELECT * FROM ' . INFRACTION_TEMPLATES_TABLE . " WHERE template_id = $infraction_template";
 			$result = $db->sql_query($sql);
 			$template_row = $db->sql_fetchrow($result);
 			$db->sql_freeresult($result);
@@ -287,10 +293,10 @@ class mcp_infractions
 			
 			// RHS already validated pre db insertion.
 			$infraction = array_merge($infraction, array(
-				'type'		=> $template_row['type'],
-				'points'		=> $template_row['points'],
-				'duration'	=> $template_row['duration'],
-				'reason'		=> $template_row['reason']
+				'type'				=> $template_row['type'],
+				'infraction_points'		=> $template_row['infraction_points'],
+				'duration'			=> $template_row['duration'],
+				'reason'				=> $template_row['reason']
 			));
 		
 		}
@@ -306,6 +312,8 @@ class mcp_infractions
 			
 			$infraction_points = request_var('points', 0);
 			// Negative infraction or zero points?
+			
+			// Err, in times like these we should return to the form!!
 			if($infraction_points < 1)
 			{
 				if($infraction_type == INFRACTIONS_INFRACTION)
@@ -373,12 +381,41 @@ class mcp_infractions
 		// Perform Actions
 		
 		// Notify the user, PM them, skip auth checks tbh, surely theyre a mod they can :/ ??
-		// TODO
+		
+		include_once($phpbb_root_path . 'includes/functions_privmsgs.' . $phpEx);
+		include_once($phpbb_root_path . 'includes/message_parser.' . $phpEx);
+
+		$user_row['user_lang'] = (file_exists($phpbb_root_path . 'language/' . $user_row['user_lang'] . "/mcp.$phpEx")) ? $user_row['user_lang'] : $config['default_lang'];
+		include($phpbb_root_path . 'language/' . basename($user_row['user_lang']) . "/mcp.$phpEx");
+
+		$message_parser = new parse_message();
+
+		$message_parser->message = sprintf($lang['WARNING_PM_BODY'], $warning);
+		$message_parser->parse(true, true, true, false, false, true, true);
+
+		$pm_data = array(
+			'from_user_id'			=> $user->data['user_id'],
+			'from_user_ip'			=> $user->ip,
+			'from_username'			=> $user->data['username'],
+			'enable_sig'			=> false,
+			'enable_bbcode'			=> true,
+			'enable_smilies'		=> true,
+			'enable_urls'			=> false,
+			'icon_id'				=> 0,
+			'bbcode_bitfield'		=> $message_parser->bbcode_bitfield,
+			'bbcode_uid'			=> $message_parser->bbcode_uid,
+			'message'				=> $message_parser->message,
+			'address_list'			=> array('u' => array($user_row['user_id'] => 'to')),
+		);
+
+		// TODO - This needs to change with warnings/infractions??
+		submit_pm('post', $lang['L_INFRACTION_PM'], $pm_data, false);
+		add_log('moderator', 'L_INFRACTION_LOG', $user_row['username']);
 		
 		// TODO RUN HOOK: infraction_issued !!
 		
 		// Redirect
-		// A possible message that that the user was banned, etc etc
+		// A possible message that that the user was banned, etc - Flash cookies? (so, display a message on the following page with the sucess?)
 		$redirect = append_sid("{$phpbb_root_path}mcp.$phpEx", "i=infractions");
 		
 		// Instant - its better that way
@@ -389,6 +426,7 @@ class mcp_infractions
 	/**
 	 * access via GET uri, maybe a are you sure you wanna do this too?
 	 * Major issue, if the guy is banned, it needs to be unbanned, but what if he already had a ban before the autoaction ban?
+	 * // TODO IMPORTANT how does the bans system deal with bans?? - like, multiple bans, is it possible to have 2?
 	 * This gets complicated, we have to revert a ban thats made, and then check if they're eligible for a ban, if yes and its the same continue it.
 	 * And if they are unbanned we should hook it to update this status?
 	 */
@@ -524,10 +562,7 @@ class mcp_infractions
 				}
 				
 				// Do pagination
-				$total_infractions = $infractions->last_get_infraction_total();
-				
-				
-			
+				$total_infractions = $infractions->last_get_infraction_total();	
 			
 			break;
 			

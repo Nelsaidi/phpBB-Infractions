@@ -45,7 +45,7 @@
 				<!-- IF RANK_IMG --><dt><!-- IF RANK_TITLE -->&nbsp;<!-- ELSE -->{L_RANK}:<!-- ENDIF --></dt><dd>{RANK_IMG}</dd><!-- ENDIF -->
 				<dt>{L_JOINED}:</dt><dd>{JOINED}</dd>
 				<dt>{L_TOTAL_POSTS}:</dt><dd>{POSTS}</dd>
-				<dt>{L_WARNINGS}: </dt><dd>{WARNINGS}</dd>
+				<dt>Infraction Points: </dt><dd>{INFRACTION_POINTS}</dd>
 			</dl>
 		</div>
 	</div>
@@ -97,6 +97,7 @@
 		
 		
 		<dl>
+			<!-- TODO a method of doing default date -->
 			<dt><label for="duration">Duration</label></dt>
 			<dd><select name="duration">
 				<option value="1440">1 Day</option>
