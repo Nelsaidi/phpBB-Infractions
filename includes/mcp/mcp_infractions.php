@@ -335,6 +335,10 @@ class mcp_infractions
 			*/
 			
 			$infraction_duration = request_var('duration', 0);
+			if($infraction_duration == -1)
+			{
+				$infraction_duration = request_var('duration_custom', 0);
+			}
 			
 			$infraction_reason = request_var('reason', '');
 			
@@ -366,7 +370,7 @@ class mcp_infractions
 		}
 		else
 		{
-			$infraction['expire_time'] = $infraction['duration'] * 60 + time(); // Duration in minutes
+			$infraction['expire_time'] = $infraction['duration'] * 60 + time(); // Duration is in minutes
 		}
 		
 		// Add the thing

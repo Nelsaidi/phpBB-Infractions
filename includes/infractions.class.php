@@ -1,6 +1,6 @@
 <?php
 
-class phpbb_infractions
+class infractions
 {
 	
 	/**

@@ -98,21 +98,25 @@
 		
 		<dl>
 			<!-- TODO a method of doing default date -->
-			<dt><label for="duration">Duration</label></dt>
-			<dd><select name="duration">
+			<dt><label for="duration" >Duration</label></dt>
+			<dd><select name="duration" onchange="if(this.value==-1){document.getElementById('duration_custom').style.display = 'block';}else{document.getElementById('duration_custom').style.display='none';}">
 				<option value="1440">1 Day</option>
 				<option value="10080">7 Days</option>
 				<option value="43200" checked="checked">30 Days</option>
 				<option value="86400">60 Days</option>
 				<option value="0">Permanent</option>
-				<option value="custom">Custom</option>
+				<option value="-1">Custom</option>
 				<!-- You know what, show a calendar and let JS calculate the duration by difference from now till then --> 
-			</select></dd>
+			</select>
+			<dd id="duration_custom">
+				<input type="text" maxlength="255" class="inputbox" name="duration_custom" />
+			</dd>
+			</dd>
 		</dl>
 		
 		<dl>
 			<dt><label for="points">Infraction Points</label></dt>
-			<dd><input type="text" maxlength="255" class="inputbox" name="points"></dd>
+			<dd><input type="text" maxlength="255" class="inputbox" name="points" /></dd>
 			
 		</dl>
 	</fieldset>

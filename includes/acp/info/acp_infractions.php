@@ -3,12 +3,12 @@
 /**
 * @package module_install
 */
-class acp_board_info
+class acp_infractions_info
 {
 	function module()
 	{
 		return array(
-			'filename'	=> 'acp_infraction',
+			'filename'	=> 'acp_infractions',
 			'title'		=> 'ACP_INFRACTIONS',
 			'version'	=> '1.0.0',
 			'modes'		=> array(

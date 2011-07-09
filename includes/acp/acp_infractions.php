@@ -46,7 +46,6 @@ class acp_infractions
 			require($phpbb_root_path . 'includes/infractions.class.' . $phpEx);
 			
 		}
-		$infractions = new infractions; 
 		
 		add_form_key('acp_infractions');
 		
@@ -54,42 +53,70 @@ class acp_infractions
 		{
 			case 'templates':
 				$this->infraction_templates();
-				$this->tpl_name = 'infraction_template';	
+				$this->tpl_name = 'acp_infraction_templates';	
 				$this->page_title = 'Infraction Templates';
 			break;
 			
 		}
 	}
 	
-	public function infraction_template()
+	public function infraction_templates()
 	{
 		global $auth, $db, $user, $template;
 		global $config, $phpbb_root_path, $phpEx;
 		global $infractions;
 		
-		$action = request_var($action, '');
+		$action = request_var('action', '');		
 		
 		switch($action)
 		{
 			case 'add':
+			case 'edit':
 				if(isset($_POST['submit']))
 				{
-				
-				
+					// Check $action!
+					$name = request_var('name', '');
+					$reason = request_var('reason', '');
+					$duration = request_var('duration', 0);
+					$infraction_points = request_var('infraction_points', 0);
+					
+					// TODO or >  $config['infraction_points_max'] 
+					if($infraction_points < 0)
+					{
+						trigger_error('bad infraction points');
+					}
+					
+					
+					if($action == 'add')
+					{
+						$sql = 'INSERT INTO ' . INFRACTION_TEMPLATES_TABLE . ' (name, reason, duration, infraction_points) VALUES ("' . 
+							$db->sql_escape($name) . '", "'.
+							$db->sql_escape($reason) . 
+							"$duration, $infraction_points ) ";
+					}
+					else
+					{
+						$sql = '';
+					}
+					
+					$db->sql_query($sql);
+					
+					redirect(adm_back_link($this->u_action));
 				}
-			break;
-			
-			case 'edit',
-				if(isset($_POST['submit']))
+				
+				if($action == 'edit')
 				{
-				
-				
+					// Preload data into form
+					$template_id = request_var('template_id', 0);
 				}
 				
+				$template->assign_var('S_TEMPLATE_FORM', 1);
+				
+			
 				
 			break;
 			
-			case 'delete',
+			case 'delete':
 				$template_id = request_var('template_id', 0);
 				
 			break;
@@ -111,6 +138,7 @@ class acp_infractions
 					{
 						$template->assign_block_vars('templates', array(
 							'TEMPLATE_ID'			=>  $infraction_template['template_id'],
+							'NAME'				=>  $infraction_template['name'],
 							'REASON'				=>  $infraction_template['reason'],
 							'INFRACION_POINTS'		=>  $infraction_template['infraction_points'],
 							'DURATION'			=>  $infraction_template['duration'],
