@@ -40,7 +40,7 @@ class mcp_infractions
 			trigger_error('Sorry dudes, still in development');
 		}
 		
-		
+		$user->add_lang('infractions');
 		// Load our infractions class
 		if(!class_exists('infractions'))
 		{
@@ -163,8 +163,10 @@ class mcp_infractions
 			{
 				trigger_error($post_row);
 			}
+			
+			$user_id = $post_row['poster_id'];
 		}
-
+	
 		
 
 		$sql = 'SELECT * FROM ' . USERS_TABLE . " WHERE user_id = $user_id";
@@ -250,7 +252,14 @@ class mcp_infractions
 			$sql = 'SELECT * FROM ' . INFRACTION_TEMPLATES_TABLE;
 			$result = $db->sql_query($sql);
 			
-			while
+			while($row = $db->sql_fetchrow($result))
+			{
+				$template->assign_block_vars('infraction_templates', array(
+					'NAME'		=> $row['name'],
+					'TEMPLATE_ID'	=> $row['template_id'],
+				));
+			}
+			$db->sql_freeresult($result);
 			
 			return true;
 		}
@@ -293,7 +302,8 @@ class mcp_infractions
 			
 			// RHS already validated pre db insertion.
 			$infraction = array_merge($infraction, array(
-				'type'				=> $template_row['type'],
+				 'type'				=> 0, // TODO
+				 
 				'infraction_points'		=> $template_row['infraction_points'],
 				'duration'			=> $template_row['duration'],
 				'reason'				=> $template_row['reason']
@@ -379,9 +389,11 @@ class mcp_infractions
 		$db->sql_query($sql);
 
 		// Update users table
-		$sql = 'UPDATE ' . USERS_TABLE . " SET infraction_points = infraction_points + {$infraction['infraction_points']} WHERE user_id = {$user_row['user_id']}";
-		$db->sql_query($sql);
-		
+		if($infraction['infraction_points'] > 0)
+		{
+			$sql = 'UPDATE ' . USERS_TABLE . " SET infraction_points = infraction_points + {$infraction['infraction_points']} WHERE user_id = {$user_row['user_id']}";
+			$db->sql_query($sql);
+		}
 		// Perform Actions
 		
 		// Notify the user, PM them, skip auth checks tbh, surely theyre a mod they can :/ ??
@@ -389,20 +401,19 @@ class mcp_infractions
 		include_once($phpbb_root_path . 'includes/functions_privmsgs.' . $phpEx);
 		include_once($phpbb_root_path . 'includes/message_parser.' . $phpEx);
 
-		$user_row['user_lang'] = (file_exists($phpbb_root_path . 'language/' . $user_row['user_lang'] . "/mcp.$phpEx")) ? $user_row['user_lang'] : $config['default_lang'];
-		include($phpbb_root_path . 'language/' . basename($user_row['user_lang']) . "/mcp.$phpEx");
+		include($phpbb_root_path . 'language/' . basename($user_row['user_lang']) . "/infractions.$phpEx");
 
 		$message_parser = new parse_message();
 
-		$message_parser->message = sprintf($lang['WARNING_PM_BODY'], $warning);
+		$message_parser->message = sprintf($lang['INFRACTION_PM_BODY'], $infraction['reason'], $infraction['infraction_points']);
 		$message_parser->parse(true, true, true, false, false, true, true);
 
 		$pm_data = array(
 			'from_user_id'			=> $user->data['user_id'],
 			'from_user_ip'			=> $user->ip,
-			'from_username'			=> $user->data['username'],
+			'from_username'		=> $user->data['username'],
 			'enable_sig'			=> false,
-			'enable_bbcode'			=> true,
+			'enable_bbcode'		=> true,
 			'enable_smilies'		=> true,
 			'enable_urls'			=> false,
 			'icon_id'				=> 0,
@@ -413,8 +424,8 @@ class mcp_infractions
 		);
 
 		// TODO - This needs to change with warnings/infractions??
-		submit_pm('post', $lang['L_INFRACTION_PM'], $pm_data, false);
-		add_log('moderator', 'L_INFRACTION_LOG', $user_row['username']);
+		submit_pm('post', $lang['INFRACTION_PM_SUBJECT'], $pm_data, false);
+		add_log('moderator', 'L_INFRACTION_LOG');
 		
 		// TODO RUN HOOK: infraction_issued !!
 		

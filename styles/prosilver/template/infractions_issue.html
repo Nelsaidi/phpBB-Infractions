@@ -80,15 +80,16 @@
 	
 	<fieldset>
 	<dl>
-		<dt><label for="template">Template</label></dt>
-		<dd><select name="template" onchange="">
-			<option value="1" checked="checked">[WARN] Spam</option>
+		<dt><label for="infraction_template">Template</label></dt>
+		<dd><select name="infraction_template" onchange="if(this.value==0){document.getElementById('infraction_details').style.display = 'block';}else{document.getElementById('infraction_details').style.display='none';}">
 			<option value="0" >Custom</option>
+			<!-- BEGIN infraction_templates -->
+			<option value="{infraction_templates.TEMPLATE_ID}" >{infraction_templates.NAME}</option>
+			<!-- END infraction_templates -->
 		</select></dd>
-		<dd>You could have something here too!</dd>
 	</dl>
 	
-	<fieldset id="infraction-details" >
+	<fieldset id="infraction_details" >
 		<dl>
 			<dt><label for="reason">Reason</label></dt>
 			<dd><textarea rows="2" cols="40" class="inputbox" id="ban" name="reason"></textarea></dd>
@@ -102,15 +103,13 @@
 			<dd><select name="duration" onchange="if(this.value==-1){document.getElementById('duration_custom').style.display = 'block';}else{document.getElementById('duration_custom').style.display='none';}">
 				<option value="1440">1 Day</option>
 				<option value="10080">7 Days</option>
-				<option value="43200" checked="checked">30 Days</option>
+				<option value="43200" checked="che">30 Days</option>
 				<option value="86400">60 Days</option>
 				<option value="0">Permanent</option>
 				<option value="-1">Custom</option>
 				<!-- You know what, show a calendar and let JS calculate the duration by difference from now till then --> 
 			</select>
-			<dd id="duration_custom">
-				<input type="text" maxlength="255" class="inputbox" name="duration_custom" />
-			</dd>
+			<span id="duration_custom"><input type="text" maxlength="255" class="inputbox" name="duration_custom" />	</span>
 			</dd>
 		</dl>
 		

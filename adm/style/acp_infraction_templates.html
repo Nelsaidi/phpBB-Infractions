@@ -1,38 +1,16 @@
 <!-- INCLUDE overall_header.html -->
 <!-- IF S_TEMPLATE_FORM -->
+<h3>Add Infraction Template</h3>
 <form id="" method="post" action="{U_ACTION}">
-
+<fieldset>
 		<dl>
 			<dt><label for="ban">Name:</label></dt>
 			<dd><input name="name" type="text" class="text medium" maxlength="255" id="name" /></dd>
 		</dl>
-		<dl>
-			<dt><label for="banlength">{L_BAN_LENGTH}:</label></dt>
-			<dd><label for="banlength"><select name="banlength" id="banlength" onchange="if(this.value==-1){document.getElementById('banlengthother').style.display = 'block';}else{document.getElementById('banlengthother').style.display='none';}">{S_BAN_END_OPTIONS}</select></label></dd>
-			<dd id="banlengthother" style="display: none;"><label><input type="text" name="banlengthother" class="inputbox" /><br /><span>{L_YEAR_MONTH_DAY}</span></label></dd>
-		</dl>
-		<dl>
-			<dt><label for="banexclude">{L_BAN_EXCLUDE}:</label><br /><span>{L_BAN_EXCLUDE_EXPLAIN}</span></dt>
-			<dd><label><input type="radio" name="banexclude" value="1" class="radio" /> {L_YES}</label>
-				<label><input type="radio" name="banexclude" id="banexclude" value="0" checked="checked" class="radio" /> {L_NO}</label></dd>
-		</dl>
-		<dl>
-			<dt><label for="banreason">{L_BAN_REASON}:</label></dt>
-			<dd><input name="banreason" type="text" class="text medium" maxlength="255" id="banreason" /></dd>
-		</dl>
-		<dl>
-			<dt><label for="bangivereason">{L_BAN_GIVE_REASON}:</label></dt>
-			<dd><input name="bangivereason" type="text" class="text medium" maxlength="255" id="bangivereason" /></dd>
-		</dl>
-
-		<p class="submit-buttons">
-			<input class="button1" type="submit" id="bansubmit" name="bansubmit" value="{L_SUBMIT}" />&nbsp;
-			<input class="button2" type="reset" id="banreset" name="banreset" value="{L_RESET}" />
-		</p>
 
 		<dl>
 			<dt><label for="reason">Reason</label></dt>
-			<dd><textarea rows="2" cols="40" class="inputbox" id="ban" name="reason"></textarea></dd>
+			<dd><textarea rows="2" cols="40" class="text medium" id="ban" name="reason"></textarea></dd>
 			
 		</dl>
 		
@@ -50,13 +28,13 @@
 				<!-- You know what, show a calendar and let JS calculate the duration by difference from now till then --> 
 			</select>
 			<dd id="duration_custom">
-				<input type="text" maxlength="255" class="inputbox" name="duration_custom" />
+				<input type="text" maxlength="255" class="text medium" name="duration_custom" />
 			</dd>
 		</dl>
 		
 		<dl>
 			<dt><label for="points">Infraction Points</label></dt>
-			<dd><input type="text" maxlength="255" class="inputbox" name="points"></dd>
+			<dd><input type="text" maxlength="255" class="text medium" name="points"></dd>
 			
 		</dl>
 		
@@ -65,6 +43,7 @@
 			<input type="submit" name="submit" value="Submit" class="button1" />
 			{S_FORM_TOKEN}
 		</fieldset>
+</fieldset>
 </form>
 <!-- ELSE -->
 <a>Add template</a>

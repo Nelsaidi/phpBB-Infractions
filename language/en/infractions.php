@@ -27,8 +27,11 @@ $lang = array_merge($lang, array(
 	'MCP_INFRACTIONS_LIST'		=> 'List Infractions',
 	'MCP_INFRACTIONS_ISSUE'		=> 'Issue Infraction',
 
-	'L_INFRACTION_PM'			=> 'You have been issued an infraction',
-	'L_INFRACTION_LOG'			=> 'Issued an infraction',
+	'INFRACTION_PM_BODY'		=> 'You have been issued %d infraction points for %s',
+	'INFRACTION_PM_SUBJECT'		=> 'You have been issued an infraction ',
+	
+	
+	'INFRACTION_LOG'			=> 'Issued an infraction',
 ));
 
 ?>

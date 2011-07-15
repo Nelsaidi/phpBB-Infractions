@@ -92,7 +92,7 @@ class acp_infractions
 						$sql = 'INSERT INTO ' . INFRACTION_TEMPLATES_TABLE . ' (name, reason, duration, infraction_points) VALUES ("' . 
 							$db->sql_escape($name) . '", "'.
 							$db->sql_escape($reason) . 
-							"$duration, $infraction_points ) ";
+							"\", $duration, $infraction_points ) ";
 					}
 					else
 					{
