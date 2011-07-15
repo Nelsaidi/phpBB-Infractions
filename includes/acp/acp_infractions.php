@@ -86,6 +86,10 @@ class acp_infractions
 						trigger_error('bad infraction points');
 					}
 					
+					if(empty($name) || empty($reason))
+					{
+						trigger_error('empty name or reason');
+					}
 					
 					if($action == 'add')
 					{
@@ -100,8 +104,7 @@ class acp_infractions
 					}
 					
 					$db->sql_query($sql);
-					
-					redirect(adm_back_link($this->u_action));
+					redirect($this->u_action);
 				}
 				
 				if($action == 'edit')
@@ -140,7 +143,7 @@ class acp_infractions
 							'TEMPLATE_ID'			=>  $infraction_template['template_id'],
 							'NAME'				=>  $infraction_template['name'],
 							'REASON'				=>  $infraction_template['reason'],
-							'INFRACION_POINTS'		=>  $infraction_template['infraction_points'],
+							'INFRACTION_POINTS'		=>  $infraction_template['infraction_points'],
 							'DURATION'			=>  $infraction_template['duration'],
 						));
 					}

@@ -87,8 +87,6 @@ class mcp_infractions
 			
 			case 'delete':
 				$this->delete_infraction();
-				$this->tpl_name = 'delete_infraction';	
-				$this->page_title = 'Delete Infraction';
 			break;
 			
 			case 'statistics':
@@ -518,6 +516,11 @@ class mcp_infractions
 		
 		// TODO RUN HOOK: infraction_deleted
 		
+		$this->tpl_name = 'delete_infraction';	
+		$this->page_title = 'Delete Infraction';
+		
+		$this->infractions_index();
+		$template->assign_var('INFRACTION_DELETED', 1);
 
 	}
 	
