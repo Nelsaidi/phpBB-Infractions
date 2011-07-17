@@ -1,0 +1,16 @@
+- Rename 'list' to 'view'
+- Have a view user infraction page
+- Fix up the delete infraction, how to deal with i dont know
+
+- Fix up ACP
+
+-- End of version --
+
+- v0.3
+Remove ALL unnecesary comments, and proper comments to code
+Read every line of code
+Make it look even nicer,
+Integrate into phpBB
+Do permisions
+Make the MODX, make the UMIL
+
