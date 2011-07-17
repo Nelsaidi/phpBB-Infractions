@@ -49,33 +49,18 @@ class mcp_infractions
 		}
 		$infractions = new infractions; 
 		
-		/*
-		if(is_object($infractions))
-		{
-			if(get_class($infractions) != 'infractions')
-			{
-				$phpbb_infraction = new phpbb_infraction; 
-			}
-		}
-		else
-		{
-			$phpbb_infraction = new phpbb_infraction; 
-		}
-		*/
-		
-		
-		$action = request_var('action', array('' => ''));
-
-		if (is_array($action))
-		{
-			list($action, ) = each($action);
-		}
+		$action = request_var('action', '');
 
 		add_form_key('mcp_infractions');
 		
 		$template->assign_vars(array(
 			'S_IN_INFRACTIONS'		=> 1,
 		));
+		
+		if($action == 'delete')
+		{
+			$this->delete_infraction();
+		}
 		
 		switch($mode)
 		{
@@ -84,20 +69,33 @@ class mcp_infractions
 				$this->tpl_name = 'infractions_issue';	
 				$this->page_title = 'Issue Infraction';
 			break;
+
+			case 'view':
 			
-			case 'delete':
-				$this->delete_infraction();
+				if($action == 'delete')
+				{
+					$this->delete_infraction();
+					// Sort URL, we have offset, limit, user_id to sort out?
+					// TODO
+					
+					redirect(
+					
+				}
+				
+				$user_id = request_var('user_id', 0);
+				if($user_id > 0)
+				{
+					$this->view_infractions_user();
+					$this->tpl_name = 'infractions_user';
+					$this->page_title = 'Infractions user: '; // append username to this
+				}
+				else
+				{
+					$this->view_infractions();
+					$this->tpl_name = 'infractions_index';
+					$this->page_title = 'List Infractions';
+				}
 			break;
-			
-			case 'statistics':
-			
-			break;
-			
-			default:
-				$this->view_infractions();
-				$this->tpl_name = 'infractions_index';
-				$this->page_title = 'Index';
-			
 		}
 	}
 	
@@ -443,14 +441,20 @@ class mcp_infractions
 	 * This gets complicated, we have to revert a ban thats made, and then check if they're eligible for a ban, if yes and its the same continue it.
 	 * And if they are unbanned we should hook it to update this status?
 	 */
-	public function delete_infraction()
+	public function delete_infraction($infraction_id = false)
 	{
+		//TODO 
+		// Let infraction id be an array, so, use request var array as default
+		// check size, if alot then go through this function
 		global $auth, $db, $user, $template;
 		global $config, $phpbb_root_path, $phpEx;
 		
-		$infraction_id = request_var('infraction_id', 0);
+		if($infraction_id === false)
+		{
+			$infraction_id = request_var('infraction_id', 0);
+		}
 		
-		if($infraction_id == 0)
+		if($infraction_id == 0 || !is_numeric($infraction_id))
 		{
 			trigger_error('bad id');
 		}
@@ -499,16 +503,16 @@ class mcp_infractions
 		// Infraction now doesnt exist, lets reverse its actions
 		// Remove points from users table
 		$user_id = (int) $infraction['user_id']; // Lets not trust the DB too
-		$points = (int) $infraction['points']; 
+		$infraction_points = (int) $infraction['infraction_points']; 
 		
 		if($user_id == 0)
 		{
 			trigger_error('bad db, very very bad'); // though impossible
 		}
 		
-		if($points > 0)
+		if($infraction_points > 0)
 		{
-			$sql = 'UPDATE ' . USERS_TABLE . " SET infraction_points = infraction_points - {$points} WHERE user_id = {$user_id}";
+			$sql = 'UPDATE ' . USERS_TABLE . " SET infraction_points = infraction_points - {$infraction_points} WHERE user_id = {$user_id}";
 			$db->sql_query($sql);
 		}
 		
@@ -519,8 +523,7 @@ class mcp_infractions
 		$this->tpl_name = 'delete_infraction';	
 		$this->page_title = 'Delete Infraction';
 		
-		$this->infractions_index();
-		$template->assign_var('INFRACTION_DELETED', 1);
+		$template->assign_var('S_INFRACTION_DELETED', 1);
 
 	}
 	

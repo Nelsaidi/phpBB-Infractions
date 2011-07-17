@@ -10,7 +10,7 @@ class mcp_infractions_info
 			'title'	   => 'MCP_INFRACTIONS',
 			'version'    => '1.0.0',
 			'modes'	   => array(
-				'list'        => array('title' => 'MCP_INFRACTIONS_LIST', 'auth' => '', 'cat' => array('MCP_INFRACTIONS')),
+				'view'        => array('title' => 'MCP_INFRACTIONS_VIEW', 'auth' => '', 'cat' => array('MCP_INFRACTIONS')),
 				'issue'        => array('title' => 'MCP_INFRACTIONS_ISSUE', 'auth' => '', 'cat' => array('MCP_INFRACTIONS')),
 			),
 		);
