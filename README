@@ -1,3 +1,5 @@
+How to switch with view_user? Do we have view_infractins() and let that handle or one seperate function? Yeah, would be best and segreatated
+
 - Rename 'list' to 'view'
 - Have a view user infraction page
 - Fix up the delete infraction, how to deal with i dont know

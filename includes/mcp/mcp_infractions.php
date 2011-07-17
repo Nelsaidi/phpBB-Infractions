@@ -77,8 +77,8 @@ class mcp_infractions
 					$this->delete_infraction();
 					// Sort URL, we have offset, limit, user_id to sort out?
 					// TODO
-					
-					redirect(
+					// We need to redirect - remove the delete from the top? - Use AJAX? - Like fancy, click delete, confirm box, then it fades away and a yellow box fades in, epic
+					// If we do AJAX we can have an AJAX variable??
 					
 				}
 				
@@ -95,6 +95,7 @@ class mcp_infractions
 					$this->tpl_name = 'infractions_index';
 					$this->page_title = 'List Infractions';
 				}
+				
 			break;
 		}
 	}
@@ -538,60 +539,122 @@ class mcp_infractions
 		global $config, $phpbb_root_path, $phpEx;
 		global $infractions;
 		
-		$user_id = request_var('user', 0);
-		$view = request_var('view', 'index');
+				
+		// Do pagination
+		// TODO
 		
-		switch($view)
-		{	
-			// index - so most recent?
-			case 'index':
-				
-				// Do pagination
-				// TODO
-				
-				// Config - per page, etc etc
-				
-				$infractions_list = $infractions->get_infractions();
-				
-				if(!$infractions_list)
-				{
-					// Something templatey about no infractions
-					$template->assign_var('S_INFRACTIONS_NONE', 1);
-					return;
-				}
-				
-				foreach($infractions_list as $infraction)
-				{
-					// Set templates!
-					
-					$template->assign_block_vars('infraction', array(
-						'INFRACTION_ID'	=> $infraction['infraction_id'],
-						'POST_ID'			=> $infraction['post_id'],
-						'ISSUE_TIME'	 	=> $user->format_date($infraction['issue_time']),
-						
-						'USERNAME'		=> $infraction['username'],
-						'USER_PROFILE'		=> get_username_string('full', $infraction['user_id'], $infraction['username'], $infraction['user_colour']),
-						
-						'USER_ID'			=> $infraction['user_id'],
-						'REASON'			=> $infraction['reason'],
-						'POINTS_ISSUED'	=> $infraction['infraction_points'],
-						'TOTAL_POINTS'		=> $infraction['total_points'],
-						'ACTIONS'			=> '',
-						
-						// TODO actions
-					));
-				}
-				
-				// Do pagination
-				$total_infractions = $infractions->last_get_infraction_total();	
-			
-			break;
-			
-			// Infractions for user - here we display an add infraction section
-			case 'user':
-			
-			break;
+		// Config - per page, etc etc
+		
+		$infractions_list = $infractions->get_infractions();
+		
+		if(!$infractions_list)
+		{
+			// Something templatey about no infractions
+			$template->assign_var('S_INFRACTIONS_NONE', 1);
+			return;
 		}
+		
+		foreach($infractions_list as $infraction)
+		{
+			// Set templates!
+			
+			$template->assign_block_vars('infraction', array(
+				'INFRACTION_ID'	=> $infraction['infraction_id'],
+				'POST_ID'			=> $infraction['post_id'],
+				'ISSUE_TIME'	 	=> $user->format_date($infraction['issue_time']),
+				
+				'USERNAME'		=> $infraction['username'],
+				'USER_PROFILE'		=> get_username_string('full', $infraction['user_id'], $infraction['username'], $infraction['user_colour']),
+				
+				'USER_ID'			=> $infraction['user_id'],
+				'REASON'			=> $infraction['reason'],
+				'POINTS_ISSUED'	=> $infraction['infraction_points'],
+				'TOTAL_POINTS'		=> $infraction['total_points'],
+				'ACTIONS'			=> '',
+				
+				// TODO actions
+			));
+		}
+		
+	
+		
+	}
+	
+	public function view_infractions_user()
+	{
+		global $auth, $db, $user, $template;
+		global $config, $phpbb_root_path, $phpEx;
+		global $infractions;
+		
+		$user_id = request_var('user_id', 0);
+		
+		// Load avatars, colours, etc
+		// Can we make use of the get_infraction function? - will cacheing for 1 second make the latter quciker?
+		$sql = 'SELECT * FROM ' . USERS_TABLE . ' WHERE user_id = ' . $user_id;
+		$result = $db->sql_query($sql);
+		$user_row = $db->sql_fetchrow($user_row);
+		$db->sql_freeresult($result);
+		
+		if (!function_exists('get_user_avatar'))
+		{
+			include($phpbb_root_path . 'includes/functions_display.' . $phpEx);
+		}
+
+		$rank_title = $rank_img = '';
+		$avatar_img = get_user_avatar($user_row['user_avatar'], $user_row['user_avatar_type'], $user_row['user_avatar_width'], $user_row['user_avatar_height']);
+
+		$template->assign_vars(array(
+
+			'RANK_TITLE'		=> $rank_title,
+			'JOINED'			=> $user->format_date($user_row['user_regdate']),
+			'POSTS'			=> $user_row['user_posts'],
+			'INFRACTIONS'		=> $user_row['infraction_points'] ,
+
+			'USERNAME'		=> $user_row['username'],
+			'USER_PROFILE'		=> get_username_string('full', $user_row['user_id'], $user_row['username'], $user_row['user_colour']),
+
+			'AVATAR_IMG'		=> $avatar_img,
+			'RANK_IMG'		=> $rank_img,
+		));
+
+		// TODO : Pagination, so, get limit and offset?
+		
+		// Get infractions
+		$infractions_list = $this->get_infractions(25, 0, 0, $user_id);
+
+		if(!$infractions_list)
+		{
+			$template->assign_var('S_INFRACTIONS_NONE', 1);
+			return;
+		}
+		
+		foreach($infractions_list as $infraction)
+		{
+	
+			$template->assign_block_vars('infraction', array(
+				'INFRACTION_ID'	=> $infraction['infraction_id'],
+				'POST_ID'			=> $infraction['post_id'],
+				'ISSUE_TIME'	 	=> $user->format_date($infraction['issue_time']),
+				
+				'USERNAME'		=> $infraction['username'],
+				'USER_PROFILE'		=> get_username_string('full', $infraction['user_id'], $infraction['username'], $infraction['user_colour']),
+				
+				'USER_ID'			=> $infraction['user_id'],
+				'REASON'			=> $infraction['reason'],
+				'POINTS_ISSUED'	=> $infraction['infraction_points'],
+				'TOTAL_POINTS'		=> $infraction['total_points'],
+				'ACTIONS'			=> '',
+				
+				// TODO actions
+			));
+		}
+		
+		// Do pagination
+		$total_infractions = $infractions->last_get_infraction_total();	
+	
+		
+		
+		
 		
 	}
 	
