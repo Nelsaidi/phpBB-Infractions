@@ -122,6 +122,9 @@ class acp_infractions
 			case 'delete':
 				$template_id = request_var('template_id', 0);
 				
+				$sql = "DELETE FROM " . INFRACTIONS_TABLE . " WHERE template_id = $template_id";
+				$db->sql_query($sql);
+				redirect($this->u_action);
 			break;
 			
 			default:
@@ -145,6 +148,8 @@ class acp_infractions
 							'REASON'				=>  $infraction_template['reason'],
 							'INFRACTION_POINTS'		=>  $infraction_template['infraction_points'],
 							'DURATION'			=>  $infraction_template['duration'],
+							
+							'DELETE_LINK'			=> $this->u_action . 'action=delete&template_id=' . $infraction_template['template_id'],
 						));
 					}
 				}

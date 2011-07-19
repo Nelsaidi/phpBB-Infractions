@@ -71,6 +71,7 @@ class mcp_infractions
 			break;
 
 			case 'view':
+			default: 
 			
 				if($action == 'delete')
 				{
@@ -299,8 +300,7 @@ class mcp_infractions
 			
 			// RHS already validated pre db insertion.
 			$infraction = array_merge($infraction, array(
-				 'type'				=> 0, // TODO
-				 
+				'type'				=> 0, // TODO
 				'infraction_points'		=> $template_row['infraction_points'],
 				'duration'			=> $template_row['duration'],
 				'reason'				=> $template_row['reason']
@@ -592,7 +592,7 @@ class mcp_infractions
 		// Can we make use of the get_infraction function? - will cacheing for 1 second make the latter quciker?
 		$sql = 'SELECT * FROM ' . USERS_TABLE . ' WHERE user_id = ' . $user_id;
 		$result = $db->sql_query($sql);
-		$user_row = $db->sql_fetchrow($user_row);
+		$user_row = $db->sql_fetchrow($result);
 		$db->sql_freeresult($result);
 		
 		if (!function_exists('get_user_avatar'))
@@ -620,7 +620,7 @@ class mcp_infractions
 		// TODO : Pagination, so, get limit and offset?
 		
 		// Get infractions
-		$infractions_list = $this->get_infractions(25, 0, 0, $user_id);
+		$infractions_list = $infractions->get_infractions(25, 0, 0, $user_id);
 
 		if(!$infractions_list)
 		{

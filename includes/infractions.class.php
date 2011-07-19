@@ -148,7 +148,7 @@ class infractions
 				),
 			),
 			
-			'WHERE'	=> '' ,
+			'WHERE'	=> array(),
 			
 			'ORDER_BY'	=> 'issue_time DESC',
 		);
@@ -164,14 +164,15 @@ class infractions
 		
 		if(is_numeric($user_id) && $user_id > 0)
 		{
-			$sql_array['WHERE'] .= " AND user_id =  $user_id ";
+			$sql_array['WHERE'][] = " i.user_id =  $user_id ";
 		}
 		
 		if(is_numeric($forum_id) && $forum_id > 0)
 		{
-			$sql_array['WHERE'] .= " AND forum_id =  $forum_id ";
+			$sql_array['WHERE'][] = " i.forum_id =  $forum_id ";
 		}
 		
+		$sql_array['WHERE'] = implode($sql_array['WHERE'], 'AND');
 		
 		// used for pagination
 		$this->last_sql_array = $sql_array;
@@ -224,6 +225,28 @@ class infractions
 		$db->sql_freeresult($result);
 		
 		return $total_infractions;
+	}
+	
+	/**
+	 * Used to replicate the query string
+	 * Until I find a better method
+	 *
+	 * @param array variables [name] => default
+	 */
+	public function generate_query_string($args)
+	{
+		$query_string = '';
+		
+		foreach($args as $name => $default)
+		{
+			$value = request_var($name, $default);
+			if($value !== $default)
+			{
+				$query_string .= "&{$name}={$value}";
+			}			
+		}
+		
+		return $query_string;
 	}
 	
 
