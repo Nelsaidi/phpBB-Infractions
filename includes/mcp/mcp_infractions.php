@@ -521,10 +521,15 @@ class mcp_infractions
 		
 		// TODO RUN HOOK: infraction_deleted
 		
-		$this->tpl_name = 'delete_infraction';	
-		$this->page_title = 'Delete Infraction';
+		$redirect = urldecode(request_var('redirect', ''));
 		
-		$template->assign_var('S_INFRACTION_DELETED', 1);
+		// Make sure redirect is local to board, find a better way?
+		if(!empty($redirect) && substr($redirect, 0, 9) == './mcp.php')
+		{
+			redirect($redirect);
+		}
+		
+		redirect($this->u_action);
 
 	}
 	
@@ -571,6 +576,8 @@ class mcp_infractions
 				'POINTS_ISSUED'	=> $infraction['infraction_points'],
 				'TOTAL_POINTS'		=> $infraction['total_points'],
 				'ACTIONS'			=> '',
+				
+				'DELETE_LINK'		=> $this->u_action . '&action=delete&infraction_id=' . $infraction['infraction_id'] . '&redirect=' . urlencode($this->u_action),
 				
 				// TODO actions
 			));
