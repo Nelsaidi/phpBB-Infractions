@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Main Infractions Module
  *
@@ -27,7 +26,7 @@ class mcp_infractions
 {
 	public $p_master;
 	public $u_action;
-
+	
 	public function main($id, $mode)
 	{
 		global $auth, $db, $user, $template;
@@ -41,13 +40,6 @@ class mcp_infractions
 		}
 		
 		$user->add_lang('infractions');
-		// Load our infractions class
-		if(!class_exists('infractions'))
-		{
-			require($phpbb_root_path . 'includes/infractions.class.' . $phpEx);
-			
-		}
-		$infractions = new infractions; 
 		
 		$action = request_var('action', '');
 
@@ -58,12 +50,7 @@ class mcp_infractions
 			'U_FIND_USERNAME'	=> append_sid("{$phpbb_root_path}memberlist.$phpEx", 'mode=searchuser&amp;form=mcp&amp;field=username&amp;select_single=true'),
 			
 		));
-		
-		if($action == 'delete')
-		{
-			$this->delete_infraction();
-		}
-		
+
 		switch($mode)
 		{
 			case 'issue':
@@ -77,12 +64,7 @@ class mcp_infractions
 			
 				if($action == 'delete')
 				{
-					$this->delete_infraction();
-					// Sort URL, we have offset, limit, user_id to sort out?
-					// TODO
-					// We need to redirect - remove the delete from the top? - Use AJAX? - Like fancy, click delete, confirm box, then it fades away and a yellow box fades in, epic
-					// If we do AJAX we can have an AJAX variable??
-					
+					$this->delete_infraction();					
 				}
 			
 				$user_id = request_var('user_id', 0);
@@ -123,8 +105,8 @@ class mcp_infractions
 	}
 	
 	/**
-	 * Issueing an infraction
-	 * Posts and normal all in one, for simplicity
+	 * This function is responsible for displaying the form for issuing an infraction
+	 * And then processing the infraction and issuing it
 	 */
 	public function issue_infraction()
 	{
@@ -133,12 +115,10 @@ class mcp_infractions
 		global $infractions;
 		
 		// Check if the user can issue an infraction
-		/*
 		if(!$auth->acl_get('m_infractions_issue'))
 		{
 			trigger_error('NOT_AUTHORISED');
 		}
-		*/
 		
 		$username = request_var('username', '');
 		
@@ -152,7 +132,7 @@ class mcp_infractions
 			return;
 		}
 		
-		// We want no usernames in URL
+		// Get the user ID of the selected user, and redirect to a URL with the id appended
 		if($username != '')
 		{
 			$sql = 'SELECT user_id FROM ' . USERS_TABLE . ' WHERE username_clean = "' . $db->sql_escape(utf8_clean_string($username)) . '"';
@@ -180,9 +160,7 @@ class mcp_infractions
 			
 			$user_id = $post_row['poster_id'];
 		}
-	
 		
-
 		$sql = 'SELECT * FROM ' . USERS_TABLE . " WHERE user_id = $user_id";
 		$result = $db->sql_query($sql);
 		$user_row = $db->sql_fetchrow($result);	
@@ -192,6 +170,7 @@ class mcp_infractions
 		{
 			trigger_error('user does not exist');
 		}
+		
 		/*
 		if($user->data['user_id'] == $user_row['user_id'])
 		{
@@ -199,8 +178,7 @@ class mcp_infractions
 		}	
 		*/
 
-		// 21-6 : This is a seperate method tbnh - also ,this code - reusable. so put it in a function
-		// Is someone being warned? If not, then just show them the view
+		// Check if the form has been submitted, if not, display the form to issue an infraction
 		if(!isset($_POST['issue_infraction']))
 		{
 			$template->assign_vars(array(
@@ -209,17 +187,14 @@ class mcp_infractions
 				'INFRACTION_TYPE'		=> $type,
 			));
 			
-			// Get user info like avatar, infractions SHAMELESSLY STOLEN :D
-			// Generate the appropriate user information for the user we are looking at
+			// Get user information such as avatar and rank
 			if (!function_exists('get_user_avatar'))
 			{
 				include($phpbb_root_path . 'includes/functions_display.' . $phpEx);
 			}
-
 			$rank_title = $rank_img = '';
 			$avatar_img = get_user_avatar($user_row['user_avatar'], $user_row['user_avatar_type'], $user_row['user_avatar_width'], $user_row['user_avatar_height']);
 
-			// OK, they didn't submit a warning so lets build the page for them to do so
 			$template->assign_vars(array(
 				// 'U_POST_ACTION'	=> $this->u_action,
 
@@ -235,8 +210,7 @@ class mcp_infractions
 				'RANK_IMG'		=> $rank_img,
 			));
 
-			
-			// Being warned for a post
+			// Is the infraction for a post?
 			if(isset($post_row))
 			{
 				// Get the mssage and parse it, for display
@@ -262,7 +236,7 @@ class mcp_infractions
 				));
 			}
 			
-			// Get Infraction Templates
+			// Load infraction templates to be put in the form
 			$sql = 'SELECT * FROM ' . INFRACTION_TEMPLATES_TABLE;
 			$result = $db->sql_query($sql);
 			
@@ -278,12 +252,11 @@ class mcp_infractions
 			return true;
 		}
 		
-		// Ok, we are creating an infraction
+		/** We are issuing an infraction **/
 		
-		// TODO form keys for security!!
-		
-		// Populate with already validated stuff
+		// Populate infraction details with already known stuff
 		$infraction = array(
+			'type'		=> 0, // Todo ??
 			'user_id'		=> $user_id,
 			'issuer_id'	=> $user->data['user_id'],
 			'issue_time'	=> time(), 
@@ -296,14 +269,11 @@ class mcp_infractions
 			$infraction['forum_id'] = $post_row['forum_id'];
 		}
 		
-		// Load additional information
 		$infraction_template = request_var('infraction_template', 0);
 		
+		// Load data from template if selected
 		if($infraction_template != 0)
 		{
-			// COMING SOON
-			
-			// User has selected a template and not custom, load it
 			$sql = 'SELECT * FROM ' . INFRACTION_TEMPLATES_TABLE . " WHERE template_id = $infraction_template";
 			$result = $db->sql_query($sql);
 			$template_row = $db->sql_fetchrow($result);
@@ -313,10 +283,8 @@ class mcp_infractions
 			{
 				trigger_error('invalid template selected');
 			}
-			
-			// RHS already validated pre db insertion.
+
 			$infraction = array_merge($infraction, array(
-				'type'				=> 0, // TODO
 				'infraction_points'		=> $template_row['infraction_points'],
 				'duration'			=> $template_row['duration'],
 				'reason'				=> $template_row['reason']
@@ -325,91 +293,51 @@ class mcp_infractions
 		}
 		else
 		{
-			// User chose custom, validate correctness
 		
-			$infraction_type = request_var('type', 0);
-			if($infraction_type > INFRACTIONS_INFRACTION)
-			{
-				trigger_error('invalid type');
-			}
-			
-			$infraction_points = request_var('points', 0);
-			// Negative infraction or zero points?
-			
-			// Err, in times like these we should return to the form!!
-			if($infraction_points < 1)
-			{
-				if($infraction_type == INFRACTIONS_INFRACTION)
-				{
-					trigger_error('cannot issue infraction with zero points, try a warning');
-				}
-				else
-				{
-					trigger_error('dude, negative points??');
-				}
-			}
-
-			// Make sure points are in range with maximum
-			/*
-			if($infraction_points > $config['infraction_max_points_issue'])
-			{
-				trigger_error('points too large');
-			}
-			*/
-			
-			$infraction_duration = request_var('duration', 0);
-			if($infraction_duration == -1)
-			{
-				$infraction_duration = request_var('duration_custom', 0);
-			}
-			
-			$infraction_reason = request_var('reason', '');
-			
-			// Empty reason? Maybe config var?
-			/*
-			if(strlen($infraction_reason) == 0 && $config['infraction_empty_reason'] == false)
-			{
-				trigger_error('reason cannot be empty');
-			}
-			*/
-			
-			// Validated, merge
 			$infraction = array_merge($infraction, array(
-				'type'				=> $infraction_type,
-				'infraction_points'		=> $infraction_points,
-				'duration'			=> $infraction_duration,
-				'reason'				=> $infraction_reason,
+				'infraction_points'		=> request_var('points', 0),
+				'duration'			=> request_var('duration', 0),
+				'reason'				=> request_var('reason', ''),
 			));
 		}
 		
-		// Custom syntax? Ie, One month = time() + one month, etc etc? or generic 30 days
-		// NOTE
+		// Validate infraction details
+		if($infraction['infraction_points'] < 1)
+		{
+			trigger_error('Invalid ammount of points');
+		}
+
+		if($infraction['infraction_points'] == -1)
+		{
+			$infraction_duration = request_var('duration_custom', 0);
+			// TODO A better way than just by entering minutes
+		}
+		
+
 		// Calculate expire from duration, 0 = non expiring
 		$infraction['expire_time'] = ($infraction['duration'] == 0) ? 0 : time() + $infraction['duration'] * 60;
 		
 		if($infraction['duration'] == 0)
 		{
+			// Permanent infraction
 			$infraction['expire_time'] = 0;
 		}
 		else
 		{
-			$infraction['expire_time'] = $infraction['duration'] * 60 + time(); // Duration is in minutes
+			$infraction['expire_time'] = $infraction['duration'] * 60 + time(); // (final) Duration is given in minutes
 		}
 		
-		// Add the thing
-		// TODO : Move this into the class ma tings
 		$sql = 'INSERT INTO ' . INFRACTIONS_TABLE . ' ' . $db->sql_build_array('INSERT', $infraction);
 		$db->sql_query($sql);
 
-		// Update users table
+		// Update infraction_points in users table
 		if($infraction['infraction_points'] > 0)
 		{
 			$sql = 'UPDATE ' . USERS_TABLE . " SET infraction_points = infraction_points + {$infraction['infraction_points']} WHERE user_id = {$user_row['user_id']}";
 			$db->sql_query($sql);
 		}
-		// Perform Actions
 		
-		// Notify the user, PM them, skip auth checks tbh, surely theyre a mod they can :/ ??
+		// TODO Actions!!
 		
 		include_once($phpbb_root_path . 'includes/functions_privmsgs.' . $phpEx);
 		include_once($phpbb_root_path . 'includes/message_parser.' . $phpEx);
@@ -436,42 +364,35 @@ class mcp_infractions
 			'address_list'			=> array('u' => array($user_row['user_id'] => 'to')),
 		);
 
-		// TODO - This needs to change with warnings/infractions??
 		submit_pm('post', $lang['INFRACTION_PM_SUBJECT'], $pm_data, false);
 		add_log('mod', 0, 0, 'Infraction issued');	
 		
 		// TODO RUN HOOK: infraction_issued !!
-		
-		// Redirect
-		// A possible message that that the user was banned, etc - Flash cookies? (so, display a message on the following page with the sucess?)
-		$redirect = append_sid("{$phpbb_root_path}mcp.$phpEx", "i=infractions");
-		
-		// Instant - its better that way
-		redirect($redirect);
+
+		// Redirect to infractions page for instantness
+		redirect(append_sid("{$phpbb_root_path}mcp.$phpEx", "i=infractions"));
 		exit;
 	}
-	
+ 
 	/**
-	 * access via GET uri, maybe a are you sure you wanna do this too?
-	 * Major issue, if the guy is banned, it needs to be unbanned, but what if he already had a ban before the autoaction ban?
-	 * // TODO IMPORTANT how does the bans system deal with bans?? - like, multiple bans, is it possible to have 2?
-	 * This gets complicated, we have to revert a ban thats made, and then check if they're eligible for a ban, if yes and its the same continue it.
-	 * And if they are unbanned we should hook it to update this status?
+	 * This function deals with the deletion and thus reversal of infractions,
+	 * If infraction id is NOT supplied, it will get it from the URI
+	 * And then redirect
+	 *
+	 * Optimisations - modify the users table only once if multiple deletes?
 	 */
 	public function delete_infraction($infraction_id = false)
 	{
-		//TODO 
-		// Let infraction id be an array, so, use request var array as default
-		// check size, if alot then go through this function
 		global $auth, $db, $user, $template;
 		global $config, $phpbb_root_path, $phpEx;
 		
+		// Loaded via the URI
 		if($infraction_id === false)
 		{
 			$infraction_id = request_var('infraction_id', 0);
 		}
 		
-		if($infraction_id == 0 || !is_numeric($infraction_id))
+		if($infraction_id == 0 OR !is_numeric($infraction_id))
 		{
 			trigger_error('bad id');
 		}
@@ -486,31 +407,17 @@ class mcp_infractions
 		{
 			trigger_error('Infraction does not exist');
 		}
-		// Generate the SQL statement for what we are doing to it (hide[or void] or delete)
-		// 21-6: hide/void isnt the right word
 		
-		// TODO
-		// Implement soft delete
-		
-		$delete_mode = request_var('delete_mode', 'remove');
+		$delete_mode = request_var('delete_mode', 'delete');
 		
 		if($delete_mode == 'void')
 		{
-			$removal_sql = 'UPDATE ' . INFRACTIONS_TABLE . ' SET status = ' . INFRACTION_REMOVED . " WHERE infraction_id = $infraction_id";
+			// Just void it, still display it - cron job will purge
+			$removal_sql = 'UPDATE ' . INFRACTIONS_TABLE . " SET void = 1 WHERE infraction_id = $infraction_id";
 		}
-		else if($delete_mode == 'remove')
+		else if($delete_mode == 'delete')
 		{
-			// Out of DB
-			// And check the permisions here eenit
-			
-			/*
-			if(!$auth->acl_get('m_infractions_delete'))
-			{
-				trigger_error('NOT_AUTHORISED');
-			}
-			*/
-			
-			// TODO
+			// Delete it fully out of the DB
 			$removal_sql = 'DELETE FROM ' . INFRACTIONS_TABLE . " WHERE infraction_id = $infraction_id";
 		}
 		else
@@ -522,45 +429,38 @@ class mcp_infractions
 		unset($removal_sql);
 		
 		// Infraction now doesnt exist, lets reverse its actions
-		// Remove points from users table
-		$user_id = (int) $infraction['user_id']; // Lets not trust the DB too
-		$infraction_points = (int) $infraction['infraction_points']; 
-		
-		if($user_id == 0)
-		{
-			trigger_error('bad db, very very bad'); // though impossible
-		}
-		
+
+		$user_id = $infraction['user_id']; // Lets not trust the DB too
+		$infraction_points = $infraction['infraction_points']; 
+
+		// Remove added points from the user
 		if($infraction_points > 0)
 		{
 			$sql = 'UPDATE ' . USERS_TABLE . " SET infraction_points = infraction_points - {$infraction_points} WHERE user_id = {$user_id}";
 			$db->sql_query($sql);
 		}
 		
-		
-		
-		// Reverse any actions, or continue if they still apply
-		
 		// TODO RUN HOOK: infraction_deleted
-		add_log('mod', 0, 0, 'Infraction deleted');		
-		redirect(append_sid($this->u_action));
+		
+		if($infraction_id === false)
+		{
+			add_log('mod', 0, 0, 'Infraction deleted');		
+			redirect(append_sid($this->u_action));
+		}
+		
+		return true;
 	}
 	
 	/**
-	View infractions for a user, could be extended to view for a certain forum or topic
-	Note - plural 
-	Permisions are fine, post has an infraction any mod can view it?
-	*/
+	 * Infractions index
+	 * So recent infractions
+	 */
 	public function view_infractions()
 	{
 		global $auth, $db, $user, $template;
 		global $config, $phpbb_root_path, $phpEx;
 		
-	
 		// Do pagination
-		// TODO
-		
-		// Config - per page, etc etc
 		
 		$infractions_list = $this->get_infractions();
 		
@@ -572,9 +472,7 @@ class mcp_infractions
 		}
 		
 		foreach($infractions_list as $infraction)
-		{
-			// Set templates!
-			
+		{			
 			$template->assign_block_vars('infraction', array(
 				'INFRACTION_ID'	=> $infraction['infraction_id'],
 				'POST_ID'			=> $infraction['post_id'],
@@ -590,8 +488,6 @@ class mcp_infractions
 				'ACTIONS'			=> '',
 				
 				'DELETE_LINK'		=> $this->u_action . '&action=delete&infraction_id=' . $infraction['infraction_id'] ,
-				
-				// TODO actions
 			));
 		}
 		
@@ -599,6 +495,10 @@ class mcp_infractions
 		
 	}
 	
+	/**
+	 * View infractions for a user
+	 * To show user details, more detail about infractions
+	 */
 	public function view_infractions_user()
 	{
 		global $auth, $db, $user, $template;
@@ -668,17 +568,12 @@ class mcp_infractions
 		}
 		
 		// Do pagination
-		$total_infractions = $this->last_get_infraction_total();	
-	
-		
-		
-		
-		
+		// $total_infractions = $this->last_get_infraction_total();			
 	}
 	
 	/**
 	 * Load the data for a post, checking that the user has read permissions for it too
-	 * @param $id post id
+	 * @param int post id
 	 * @return mixed - array success, else string error
 	 */
 	public function get_post_for_infraction($post_id)
@@ -721,7 +616,6 @@ class mcp_infractions
 		
 		return $post_row;
 	}
-
 	
 	/** 
 	 * Get the infractions
@@ -731,20 +625,14 @@ class mcp_infractions
 	 * @param $forum_id - forum id to sele
 	 * @return array infractions demanded
 	 */
-	public function get_infractions($limit = 25, $offset = 0, $start_date = 0,  $user_id = false, $forum_id = false,  $active_only = true)
+	public function get_infractions($limit = 25, $offset = 0, $start_date = 0,  $user_id = false, $forum_id = false,  $show_void = true)
 	{
 		global $auth, $db, $user, $template;
 		global $config, $phpbb_root_path, $phpEx;
 		
 		// Records + offset for pagination - which i should learn how to dodododo
 		$sql = 'SELECT * FROM ' . INFRACTIONS_TABLE . ' WHERE ';
-		
-		// TODO - set the right select from options
-		// TODO - Maybe have an order by var?
-		
-		// TODO - Choose only required feelms, TBC later
-		
-		// TODO TESTING - Run this query in PHP My admin to get the right syntax 
+
 		$sql_array = array(
 			'SELECT'		=> 'i.*, p.post_subject, u.username, u.user_colour, u.infraction_points AS total_points',
 			
@@ -769,14 +657,10 @@ class mcp_infractions
 			'ORDER_BY'	=> 'issue_time DESC',
 		);
 		
-		// TODO Do the active only
-		// 'WHERE'	=> 'void <> ' . $active_only . ' ' ,
-		
-		
-		// TODO
-		// Check relation ship works
-		
-		// TODO - Imnplement forum_id in schema
+		if($show_void === false)
+		{
+			$sql_array['WHERE'][] = ' void = 0 ';
+		}
 		
 		if(is_numeric($user_id) && $user_id > 0)
 		{
@@ -788,9 +672,10 @@ class mcp_infractions
 			$sql_array['WHERE'][] = " i.forum_id =  $forum_id ";
 		}
 		
+		// Build our WHERE part as needed
 		$sql_array['WHERE'] = implode($sql_array['WHERE'], 'AND');
 		
-		// used for pagination
+		// Store the array so we can select count total to use for pagination
 		$this->last_sql_array = $sql_array;
 		
 		$sql = $db->sql_build_query('SELECT', $sql_array);
@@ -799,12 +684,13 @@ class mcp_infractions
 		$infractions = $db->sql_fetchrowset($result);
 		$db->sql_freeresult($result);
 		
-		$row_count = sizeof($infractions);
-		$this->last_get_infraction_count = $row_count;
+		$row_count = sizeof($infractions); 
+		$this->last_get_infraction_count = $row_count; // Total rows returned
 		
+		// If we got less rows than our limit, then this is our total rows
 		if($row_count < $limit)
 		{
-			$this->last_get_infraction_total = $row_count; // Our total rows!
+			$this->last_get_infraction_total = $row_count; 
 		}
 		
 		if($row_count == 0)
@@ -818,7 +704,9 @@ class mcp_infractions
 	/**
 	 * A function to get total row count for last infraction view select
 	 * NOTE this way its optional if pagination is required, - needs a better way though?
-	 */
+	 *
+	 * Not used yet, need to figure it out
+	 
 	public function last_get_infraction_total()
 	{
 		global $auth, $db, $user, $template;
@@ -842,7 +730,7 @@ class mcp_infractions
 		
 		return $total_infractions;
 	}
-
+	*/
 	
 }
 
