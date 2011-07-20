@@ -1,5 +1,19 @@
 <?php
 
+/**
+* phpBB Infraction System
+* 
+* @package phpBB3
+* @copyright (c) 2011 Nelsaidi
+* @license http://opensource.org/licenses/gpl-license.php GNU Public License
+*
+*/
+
+/**
+ * This function clears and undoes the effects of infractions
+ *
+ * @param int Optional - user ID to clear for
+ */
 function clear_expired_infractions($user_id = '')
 {
 	global $auth, $db, $user, $template;
@@ -48,6 +62,11 @@ function clear_expired_infractions($user_id = '')
 	// Yep, that sounds best - we just set a flag
 	
 	$sql = "DELETE FROM " . INFRACTIONS_TABLE . " WHERE expire_time < " . time() . ' AND void = 0 ';
+	if(is_numeric($user_id))
+	{
+		$sql .= " AND user_id = $user_id ";
+	}
+	
 	$deleted = $db->sql_query($sql);
 	
 	return $deleted;
