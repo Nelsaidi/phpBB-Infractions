@@ -82,8 +82,13 @@ class mcp_infractions
 					// If we do AJAX we can have an AJAX variable??
 					
 				}
-				
+			
 				$user_id = request_var('user_id', 0);
+				$username = request_var('username', '');
+				if($username != '')
+				{
+					$this->search_user($
+				}
 				if($user_id > 0)
 				{
 					$this->view_infractions_user();
@@ -96,8 +101,9 @@ class mcp_infractions
 					$this->tpl_name = 'infractions_index';
 					$this->page_title = 'List Infractions';
 				}
-				
+			
 			break;
+			
 		}
 	}
 	
@@ -422,7 +428,7 @@ class mcp_infractions
 
 		// TODO - This needs to change with warnings/infractions??
 		submit_pm('post', $lang['INFRACTION_PM_SUBJECT'], $pm_data, false);
-		add_log('moderator', 'L_INFRACTION_LOG');
+		add_log('mod', 0, 0, 'Infraction issued');	
 		
 		// TODO RUN HOOK: infraction_issued !!
 		
@@ -465,7 +471,11 @@ class mcp_infractions
 		$result = $db->sql_query($sql);
 		$infraction = $db->sql_fetchrow($result);
 		$db->sql_freeresult($result);
-			
+		
+		if(sizeof($infraction) == 0)
+		{
+			trigger_error('Infraction does not exist');
+		}
 		// Generate the SQL statement for what we are doing to it (hide[or void] or delete)
 		// 21-6: hide/void isnt the right word
 		
@@ -517,19 +527,14 @@ class mcp_infractions
 			$db->sql_query($sql);
 		}
 		
+		
+		
 		// Reverse any actions, or continue if they still apply
 		
 		// TODO RUN HOOK: infraction_deleted
-		
-		$redirect = urldecode(request_var('redirect', ''));
-		
-		// Make sure redirect is local to board, find a better way?
-		if(!empty($redirect) && substr($redirect, 0, 9) == './mcp.php')
-		{
-			redirect($redirect);
-		}
-		
+		add_log('mod', 0, 0, 'Infraction deleted');		
 		redirect($this->u_action);
+		
 
 	}
 	
@@ -577,7 +582,7 @@ class mcp_infractions
 				'TOTAL_POINTS'		=> $infraction['total_points'],
 				'ACTIONS'			=> '',
 				
-				'DELETE_LINK'		=> $this->u_action . '&action=delete&infraction_id=' . $infraction['infraction_id'] . '&redirect=' . urlencode($this->u_action),
+				'DELETE_LINK'		=> $this->u_action . '&action=delete&infraction_id=' . $infraction['infraction_id'] ,
 				
 				// TODO actions
 			));
@@ -663,6 +668,231 @@ class mcp_infractions
 		
 		
 		
+	}
+	
+		/**
+	 * Load the data for a post, checking that the user has read permissions for it too
+	 * @param $id post id
+	 * @return mixed - array success, else string error
+	 */
+	public function get_post_for_infraction($post_id)
+	{
+		global $auth, $db, $user, $template;
+		global $config, $phpbb_root_path, $phpEx;
+		
+		// Check if the user has already been warned for this post
+		// TODO
+			
+		if(!is_numeric($post_id))
+		{
+			return 'POST_NOT_EXIST';
+		}
+		
+		$sql = "SELECT * FROM " . POSTS_TABLE . " WHERE post_id = $post_id";
+		
+		$result = $db->sql_query($sql); // Do we cache it for ~60 seconds, saves querying again but maybe another mod updates the post?
+		
+		$post_row = $db->sql_fetchrow($result);
+		$db->sql_freeresult($result);
+		
+		if(sizeof($post_row) == 0)
+		{
+			return 'POST_NOT_EXIST';
+		}
+		
+		// Check the user has issue warning rights too it 
+		// TODO 
+		// just read rights for now, let infractions be global?
+		
+		// Check if the user can read the post
+		if(!$auth->acl_get('f_read', $post_row['forum_id']))
+		{
+			return 'NO_PERMISIONS';
+		}
+		
+		// TODO - is there a better way to check permisions? - maybe first, since we already have the forum id from the infraction!
+		
+		
+		return $post_row;
+	}
+	
+	/**
+	 * Clears expired infractions
+	 * @param $user mixed - single or array or blank for all
+	 * @return bool success
+	 */
+	public function clear_expired_infractions($user_id = '')
+	{
+		global $auth, $db, $user, $template;
+		global $config, $phpbb_root_path, $phpEx;
+		
+		$sql = 'SELECT * FROM ' . INFRACTIONS_TABLE  . ' WHERE expire_time < ' . time() . ' AND void = 0 AND expire_time <> 0 ';
+		
+		if(is_numeric($user_id))
+		{
+			$sql .= " AND user_id = $user_id ";
+		}
+		
+		
+		$result = $db->sql_query($sql);
+		
+		$infractions = $db->sql_fetchrowset($result);
+		$db->sql_freeresult($result);
+		
+		// No infractions
+		if(sizeof($infractions) == 0)
+		{
+			return false;
+		}
+		
+		// Note - bans are dealt by the default bans, here we deal with group moves, luckily they are stored in an array
+		
+		$users = array();
+		
+		foreach($infractions as $infraction)
+		{
+			// TODO - Undo groups once groups are implemented
+			// check if new groups -  iterate through infraction new groups , do group_user_del(4, 53);
+			
+			if($infraction['infraction_points'] > 0)
+			{
+				$sql = "UPDATE " . USERS_TABLE . " SET infraction_points = infraction_points - {$infraction['infraction_points']} WHERE user_id = {$infraction['user_id']}";
+				$db->sql_query($sql);
+			}
+			
+		}
+		
+		// TODO
+		// Check config - time to keep infractions for in table for
+		// Issue - now that they are variable, we have to do this each time?
+		// Or does another script handle that? a cron job perhaps
+		// Yep, that sounds best - we just set a flag
+		
+		$sql = "DELETE FROM " . INFRACTIONS_TABLE . " WHERE expire_time < " . time() . ' AND void = 0 ';
+		$deleted = $db->sql_query($sql);
+		
+		return $deleted;
+	}
+
+	
+	/** 
+	 * Get the infractions
+	 * Underlying function
+	 *
+	 * @param $user_id User ID to select for - false for non specific (so all)
+	 * @param $forum_id - forum id to sele
+	 * @return array infractions demanded
+	 */
+	public function get_infractions($limit = 25, $offset = 0, $start_date = 0,  $user_id = false, $forum_id = false,  $active_only = true)
+	{
+		global $auth, $db, $user, $template;
+		global $config, $phpbb_root_path, $phpEx;
+		
+		// Records + offset for pagination - which i should learn how to dodododo
+		$sql = 'SELECT * FROM ' . INFRACTIONS_TABLE . ' WHERE ';
+		
+		// TODO - set the right select from options
+		// TODO - Maybe have an order by var?
+		
+		// TODO - Choose only required feelms, TBC later
+		
+		// TODO TESTING - Run this query in PHP My admin to get the right syntax 
+		$sql_array = array(
+			'SELECT'		=> 'i.*, p.post_subject, u.username, u.user_colour, u.infraction_points AS total_points',
+			
+			'FROM'		=> array(
+				INFRACTIONS_TABLE	=> 'i',
+			),
+			
+			'LEFT_JOIN'	=> array(
+				array(
+					'FROM'	=> array(POSTS_TABLE => 'p'),
+					'ON'		=> 'i.post_id = p.post_id'
+				),
+				// NOTE : Need to link to users too - impact on performance now?
+				array(
+					'FROM'	=> array(USERS_TABLE => 'u'),
+					'ON'		=> 'i.user_id = u.user_id',
+				),
+			),
+			
+			'WHERE'	=> array(),
+			
+			'ORDER_BY'	=> 'issue_time DESC',
+		);
+		
+		// TODO Do the active only
+		// 'WHERE'	=> 'void <> ' . $active_only . ' ' ,
+		
+		
+		// TODO
+		// Check relation ship works
+		
+		// TODO - Imnplement forum_id in schema
+		
+		if(is_numeric($user_id) && $user_id > 0)
+		{
+			$sql_array['WHERE'][] = " i.user_id =  $user_id ";
+		}
+		
+		if(is_numeric($forum_id) && $forum_id > 0)
+		{
+			$sql_array['WHERE'][] = " i.forum_id =  $forum_id ";
+		}
+		
+		$sql_array['WHERE'] = implode($sql_array['WHERE'], 'AND');
+		
+		// used for pagination
+		$this->last_sql_array = $sql_array;
+		
+		$sql = $db->sql_build_query('SELECT', $sql_array);
+		$result = $db->sql_query_limit($sql, $limit, $offset);
+		
+		$infractions = $db->sql_fetchrowset($result);
+		$db->sql_freeresult($result);
+		
+		$row_count = sizeof($infractions);
+		$this->last_get_infraction_count = $row_count;
+		
+		if($row_count < $limit)
+		{
+			$this->last_get_infraction_total = $row_count; // Our total rows!
+		}
+		
+		if($row_count == 0)
+		{
+			return false;
+		}
+		
+		return $infractions;
+	}
+	
+	/**
+	 * A function to get total row count for last infraction view select
+	 * NOTE this way its optional if pagination is required, - needs a better way though?
+	 */
+	public function last_get_infraction_total()
+	{
+		global $auth, $db, $user, $template;
+		global $config, $phpbb_root_path, $phpEx;
+		
+		// NOTE - if the return was less than the limit, then that is our total rows - performance!!
+		// Argh this is messing with my mind - its getting VERY messy, need to optimise approach
+		
+		if($this->last_get_infraction_count == 0)
+		{
+			return 0;
+		}
+		
+		$sql_array = $this->last_sql_array;
+		$sql_array['SELECT'] = 'count(i.infraction_id) AS total_infractions';
+		$sql = $db->sql_build_query('SELECT', $sql_array);
+		
+		$result = $db->sql_query($sql);
+		$total_infractions = $db->sql_fetchfield('total_infractions');
+		$db->sql_freeresult($result);
+		
+		return $total_infractions;
 	}
 	
 	
