@@ -55,6 +55,8 @@ class mcp_infractions
 		
 		$template->assign_vars(array(
 			'S_IN_INFRACTIONS'		=> 1,
+			'U_FIND_USERNAME'	=> append_sid("{$phpbb_root_path}memberlist.$phpEx", 'mode=searchuser&amp;form=mcp&amp;field=username&amp;select_single=true'),
+			
 		));
 		
 		if($action == 'delete')
@@ -85,10 +87,23 @@ class mcp_infractions
 			
 				$user_id = request_var('user_id', 0);
 				$username = request_var('username', '');
+				
 				if($username != '')
 				{
-					$this->search_user($
-				}
+					$sql = 'SELECT user_id FROM ' . USERS_TABLE . ' WHERE username_clean = "' . $db->sql_escape(utf8_clean_string($username)) . '"';
+					$result = $db->sql_query($sql);
+					$user_row = $db->sql_fetchrow($result);	
+					$db->sql_freeresult($result);
+					
+					if(!isset($user_row['user_id']))
+					{
+						trigger_error('user does not exist');
+					}
+					
+					redirect(append_sid("{$phpbb_root_path}mcp.$phpEx", "i=infractions&mode=view&user_id={$user_row['user_id']}"));
+					exit;
+				}		
+				
 				if($user_id > 0)
 				{
 					$this->view_infractions_user();
@@ -133,12 +148,7 @@ class mcp_infractions
 		
 		if($user_id == 0 && $post_id == 0 && $username == '')
 		{
-			$template->assign_vars(array(
-				'S_INFRACTIONS_NO_USER'		=> 1,
-				'U_FIND_USERNAME'	=> append_sid("{$phpbb_root_path}memberlist.$phpEx", 'mode=searchuser&amp;form=mcp&amp;field=username&amp;select_single=true'),
-			
-			));
-			
+			$template->assign_var('S_INFRACTIONS_NO_USER' , 1);			
 			return;
 		}
 		
@@ -162,7 +172,7 @@ class mcp_infractions
 		// Get post data
 		if($post_id != 0)
 		{			
-			$post_row = $infractions->get_post_for_infraction($post_id);
+			$post_row = $this->get_post_for_infraction($post_id);
 			if(!is_array($post_row))
 			{
 				trigger_error($post_row);
@@ -533,9 +543,7 @@ class mcp_infractions
 		
 		// TODO RUN HOOK: infraction_deleted
 		add_log('mod', 0, 0, 'Infraction deleted');		
-		redirect($this->u_action);
-		
-
+		redirect(append_sid($this->u_action));
 	}
 	
 	/**
@@ -547,15 +555,14 @@ class mcp_infractions
 	{
 		global $auth, $db, $user, $template;
 		global $config, $phpbb_root_path, $phpEx;
-		global $infractions;
 		
-				
+	
 		// Do pagination
 		// TODO
 		
 		// Config - per page, etc etc
 		
-		$infractions_list = $infractions->get_infractions();
+		$infractions_list = $this->get_infractions();
 		
 		if(!$infractions_list)
 		{
@@ -596,7 +603,6 @@ class mcp_infractions
 	{
 		global $auth, $db, $user, $template;
 		global $config, $phpbb_root_path, $phpEx;
-		global $infractions;
 		
 		$user_id = request_var('user_id', 0);
 		
@@ -632,7 +638,7 @@ class mcp_infractions
 		// TODO : Pagination, so, get limit and offset?
 		
 		// Get infractions
-		$infractions_list = $infractions->get_infractions(25, 0, 0, $user_id);
+		$infractions_list = $this->get_infractions(25, 0, 0, $user_id);
 
 		if(!$infractions_list)
 		{
@@ -662,7 +668,7 @@ class mcp_infractions
 		}
 		
 		// Do pagination
-		$total_infractions = $infractions->last_get_infraction_total();	
+		$total_infractions = $this->last_get_infraction_total();	
 	
 		
 		
@@ -670,7 +676,7 @@ class mcp_infractions
 		
 	}
 	
-		/**
+	/**
 	 * Load the data for a post, checking that the user has read permissions for it too
 	 * @param $id post id
 	 * @return mixed - array success, else string error
@@ -714,64 +720,6 @@ class mcp_infractions
 		
 		
 		return $post_row;
-	}
-	
-	/**
-	 * Clears expired infractions
-	 * @param $user mixed - single or array or blank for all
-	 * @return bool success
-	 */
-	public function clear_expired_infractions($user_id = '')
-	{
-		global $auth, $db, $user, $template;
-		global $config, $phpbb_root_path, $phpEx;
-		
-		$sql = 'SELECT * FROM ' . INFRACTIONS_TABLE  . ' WHERE expire_time < ' . time() . ' AND void = 0 AND expire_time <> 0 ';
-		
-		if(is_numeric($user_id))
-		{
-			$sql .= " AND user_id = $user_id ";
-		}
-		
-		
-		$result = $db->sql_query($sql);
-		
-		$infractions = $db->sql_fetchrowset($result);
-		$db->sql_freeresult($result);
-		
-		// No infractions
-		if(sizeof($infractions) == 0)
-		{
-			return false;
-		}
-		
-		// Note - bans are dealt by the default bans, here we deal with group moves, luckily they are stored in an array
-		
-		$users = array();
-		
-		foreach($infractions as $infraction)
-		{
-			// TODO - Undo groups once groups are implemented
-			// check if new groups -  iterate through infraction new groups , do group_user_del(4, 53);
-			
-			if($infraction['infraction_points'] > 0)
-			{
-				$sql = "UPDATE " . USERS_TABLE . " SET infraction_points = infraction_points - {$infraction['infraction_points']} WHERE user_id = {$infraction['user_id']}";
-				$db->sql_query($sql);
-			}
-			
-		}
-		
-		// TODO
-		// Check config - time to keep infractions for in table for
-		// Issue - now that they are variable, we have to do this each time?
-		// Or does another script handle that? a cron job perhaps
-		// Yep, that sounds best - we just set a flag
-		
-		$sql = "DELETE FROM " . INFRACTIONS_TABLE . " WHERE expire_time < " . time() . ' AND void = 0 ';
-		$deleted = $db->sql_query($sql);
-		
-		return $deleted;
 	}
 
 	
@@ -894,7 +842,7 @@ class mcp_infractions
 		
 		return $total_infractions;
 	}
-	
+
 	
 }
 

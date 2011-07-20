@@ -1,6 +1,6 @@
 <?php
 
-public function clear_expired_infractions($user_id = '')
+function clear_expired_infractions($user_id = '')
 {
 	global $auth, $db, $user, $template;
 	global $config, $phpbb_root_path, $phpEx;
