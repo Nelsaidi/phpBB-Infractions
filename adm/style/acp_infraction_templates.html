@@ -1,7 +1,7 @@
 <!-- INCLUDE overall_header.html -->
 <!-- IF S_TEMPLATE_FORM -->
 <h3>Add Infraction Template</h3>
-<form id="" method="post" action="{U_ACTION}">
+<form id="" method="post" action="{TEMPLATE_ADD}">
 <fieldset>
 		<dl>
 			<dt><label for="ban">Name:</label></dt>
@@ -57,6 +57,8 @@
 		<th>Infraction Points</th>
 		<th>Duration</th>
 		<th></th>
+		<th></th>
+		<th></th>
 	</thead>
 	<!-- BEGIN templates -->
 	<tr>
@@ -64,7 +66,10 @@
 		<td>{templates.REASON}</td>
 		<td>{templates.INFRACTION_POINTS}</td>
 		<td>{templates.DURATION}</td>
-		<td><a href="{templates.DELETE_LINK}">Delete</a> </td>
+		<td><a href="{U_ACTION}&action=delete&template_id={templates.TEMPLATE_ID}">Delete</a> </td>
+		<td><a href="{U_ACTION}&action=moveup&template_id={templates.TEMPLATE_ID}">Move Up</a> </td>
+		<td><a href="{U_ACTION}&action=movedown&template_id={templates.TEMPLATE_ID}">Move Down</a> </td>
+		
 	</tr>
 	<!-- END templates -->
 </table>

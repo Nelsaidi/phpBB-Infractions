@@ -47,6 +47,7 @@ class acp_infractions
 		}
 		
 		add_form_key('acp_infractions');
+		$template->assign_var('U_ACTION', append_sid($this->u_action));
 		
 		switch($mode)
 		{
@@ -92,17 +93,25 @@ class acp_infractions
 					
 					if($action == 'add')
 					{
-						$sql = 'INSERT INTO ' . INFRACTION_TEMPLATES_TABLE . ' (name, reason, duration, infraction_points) VALUES ("' . 
+						// Determine position
+						$sql = "SELECT MAX(position) as max_position FROM " . INFRACTION_TEMPLATES_TABLE;
+						$db->sql_query($sql);
+						$position = $db->sql_fetchfield('max_position') + 1;
+							
+						$sql = 'INSERT INTO ' . INFRACTION_TEMPLATES_TABLE . ' (name, reason, duration, infraction_points, position) VALUES ("' . 
 							$db->sql_escape($name) . '", "'.
 							$db->sql_escape($reason) . 
-							"\", $duration, $infraction_points ) ";
+							"\", $duration, $infraction_points, $position ) ";
+							
+						$db->sql_query($sql);
+					
 					}
 					else
 					{
 						$sql = '';
 					}
 					
-					$db->sql_query($sql);
+				
 					redirect($this->u_action);
 				}
 				
@@ -121,25 +130,76 @@ class acp_infractions
 			case 'delete':
 				$template_id = request_var('template_id', 0);
 				
+				// Get position so we can rearrange list after delete
+				$sql = "SELECT position FROM " . INFRACTION_TEMPLATES_TABLE . " WHERE template_id = $template_id";
+				$result = $db->sql_query($sql);
+				$current_position = (int) $db->sql_fetchfield('position');
+				unset($sql);
+				
+				// Remove template from DB
 				$sql = "DELETE FROM " . INFRACTION_TEMPLATES_TABLE . " WHERE template_id = $template_id";
 				$db->sql_query($sql);
+				
+				// Rearrange list
+				$sql = "UPDATE " . INFRACTION_TEMPLATES_TABLE . " SET position = position - 1 WHERE position > $current_position";
+				$db->sql_query($sql);
+				
 				redirect($this->u_action);
+				
+				
 			break;
 			
 			case 'moveup':
 			case 'movedown':
-			// We need to be able to move the templates about
-			
-			break;
+				$template_id = request_var('template_id', 0);
+				if($template_id == 0)
+				{
+					trigger_error('invalid template id');
+				}
+				
+				$sql = "SELECT position FROM " . INFRACTION_TEMPLATES_TABLE . " WHERE template_id = $template_id";
+				$result = $db->sql_query($sql);
+				$current_position = (int) $db->sql_fetchfield('position');
+				
+				$sql = "SELECT MAX(position) as max_position FROM " . INFRACTION_TEMPLATES_TABLE;
+				$db->sql_query($sql);
+				$max_position = (int) $db->sql_fetchfield('max_position') ;
+
+				unset($sql);
+
+				if($action == 'moveup' && $current_position != 1)
+				{
+					// Decrease current by 1, add 1 to previous
+					$sql = 'UPDATE ' . INFRACTION_TEMPLATES_TABLE . ' SET position = ' . $current_position . ' WHERE position = ' . ($current_position - 1);
+					$db->sql_query($sql);
+					
+					$sql = 'UPDATE ' . INFRACTION_TEMPLATES_TABLE . ' SET position = ' . ($current_position - 1) . ' WHERE template_id = ' . $template_id;
+					$db->sql_query($sql);
+				
+				}
+				
+				if($action == 'movedown' && $current_position != $max_position)
+				{
+					// Subtract 1 from previous
+					$sql = 'UPDATE ' . INFRACTION_TEMPLATES_TABLE . ' SET position = ' . $current_position . ' WHERE position = ' . ($current_position + 1);
+					$db->sql_query($sql);
+					
+					$sql = 'UPDATE ' . INFRACTION_TEMPLATES_TABLE . ' SET position = ' . ($current_position + 1) . ' WHERE template_id = ' . $template_id;
+					$db->sql_query($sql);
+				}
+				
+				
+
+			// No break - continue on displaying the templates
 			
 			default:
 				// Index
-				$sql = 'SELECT * FROM ' . INFRACTION_TEMPLATES_TABLE;
+				$sql = 'SELECT * FROM ' . INFRACTION_TEMPLATES_TABLE . ' ORDER BY position ASC';
 				$result = $db->sql_query($sql);
 				$infraction_templates = $db->sql_fetchrowset($result);
 				$db->sql_freeresult($result);
 				
-				$template->assign_var('TEMPLATE_ADD', $this->u_action . '&action=add');
+				$template->assign_var('TEMPLATE_ADD', append_sid($this->u_action, 'action=add'));
 				
 				if(sizeof($infraction_templates) == 0)
 				{
@@ -156,7 +216,6 @@ class acp_infractions
 							'INFRACTION_POINTS'		=>  $infraction_template['infraction_points'],
 							'DURATION'			=>  $infraction_template['duration'],
 							
-							'DELETE_LINK'			=> $this->u_action . '&action=delete&template_id=' . $infraction_template['template_id'],
 						));
 					}
 				}

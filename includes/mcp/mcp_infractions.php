@@ -237,7 +237,7 @@ class mcp_infractions
 			}
 			
 			// Load infraction templates to be put in the form
-			$sql = 'SELECT * FROM ' . INFRACTION_TEMPLATES_TABLE;
+			$sql = 'SELECT * FROM ' . INFRACTION_TEMPLATES_TABLE . ' ORDER BY position ASC';
 			$result = $db->sql_query($sql);
 			
 			while($row = $db->sql_fetchrow($result))
