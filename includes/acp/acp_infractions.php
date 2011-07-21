@@ -39,15 +39,8 @@ class acp_infractions
 			trigger_error('Sorry dudes, still in development');
 		}
 		
-		// Load our infractions class
-		if(!class_exists('infractions'))
-		{
-			require($phpbb_root_path . 'includes/infractions.class.' . $phpEx);
-			
-		}
-		
 		add_form_key('acp_infractions');
-		$template->assign_var('U_ACTION', append_sid($this->u_action));
+		$template->assign_var('U_ACTION', $this->u_action);
 		
 		switch($mode)
 		{
@@ -74,13 +67,11 @@ class acp_infractions
 			case 'edit':
 				if(isset($_POST['submit']))
 				{
-					// Check $action!
 					$name = request_var('name', '');
 					$reason = request_var('reason', '');
 					$duration = request_var('duration', 0);
 					$infraction_points = request_var('infraction_points', 0);
 					
-					// TODO or >  $config['infraction_points_max'] 
 					if($infraction_points < 0)
 					{
 						trigger_error('bad infraction points');
@@ -111,7 +102,6 @@ class acp_infractions
 						$sql = '';
 					}
 					
-				
 					redirect($this->u_action);
 				}
 				

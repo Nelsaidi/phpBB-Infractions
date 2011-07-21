@@ -1,0 +1,74 @@
+********
+Permisions:
++ m_infractions_issue
+
+***********
+includes/constants.php
+
+After:
+define('ZEBRA_TABLE',				$table_prefix . 'zebra');
+
+Add:
+
+// Infractions
+define('INFRACTIONS_TABLE',			$table_prefix . 'infractions');
+define('INFRACTION_TEMPLATES_TABLE', 	$table_prefix . 'infraction_templates');
+
+
+*********
+styles/prosilver/templates/viewtopic_body.html
+
+Find:
+<li class="warn-icon"><a href="{postrow.U_WARN}" title="{L_WARN_USER}"><span>{L_WARN_USER}</span></a></li>
+
+Replace With:
+<li class="warn-icon"><a href="{postrow.U_ISSUE_INFRACTION}" title="{L_ISSUE_INFRACTION}"><span>{L_ISSUE_INFRACTION}</span></a></li>
+
+
+**********
+viewtopic.php
+
+Find:
+'U_WARN'			=> ($auth->acl_get('m_warn') && $poster_id != $user->data['user_id'] && $poster_id != ANONYMOUS) ? append_sid("{$phpbb_root_path}mcp.$phpEx", 'i=warn&amp;mode=warn_post&amp;f=' . $forum_id . '&amp;p=' . $row['post_id'], true, $user->session_id) : '',
+
+Replace With:
+'U_ISSUE_INFRACTION'	=> ($auth->acl_get('m_infractions_issue') && $poster_id != $user->data['user_id'] && $poster_id != ANONYMOUS) ? append_sid("{$phpbb_root_path}mcp.$phpEx", 'i=infractions&amp;mode=issue&amp;post_id=' . $row['post_id'], true, $user->session_id) : '',
+
+
+**********
+memberlist.php
+
+Find:
+'WARNINGS'		=> isset($data['user_warnings']) ? $data['user_warnings'] : 0,
+
+Replace With:
+'INFRACTION_POINTS'	=> $data['infraction_points'],
+
+---
+
+Find:
+'U_WARN'		=> ($warn_user_enabled && $auth->acl_get('m_warn')) ? append_sid("{$phpbb_root_path}mcp.$phpEx", 'i=warn&amp;mode=warn_user&amp;u=' . $user_id, true, $user->session_id) : '',
+
+Replace With:
+'U_ISSUE_INFRACTION'	=> ($auth->acl_get('m_infractions_issue')) ? append_sid("{$phpbb_root_path}mcp.$phpEx", 'i=infractions&amp;mode=issue&amp;user_id=' . $user_id, true, $user->session_id) : '',
+
+
+***********
+styles/prosilver/templates/memberlist_view.html
+
+Find:
+<dt>{L_WARNINGS}: </dt>
+
+Replace With:
+<dt>{L_INFRACTION_POINTS}: </dt>
+
+---
+
+Find:
+<dd><strong>{WARNINGS}</strong><!-- IF U_NOTES or U_WARN --> [ <!-- IF U_NOTES --><a href="{U_NOTES}">{L_VIEW_NOTES}</a><!-- ENDIF --> <!-- IF U_WARN --><!-- IF U_NOTES --> | <!-- ENDIF --><a href="{U_WARN}">{L_WARN_USER}</a><!-- ENDIF --> ]<!-- ENDIF --></dd>
+
+Replace With:
+<dd><strong>{INFRACTION_POINTS}</strong><!-- IF U_NOTES or U_ISSUE_INFRACTION --> [ <!-- IF U_NOTES --><a href="{U_NOTES}">{L_VIEW_NOTES}</a><!-- ENDIF --> <!-- IF U_WARN --><!-- IF U_NOTES --> | <!-- ENDIF --><a href="{U_ISSUE_INFRACTION}">{L_ISSUE_INFRACTION}</a><!-- ENDIF --> ]<!-- ENDIF --></dd>
+
+****
+

@@ -132,6 +132,11 @@ class mcp_infractions
 			return;
 		}
 		
+		if($user_id == ANONYMOUS)
+		{
+			trigger_error('Cannot issue warning to anon');
+		}
+		
 		// Get the user ID of the selected user, and redirect to a URL with the id appended
 		if($username != '')
 		{

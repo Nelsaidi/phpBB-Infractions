@@ -30,8 +30,12 @@ $lang = array_merge($lang, array(
 	'INFRACTION_PM_BODY'		=> 'You have been issued %d infraction points for %s',
 	'INFRACTION_PM_SUBJECT'		=> 'You have been issued an infraction ',
 	
-	
 	'INFRACTION_LOG'			=> 'Issued an infraction',
+	
+	'L_ISSUE_INFRACTION'		=> 'Issue Infraction',
+	'L_INFRACTION_POINTS'		=> 'Infraction Points',
+	
+	
 ));
 
 ?>
