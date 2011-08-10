@@ -70,5 +70,25 @@ Find:
 Replace With:
 <dd><strong>{INFRACTION_POINTS}</strong><!-- IF U_NOTES or U_ISSUE_INFRACTION --> [ <!-- IF U_NOTES --><a href="{U_NOTES}">{L_VIEW_NOTES}</a><!-- ENDIF --> <!-- IF U_WARN --><!-- IF U_NOTES --> | <!-- ENDIF --><a href="{U_ISSUE_INFRACTION}">{L_ISSUE_INFRACTION}</a><!-- ENDIF --> ]<!-- ENDIF --></dd>
 
-****
 
+*********
+mcp.php
+
+After: 
+$user->setup('mcp');
+
+Add:
+$user->add_lang('infractions');
+
+
+*********
+adm/index.php
+
+After:
+$user->setup('acp/common');
+
+Add:
+$user->add_lang('infractions');
+
+
+*********
