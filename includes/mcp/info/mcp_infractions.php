@@ -1,5 +1,22 @@
 <?php
 
+/**
+* phpBB Infraction System
+* 
+* @package phpBB3
+* @copyright (c) 2011 Nelsaidi
+* @license http://opensource.org/licenses/gpl-license.php GNU Public License
+*
+*/
+
+/**
+* @ignore
+*/
+if (!defined('IN_PHPBB'))
+{
+	exit;
+}
+
 class mcp_infractions_info
 {
 

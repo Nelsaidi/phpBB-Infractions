@@ -10,6 +10,14 @@
 */
 
 /**
+* @ignore
+*/
+if (!defined('IN_PHPBB'))
+{
+	exit;
+}
+
+/**
  * This function clears and undoes the effects of infractions
  *
  * @param int Optional - user ID to clear for

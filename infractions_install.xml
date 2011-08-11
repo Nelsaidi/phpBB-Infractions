@@ -6,11 +6,11 @@
 	<header>
 		<license>http://opensource.org/licenses/gpl-license.php GNU General Public License v2</license>
 
-		<title lang="en">Hello World</title>
+		<title lang="en">Infractions</title>
 		
-		<description lang="en">Quick Start Tutorial sample</description>
+		<description lang="en">An infractions system for phpBB</description>
 
-		<author-notes lang="en">This is a tutorial, do not install this MOD</author-notes>
+		<author-notes lang="en"></author-notes>
 
 		<author-group>
 			<author>
@@ -18,9 +18,6 @@
 				<username phpbbcom="no">nelsaidi</username>
 				<homepage>http://www.github.com/</homepage>
 				
-      		<contributions-group>
-				<contributions status="past" from="2006-01-01" to="2007-11-01" position="Developer"/>
-      		</contributions-group>
 			</author>
 		</author-group>
 
@@ -68,25 +65,20 @@ define('INFRACTION_TEMPLATES_TABLE', 	$table_prefix . 'infraction_templates');</
 		
 		<open src="viewtopic.php">
 			<edit>
-				<find>text to find</find>
-				<action type="after-add">text to be added on the line after</action>
-			</edit>
-			
-			<edit>
-				<find>'U_WARN'			=> ($auth->acl_get('m_warn') && $poster_id != $user->data['user_id'] && $poster_id != ANONYMOUS) ? append_sid("{$phpbb_root_path}mcp.$phpEx", 'i=warn&amp;mode=warn_post&amp;f=' . $forum_id . '&amp;p=' . $row['post_id'], true, $user->session_id) : '',</find>
-				<action type="replace-with">'U_ISSUE_INFRACTION'	=> ($auth->acl_get('m_infractions_issue') && $poster_id != $user->data['user_id'] && $poster_id != ANONYMOUS) ? append_sid("{$phpbb_root_path}mcp.$phpEx", 'i=infractions&amp;mode=issue&amp;post_id=' . $row['post_id'], true, $user->session_id) : '',</action>
+				<find><![CDATA['U_WARN'			=> ($auth->acl_get('m_warn') && $poster_id != $user->data['user_id'] && $poster_id != ANONYMOUS) ? append_sid("{$phpbb_root_path}mcp.$phpEx", 'i=warn&amp;mode=warn_post&amp;f=' . $forum_id . '&amp;p=' . $row['post_id'], true, $user->session_id) : '',]]></find>
+				<action type="replace-with"><![CDATA['U_ISSUE_INFRACTION'	=> ($auth->acl_get('m_infractions_issue') && $poster_id != $user->data['user_id'] && $poster_id != ANONYMOUS) ? append_sid("{$phpbb_root_path}mcp.$phpEx", 'i=infractions&amp;mode=issue&amp;post_id=' . $row['post_id'], true, $user->session_id) : '',]]></action>
 			</edit>
 		</open>
 		
 		<open src="memberlist.php">
 			<edit>
-				<find>'WARNINGS'		=> isset($data['user_warnings']) ? $data['user_warnings'] : 0,</find>
-				<action type="after-add">'INFRACTION_POINTS'	=> $data['infraction_points'],</action>
+				<find><![CDATA['WARNINGS'		=> isset($data['user_warnings']) ? $data['user_warnings'] : 0,]]></find>
+				<action type="after-add"><![CDATA['INFRACTION_POINTS'	=> $data['infraction_points'],]]></action>
 			</edit>
 			
 			<edit>
-				<find>'U_WARN'		=> ($warn_user_enabled && $auth->acl_get('m_warn')) ? append_sid("{$phpbb_root_path}mcp.$phpEx", 'i=warn&amp;mode=warn_user&amp;u=' . $user_id, true, $user->session_id) : '',</find>
-				<action type="replace-with">'U_ISSUE_INFRACTION'	=> ($auth->acl_get('m_infractions_issue')) ? append_sid("{$phpbb_root_path}mcp.$phpEx", 'i=infractions&amp;mode=issue&amp;user_id=' . $user_id, true, $user->session_id) : '',</action>
+				<find><![CDATA['U_WARN'		=> ($warn_user_enabled && $auth->acl_get('m_warn')) ? append_sid("{$phpbb_root_path}mcp.$phpEx", 'i=warn&amp;mode=warn_user&amp;u=' . $user_id, true, $user->session_id) : '',]]></find>
+				<action type="replace-with">'<![CDATA[U_ISSUE_INFRACTION'	=> ($auth->acl_get('m_infractions_issue')) ? append_sid("{$phpbb_root_path}mcp.$phpEx", 'i=infractions&amp;mode=issue&amp;user_id=' . $user_id, true, $user->session_id) : '',]]></action>
 			</edit>
 		</open>
 		
@@ -104,15 +96,15 @@ define('INFRACTION_TEMPLATES_TABLE', 	$table_prefix . 'infraction_templates');</
 		
 		<open src="mcp.php">
 			<edit>
-				<find>$user->setup('mcp');</find>
-				<action type="after-add">$user->add_lang('infractions');</action>
+				<find><![CDATA[$user->setup('mcp');]]></find>
+				<action type="after-add"><![CDATA[$user->add_lang('infractions');]]></action>
 			</edit>
 		</open>
 		
 		<open src="adm/index.php">
 			<edit>
-				<find>$user->setup('acp/common');</find>
-				<action type="after-add">$user->add_lang('infractions');</action>
+				<find><![CDATA[$user->setup('acp/common');]]></find>
+				<action type="after-add"><![CDATA[$user->add_lang('infractions');]]></action>
 			</edit>
 		</open>
 	</action-group>

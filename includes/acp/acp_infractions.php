@@ -1,26 +1,20 @@
 <?php
 
 /**
- *ACP infractions
- *
- * @todo Put it into classes, I have my reasons for why I done it like this, it'll be nicer ... eventually.
- * @author Nelsaidi
- */
-
-// Move into constants.php
-// TODO
-
-// For sake of simplicity (for development)
-// define('INFRACTIONS_TABLE', 'infractions');
-define('INFRACTION_TEMPLATES_TABLE', 'phpbb_infraction_templates');
-
-define('INFRACTIONS_WARNING', 0);
-define('INFRACTIONS_INFRACTION', 1);
-// const NOTE = 2;
-
-define('INFRACTIONS_ACTIVE', 0);
-define('INFRACTIONS_EXPIRED', 1);
-define('INFRACTIONS_REMOVED', 2);
+* phpBB Infraction System
+* 
+* @package phpBB3
+* @copyright (c) 2011 Nelsaidi
+* @license http://opensource.org/licenses/gpl-license.php GNU Public License
+*
+*/
+/**
+* @ignore
+*/
+if (!defined('IN_PHPBB'))
+{
+	exit;
+}
  
 class acp_infractions
 {
