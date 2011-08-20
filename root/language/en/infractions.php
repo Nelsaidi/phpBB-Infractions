@@ -31,7 +31,7 @@ $lang = array_merge($lang, array(
 	'ACP_INFRACTION_TEMPLATES'	=> 'Templates',
 	
 	'MCP_INFRACTIONS'			=> 'Infractions',
-	'MCP_INFRACTIONS_LIST'		=> 'List Infractions',
+	'MCP_INFRACTIONS_VIEW'		=> 'View Infractions',
 	'MCP_INFRACTIONS_ISSUE'		=> 'Issue Infraction',
 
 	'INFRACTION_PM_BODY'		=> 'You have been issued %d infraction points for %s',

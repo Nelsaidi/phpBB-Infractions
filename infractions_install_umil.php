@@ -127,11 +127,15 @@ $versions = array(
 		),
 
 		'module_add' => array(
-			array('mcp', '',
+			array('mcp', '', 'MCP_INFRACTIONS'),
+			 
+			array('acp', 'ACP_CAT_USERGROUP', 'ACP_INFRACTIONS'),
+			 
+			array('mcp', 'MCP_INFRACTIONS',
 				array('module_basename'	=> 'infractions'),
 			),
 			
-			array('acp', 'ACP_CAT_USERGROUP',
+			array('acp', 'ACP_INFRACTIONS',
 				array('module_basename'	=> 'infractions'),
 			),
 		),
