@@ -371,6 +371,11 @@ class mcp_infractions
 		// TODO RUN HOOK: infraction_issued !!
 
 		// Redirect to infractions page for instantness
+		if($_POST['edit_post'] == 1)
+		{
+			redirect(append_sid("{$phpbb_root_path}posting.php", "mode=edit&f={$post_row['forum_id']}&p={$post_row['post_id']}"));
+		}
+		
 		redirect(append_sid("{$phpbb_root_path}mcp.$phpEx", "i=infractions"));
 		exit;
 	}
