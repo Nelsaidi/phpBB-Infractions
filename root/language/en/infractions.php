@@ -34,13 +34,13 @@ $lang = array_merge($lang, array(
 	'MCP_INFRACTIONS_VIEW'		=> 'View Infractions',
 	'MCP_INFRACTIONS_ISSUE'		=> 'Issue Infraction',
 
-	'INFRACTION_PM_BODY'		=> 'You have been issued %d infraction points for %s',
+	'INFRACTION_PM_BODY'		=> "Dear %s \nYou have been issued an infraction with the following details:\n\nReason: %s\nInfraction Points: %s\n\nYour total infraction points is now %s",
 	'INFRACTION_PM_SUBJECT'		=> 'You have been issued an infraction ',
 	
 	'INFRACTION_LOG'			=> 'Issued an infraction',
 	
-	'L_ISSUE_INFRACTION'		=> 'Issue Infraction',
-	'L_INFRACTION_POINTS'		=> 'Infraction Points',
+	'ISSUE_INFRACTION'		=> 'Issue Infraction',
+	'INFRACTION_POINTS'		=> 'Infraction Points',
 	
 	
 ));
