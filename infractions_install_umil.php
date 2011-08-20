@@ -38,7 +38,7 @@ $version_config_name = 'infractions_version';
 
 
 // The language file which will be included when installing
-$language_file = 'infractions.php';
+$language_file = 'infractions';
 
 
 /*
@@ -74,7 +74,7 @@ $versions = array(
 		'table_add' => array(
 			array('phpbb_infractions', array(
 				'COLUMNS' => array(
-					'infraction_id' 	=> array('INT:11', 0, 'auto_increment'),
+					'infraction_id' 	=> array('INT:11', null, 'auto_increment'),
 					'type' 			=> array('BOOL', 0),
 					'void'			=> array('BOOL', 0),
 					'user_id' 		=> array('INT:11', 0),
@@ -91,17 +91,17 @@ $versions = array(
 					'groups'			=> array('TEXT', ''),
 				),
 
-				'PRIMARY_KEY'	=> array('infraction_id', ''),
+				'PRIMARY_KEY'	=> 'infraction_id',
 
 				'KEYS'		=> array(
-					'expire_time' 	=> array('INDEX', array('expire_time')),
-					'user_id'		=> array('INDEX', array('user_id')),
+					'expire_time' 	=> array('INDEX', 'expire_time'),
+					'user_id'		=> array('INDEX', 'user_id'),
 				),
 			)),
 
 			array('phpbb_infraction_templates', array(
 				'COLUMNS' => array(
-					'template_id'		=> array('INT:11', 0, 'auto_increment'),
+					'template_id'		=> array('INT:11', null, 'auto_increment'),
 					'position' 		=> array('USINT', 0),
 					'name' 			=> array('VCHAR', ''),
 					'reason' 			=> array('TEXT', ''),
@@ -109,17 +109,17 @@ $versions = array(
 					'duration' 		=> array('INT:11', 0),
 				),
 
-				'PRIMARY_KEY'	=> array('template_id', ''),
+				'PRIMARY_KEY'	=> 'template_id',
 
 				'KEYS'		=> array(
-					'position' => array('INDEX', array('position')),
+					'position' => array('INDEX', 'position'),
 				),
 			)),
 
 		),
 
 		'table_column_add' => array(
-			array('USERS_TABLE', 'infraction_points', array('TINT:11', '0')),
+			array('phpbb_users', 'infraction_points', array('TINT:11', '0')),
 		),
 
 		'config_add' => array(
@@ -127,12 +127,13 @@ $versions = array(
 		),
 
 		'module_add' => array(
-			array('mcp_infractions', 'mcp',
-				array('module_basename'	=> 0),
+			array('mcp', '',
+				array('module_basename'	=> 'infractions'),
 			),
 			
-			array('acp_infractions', 'acp',
-				array('module_basename'	=> 'ACP_CAT_USERGROUP'),
+			array('acp', 'ACP_CAT_USERGROUP',
+				array('module_basename'	=> 'infractions'),
+			),
 		),
 
 	),

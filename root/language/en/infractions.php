@@ -1,15 +1,22 @@
 <?php
-/** 
-*
-* hello_world [English]
-*
-* @package language
-* @version $Id: v3_modules.xml 52 2007-12-09 19:45:45Z jelly_doughnut $
-* @copyright (c) 2005 phpBB Group 
-* @license http://opensource.org/licenses/gpl-license.php GNU Public License 
+
+/**
+* phpBB Infraction System
+* 
+* @package phpBB3
+* @copyright (c) 2011 Nelsaidi
+* @license http://opensource.org/licenses/gpl-license.php GNU Public License
 *
 */
-                    
+
+/**
+* @ignore
+*/
+if (!defined('IN_PHPBB'))
+{
+	exit;
+}
+
 /**
 * DO NOT CHANGE
 */

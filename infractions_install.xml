@@ -41,10 +41,10 @@
 			<file from="root/includes/acp/info/acp_infractions.php" to="includes/acp/info/acp_infractions.php" />
 			<file from="root/language/en/infractions.php" to="language/en/infractions.php" />
 			
-			<file from="root/styles/prosilver/templates/infractions_index.html" to="styles/prosilver/templates/infractions_index.html" />
-			<file from="root/styles/prosilver/templates/infractions_issue.html" to="styles/prosilver/templates/infractions_issue.html" />
-			<file from="root/styles/prosilver/templates/infractions_user.html" to="styles/prosilver/templates/infractions_user.html" />
-			<file from="root/styles/prosilver/templates/infractions_view_table.html" to="styles/prosilver/templates/infractions_view_table.html" />
+			<file from="root/styles/prosilver/template/infractions_index.html" to="styles/prosilver/template/infractions_index.html" />
+			<file from="root/styles/prosilver/template/infractions_issue.html" to="styles/prosilver/template/infractions_issue.html" />
+			<file from="root/styles/prosilver/template/infractions_user.html" to="styles/prosilver/template/infractions_user.html" />
+			<file from="root/styles/prosilver/template/infractions_view_table.html" to="styles/prosilver/template/infractions_view_table.html" />
 			
 		</copy>		
 		
@@ -56,7 +56,7 @@ define('INFRACTION_TEMPLATES_TABLE', 	$table_prefix . 'infraction_templates');</
 			</edit>
 		</open>
 		
-		<open src="styles/prosilver/templates/viewtopic_body.html">
+		<open src="styles/prosilver/template/viewtopic_body.html">
 			<edit>
 				<find><![CDATA[<li class="warn-icon"><a href="{postrow.U_WARN}" title="{L_WARN_USER}"><span>{L_WARN_USER}</span></a></li>]]></find>
 				<action type="replace-with"><![CDATA[<li class="warn-icon"><a href="{postrow.U_ISSUE_INFRACTION}" title="{L_ISSUE_INFRACTION}"><span>{L_ISSUE_INFRACTION}</span></a></li>]]></action>
@@ -82,7 +82,7 @@ define('INFRACTION_TEMPLATES_TABLE', 	$table_prefix . 'infraction_templates');</
 			</edit>
 		</open>
 		
-		<open src="styles/prosilver/templates/memberlist_view.html">
+		<open src="styles/prosilver/template/memberlist_view.html">
 			<edit>
 				<find><![CDATA[<dt>{L_WARNINGS}: </dt>]]></find>
 				<action type="replace-with"><![CDATA[<dt>{L_INFRACTION_POINTS}: </dt>]]></action>
