@@ -85,11 +85,11 @@ $versions = array(
 					'issue_time' 		=> array('INT:11', 0),
 					'expire_time' 		=> array('INT:11', 0),
 					'duration' 		=> array('INT:11', 0),
-					'reason' 			=> array('TEXT', null),
+					'reason' 			=> array('TEXT', ''),
 					'banned' 			=> array('BOOL', 0),
 					'ban_id' 			=> array('INT:11', 0),
 					'ban_duration' 	=> array('INT:11', 0),
-					'groups'			=> array('TEXT', null),
+					'groups'			=> array('TEXT', ''),
 				),
 
 				'PRIMARY_KEY'	=> 'infraction_id',
