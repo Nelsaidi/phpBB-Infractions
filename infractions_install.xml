@@ -32,6 +32,8 @@
 	
 	<action-group>
 	
+		<php-installer>infractions_install_umil.php</php-installer>
+	
 		<copy>
 			<file from="root/adm/style/acp_infraction_templates.html" to="adm/style/acp_infraction_templates.html" />
 			<file from="root/includes/functions_infractions.php" to="includes/functions_infractions.php" />
