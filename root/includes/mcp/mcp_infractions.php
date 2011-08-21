@@ -183,7 +183,7 @@ class mcp_infractions
 		if(!isset($_POST['issue_infraction']))
 		{
 			$template->assign_vars(array(
-				'U_POST_ACTION'		=> append_sid("{$phpbb_root_path}mcp.$phpEx", 'i=infractions&amp;mode=issue&amp;user_id=' . $user_id),
+				'U_POST_ACTION'		=> append_sid("{$phpbb_root_path}mcp.$phpEx", 'i=infractions&amp;mode=issue&amp;user_id=' . $user_id . '&amp;post_id=' . $post_id),
 				'INFRACTION_USER_ID'	=> $user_row['user_id'],
 				'INFRACTION_TYPE'		=> $type,
 			));
@@ -202,7 +202,7 @@ class mcp_infractions
 				'RANK_TITLE'		=> $rank_title,
 				'JOINED'			=> $user->format_date($user_row['user_regdate']),
 				'POSTS'			=> $user_row['user_posts'],
-				'INFRACTIONS'		=> $user_row['infraction_points'] ,
+				'INFRACTION_POINTS'		=> $user_row['infraction_points'] ,
 
 				'USERNAME'		=> $user_row['username'],
 				'USER_PROFILE'		=> get_username_string('full', $user_row['user_id'], $user_row['username'], $user_row['user_colour']),
@@ -287,7 +287,7 @@ class mcp_infractions
 
 			$infraction = array_merge($infraction, array(
 				'infraction_points'		=> $template_row['infraction_points'],
-				'duration'			=> $template_row['duration'],
+				'duration'				=> $template_row['duration'],
 				'reason'				=> $template_row['reason']
 			));
 		
@@ -297,7 +297,7 @@ class mcp_infractions
 		
 			$infraction = array_merge($infraction, array(
 				'infraction_points'		=> request_var('points', 0),
-				'duration'			=> request_var('duration', 0),
+				'duration'				=> request_var('duration', 0),
 				'reason'				=> request_var('reason', ''),
 			));
 		}
@@ -347,7 +347,7 @@ class mcp_infractions
 
 		$message_parser = new parse_message();
 
-		$message_parser->message = sprintf($lang['INFRACTION_PM_BODY'], $infraction['reason'], $infraction['infraction_points']);
+		$message_parser->message = sprintf($lang['INFRACTION_PM_BODY'], $user_row['username'], $infraction['reason'], $infraction['infraction_points'], $infraction['infraction_points'] + $user_row['infraction_points']);
 		$message_parser->parse(true, true, true, false, false, true, true);
 
 		$pm_data = array(
@@ -370,6 +370,12 @@ class mcp_infractions
 		
 		// TODO RUN HOOK: infraction_issued !!
 
+		// User chose to edit post, redirect
+		if($_POST['edit_post'] == 1)
+		{
+			redirect(append_sid("{$phpbb_root_path}posting.php", "mode=edit&f={$infraction['forum_id']}&p={$infraction['post_id']}"));
+		}
+		
 		// Redirect to infractions page for instantness
 		redirect(append_sid("{$phpbb_root_path}mcp.$phpEx", "i=infractions"));
 		exit;
@@ -479,6 +485,8 @@ class mcp_infractions
 				'POST_ID'			=> $infraction['post_id'],
 				'ISSUE_TIME'	 	=> $user->format_date($infraction['issue_time']),
 				
+				'EXPIRE_TIME'	 	=> $user->format_date($infraction['expire_time']),
+				
 				'USERNAME'		=> $infraction['username'],
 				'USER_PROFILE'		=> get_username_string('full', $infraction['user_id'], $infraction['username'], $infraction['user_colour']),
 				
@@ -554,6 +562,7 @@ class mcp_infractions
 				'INFRACTION_ID'	=> $infraction['infraction_id'],
 				'POST_ID'			=> $infraction['post_id'],
 				'ISSUE_TIME'	 	=> $user->format_date($infraction['issue_time']),
+				'EXPIRE_TIME'	 	=> $user->format_date($infraction['expire_time']),
 				
 				'USERNAME'		=> $infraction['username'],
 				'USER_PROFILE'		=> get_username_string('full', $infraction['user_id'], $infraction['username'], $infraction['user_colour']),

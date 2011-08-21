@@ -21,7 +21,7 @@
 			</author>
 		</author-group>
 
-		<mod-version>1.0.0</mod-version>
+		<mod-version>0.3.0</mod-version>
 
 		<installation>
 			<level>easy</level>
@@ -90,7 +90,7 @@ define('INFRACTION_TEMPLATES_TABLE', 	$table_prefix . 'infraction_templates');</
 				<action type="after-add"><![CDATA[		$this->add_lang('infractions');
 		$this->add_lang('infractions');
 		include_once($phpbb_root_path . 'includes/functions_infractions.' . $phpEx);
-		clear_expired_infractions($this->data['user_id']);]]></action>
+		if(isset($config['infractions_installed'])){clear_expired_infractions($this->data['user_id']);}]]></action>
 			</edit>
 		</open>
 

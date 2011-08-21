@@ -79,16 +79,17 @@ $versions = array(
 					'void'			=> array('BOOL', 0),
 					'user_id' 		=> array('INT:11', 0),
 					'post_id' 		=> array('INT:11', 0),
+					'forum_id' 		=> array('INT:11', 0),
 					'issuer_id' 		=> array('INT:11', 0),
 					'infraction_points' => array('INT:11', 0),
 					'issue_time' 		=> array('INT:11', 0),
 					'expire_time' 		=> array('INT:11', 0),
 					'duration' 		=> array('INT:11', 0),
-					'reason' 			=> array('TEXT', ''),
+					'reason' 			=> array('TEXT', null),
 					'banned' 			=> array('BOOL', 0),
 					'ban_id' 			=> array('INT:11', 0),
 					'ban_duration' 	=> array('INT:11', 0),
-					'groups'			=> array('TEXT', ''),
+					'groups'			=> array('TEXT', null),
 				),
 
 				'PRIMARY_KEY'	=> 'infraction_id',
@@ -123,15 +124,19 @@ $versions = array(
 		),
 
 		'config_add' => array(
-			array('infractions', '1', 0),
+			array('infractions_installed', '1', 0),
 		),
 
 		'module_add' => array(
-			array('mcp', '',
+			array('mcp', '', 'MCP_INFRACTIONS'),
+			 
+			array('acp', 'ACP_CAT_USERGROUP', 'ACP_INFRACTIONS'),
+			 
+			array('mcp', 'MCP_INFRACTIONS',
 				array('module_basename'	=> 'infractions'),
 			),
 			
-			array('acp', 'ACP_CAT_USERGROUP',
+			array('acp', 'ACP_INFRACTIONS',
 				array('module_basename'	=> 'infractions'),
 			),
 		),
