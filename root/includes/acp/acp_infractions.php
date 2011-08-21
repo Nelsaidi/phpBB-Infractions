@@ -66,6 +66,11 @@ class acp_infractions
 					$duration = request_var('duration', 0);
 					$infraction_points = request_var('infraction_points', 0);
 					
+					if($duration == -1)
+					{
+						$duration = request_var('duration_custom', 0);
+					}
+					
 					if($infraction_points < 0)
 					{
 						trigger_error('bad infraction points');
