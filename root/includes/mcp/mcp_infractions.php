@@ -469,6 +469,7 @@ class mcp_infractions
 		
 		// Do pagination
 		
+		clear_expired_infractions();
 		$infractions_list = $this->get_infractions();
 		
 		if(!$infractions_list)
@@ -514,6 +515,7 @@ class mcp_infractions
 		global $config, $phpbb_root_path, $phpEx;
 		
 		$user_id = request_var('user_id', 0);
+		clear_expired_infractions($user_id);
 		
 		// Load avatars, colours, etc
 		// Can we make use of the get_infraction function? - will cacheing for 1 second make the latter quciker?
