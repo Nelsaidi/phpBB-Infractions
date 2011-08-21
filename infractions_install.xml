@@ -21,7 +21,7 @@
 			</author>
 		</author-group>
 
-		<mod-version>0.3.0</mod-version>
+		<mod-version>1.0.0</mod-version>
 
 		<installation>
 			<level>easy</level>
@@ -31,6 +31,8 @@
 	</header>
 	
 	<action-group>
+	
+		<php-installer>infractions_install_umil.php</php-installer>
 	
 		<copy>
 			<file from="root/adm/style/acp_infraction_templates.html" to="adm/style/acp_infraction_templates.html" />
@@ -93,19 +95,16 @@ define('INFRACTION_TEMPLATES_TABLE', 	$table_prefix . 'infraction_templates');</
 				<action type="replace-with"><![CDATA[<dd><strong>{INFRACTION_POINTS}</strong><!-- IF U_NOTES or U_ISSUE_INFRACTION --> [ <!-- IF U_NOTES --><a href="{U_NOTES}">{L_VIEW_NOTES}</a><!-- ENDIF --> <!-- IF U_WARN --><!-- IF U_NOTES --> | <!-- ENDIF --><a href="{U_ISSUE_INFRACTION}">{L_ISSUE_INFRACTION}</a><!-- ENDIF --> ]<!-- ENDIF --></dd>]]></action>
 			</edit>
 		</open>
-		
-		<open src="mcp.php">
+
+		<open src="includes/session.php">
 			<edit>
-				<find><![CDATA[$user->setup('mcp');]]></find>
-				<action type="after-add"><![CDATA[$user->add_lang('infractions');]]></action>
+				<find><![CDATA[$this->add_lang($lang_set);]]></find>
+				<action type="after-add"><![CDATA[	$this->add_lang('infractions');
+		$this->add_lang('infractions');
+		include_once($phpbb_root_path . 'includes/functions_infractions.' . $phpEx);
+		clear_expired_infractions($this->data['user_id']);]]></action>
 			</edit>
 		</open>
-		
-		<open src="adm/index.php">
-			<edit>
-				<find><![CDATA[$user->setup('acp/common');]]></find>
-				<action type="after-add"><![CDATA[$user->add_lang('infractions');]]></action>
-			</edit>
-		</open>
+
 	</action-group>
 </mod>		
