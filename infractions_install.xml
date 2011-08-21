@@ -35,19 +35,7 @@
 		<php-installer>infractions_install_umil.php</php-installer>
 	
 		<copy>
-			<file from="root/adm/style/acp_infraction_templates.html" to="adm/style/acp_infraction_templates.html" />
-			<file from="root/includes/functions_infractions.php" to="includes/functions_infractions.php" />
-			<file from="root/includes/mcp/mcp_infractions.php" to="includes/mcp/mcp_infractions.php" />
-			<file from="root/includes/mcp/info/mcp_infractions.php" to="includes/mcp/info/mcp_infractions.php" />
-			<file from="root/includes/acp/acp_infractions.php" to="includes/acp/acp_infractions.php" />
-			<file from="root/includes/acp/info/acp_infractions.php" to="includes/acp/info/acp_infractions.php" />
-			<file from="root/language/en/infractions.php" to="language/en/infractions.php" />
-			
-			<file from="root/styles/prosilver/template/infractions_index.html" to="styles/prosilver/template/infractions_index.html" />
-			<file from="root/styles/prosilver/template/infractions_issue.html" to="styles/prosilver/template/infractions_issue.html" />
-			<file from="root/styles/prosilver/template/infractions_user.html" to="styles/prosilver/template/infractions_user.html" />
-			<file from="root/styles/prosilver/template/infractions_view_table.html" to="styles/prosilver/template/infractions_view_table.html" />
-			
+			<file from="root/*.*" to="*.*" />
 		</copy>		
 		
 		<open src="includes/constants.php">
@@ -99,7 +87,7 @@ define('INFRACTION_TEMPLATES_TABLE', 	$table_prefix . 'infraction_templates');</
 		<open src="includes/session.php">
 			<edit>
 				<find><![CDATA[$this->add_lang($lang_set);]]></find>
-				<action type="after-add"><![CDATA[	$this->add_lang('infractions');
+				<action type="after-add"><![CDATA[		$this->add_lang('infractions');
 		$this->add_lang('infractions');
 		include_once($phpbb_root_path . 'includes/functions_infractions.' . $phpEx);
 		clear_expired_infractions($this->data['user_id']);]]></action>
