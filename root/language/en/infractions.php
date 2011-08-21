@@ -39,9 +39,11 @@ $lang = array_merge($lang, array(
 	
 	'INFRACTION_LOG'			=> 'Issued an infraction',
 	
-	'ISSUE_INFRACTION'		=> 'Issue Infraction',
-	'INFRACTION_POINTS'		=> 'Infraction Points',
+	'ISSUE_INFRACTION'			=> 'Issue Infraction',
+	'INFRACTION_POINTS'			=> 'Infraction Points',
 	
+	'acl_m_infractions'   		 => array('lang' => 'Can view infractions', 'cat' => 'misc'),
+	'acl_m_infractions_issue'    => array('lang' => 'Can issue infractions', 'cat' => 'misc'),
 	
 ));
 
