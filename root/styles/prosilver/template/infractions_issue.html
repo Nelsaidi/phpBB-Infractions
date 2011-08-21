@@ -97,7 +97,7 @@
 	
 	<fieldset id="infraction_details" >
 		<dl>
-			<dt><label for="reason">Reason</label></dt>
+			<dt><label for="reason">Reason</label><br/><span>The reason displayed to the user for this infraction</span></dt>
 			<dd><textarea rows="2" cols="40" class="inputbox" id="ban" name="reason"></textarea></dd>
 			
 		</dl>
@@ -115,7 +115,7 @@
 				<option value="-1">Custom</option>
 				<!-- You know what, show a calendar and let JS calculate the duration by difference from now till then --> 
 			</select>
-			<span id="duration_custom"><input type="text" maxlength="255" class="inputbox" name="duration_custom" />	</span>
+			<span id="duration_custom" style="display:none"><input type="text" maxlength="255" class="inputbox" name="duration_custom" />	</span>
 			</dd>
 		</dl>
 		
