@@ -28,14 +28,6 @@ class mcp_infractions
 		global $auth, $db, $user, $template;
 		global $config, $phpbb_root_path, $phpEx;
 		global $infractions;
-
-		// Block Users
-		if($user->data['user_id'] != 2)
-		{
-			trigger_error('Sorry dudes, still in development');
-		}
-		
-		$user->add_lang('infractions');
 		
 		$action = request_var('action', '');
 
@@ -56,7 +48,6 @@ class mcp_infractions
 			break;
 
 			case 'view':
-			default: 
 			
 				if($action == 'delete')
 				{
@@ -130,7 +121,7 @@ class mcp_infractions
 		
 		if($user_id == ANONYMOUS)
 		{
-			trigger_error('Cannot issue warning to anon');
+			trigger_error('Cannot issue a warning to this user');
 		}
 		
 		// Get the user ID of the selected user, and redirect to a URL with the id appended
@@ -169,15 +160,15 @@ class mcp_infractions
 		
 		if(!isset($user_row['user_id']))
 		{
-			trigger_error('user does not exist');
+			trigger_error('Selected user does not exist.');
 		}
 		
-		/*
+	
 		if($user->data['user_id'] == $user_row['user_id'])
 		{
-			trigger_error('deehuuude, you cant warn yourself');
+			trigger_error('You cannot issue an infraction to your self.');
 		}	
-		*/
+		
 
 		// Check if the form has been submitted, if not, display the form to issue an infraction
 		if(!isset($_POST['issue_infraction']))
@@ -257,7 +248,6 @@ class mcp_infractions
 		
 		// Populate infraction details with already known stuff
 		$infraction = array(
-			'type'		=> 0, // Todo ??
 			'user_id'		=> $user_id,
 			'issuer_id'	=> $user->data['user_id'],
 			'issue_time'	=> time(), 
@@ -297,23 +287,35 @@ class mcp_infractions
 		
 			$infraction = array_merge($infraction, array(
 				'infraction_points'		=> request_var('points', 0),
-				'duration'				=> request_var('duration', 0),
+				'duration'				=> request_var('duration', ''),
 				'reason'				=> request_var('reason', ''),
 			));
 		}
 		
 		// Validate infraction details
-		if($infraction['infraction_points'] < 1)
+		if($infraction['infraction_points'] < 0)
 		{
-			trigger_error('Invalid ammount of points');
-		}
-
-		if($infraction['infraction_points'] == -1)
-		{
-			$infraction_duration = request_var('duration_custom', 0);
-			// TODO A better way than just by entering minutes
+			trigger_error('');
 		}
 		
+		if($infraction['duration'] == 0)
+		{
+			// Permanent 
+			$infraction['expire_time'] = 0;
+			$infraction['duration'] = 0; // For typcast reasons
+		}
+		else
+		{
+			$infraction['expire_time'] = strtotime('+' . $infraction['duration']);
+			if($infraction['expire_time'] < time())
+			{
+				trigger_error('Invalid Date');
+			}
+			else
+			{
+				$infraction['duration'] = $infraction['expire_time'] - time();
+			}
+		}
 
 		// Calculate expire from duration, 0 = non expiring
 		$infraction['expire_time'] = ($infraction['duration'] == 0) ? 0 : time() + $infraction['duration'] * 60;
@@ -392,16 +394,22 @@ class mcp_infractions
 	{
 		global $auth, $db, $user, $template;
 		global $config, $phpbb_root_path, $phpEx;
+
 		
 		// Loaded via the URI
 		if($infraction_id === false)
 		{
+			if(!$auth->acl_get('m_infractions_delete'))
+			{
+				trigger_error('NOT_AUTHORISED');
+			}
+			
 			$infraction_id = request_var('infraction_id', 0);
 		}
 		
 		if($infraction_id == 0 OR !is_numeric($infraction_id))
 		{
-			trigger_error('bad id');
+			trigger_error('Invalid infraction ID');
 		}
 		
 		// Get a copy of the infraction to allow for full reversal
@@ -415,21 +423,22 @@ class mcp_infractions
 			trigger_error('Infraction does not exist');
 		}
 		
-		$delete_mode = request_var('delete_mode', 'delete');
+		// $delete_mode = request_var('delete_mode', 'delete');
+		$delete_mode = 'delete';
 		
-		if($delete_mode == 'void')
-		{
-			// Just void it, still display it - cron job will purge
-			$removal_sql = 'UPDATE ' . INFRACTIONS_TABLE . " SET void = 1 WHERE infraction_id = $infraction_id";
-		}
-		else if($delete_mode == 'delete')
+		if($delete_mode == 'delete')
 		{
 			// Delete it fully out of the DB
 			$removal_sql = 'DELETE FROM ' . INFRACTIONS_TABLE . " WHERE infraction_id = $infraction_id";
 		}
+		else if($delete_mode == 'void')
+		{
+			// Just void it, still display it - cron job will purge
+			// $removal_sql = 'UPDATE ' . INFRACTIONS_TABLE . " SET void = 1 WHERE infraction_id = $infraction_id";
+		}
 		else
 		{
-			trigger_error('unknown mode');
+			trigger_error('Unexepected delete method');
 		}
 		
 		$db->sql_query($removal_sql);
@@ -488,16 +497,16 @@ class mcp_infractions
 				
 				'EXPIRE_TIME'	 	=> $user->format_date($infraction['expire_time']),
 				
-				'USERNAME'		=> $infraction['username'],
+				'USERNAME'			=> $infraction['username'],
 				'USER_PROFILE'		=> get_username_string('full', $infraction['user_id'], $infraction['username'], $infraction['user_colour']),
 				
 				'USER_ID'			=> $infraction['user_id'],
 				'REASON'			=> $infraction['reason'],
-				'POINTS_ISSUED'	=> $infraction['infraction_points'],
+				'POINTS_ISSUED'		=> $infraction['infraction_points'],
 				'TOTAL_POINTS'		=> $infraction['total_points'],
 				'ACTIONS'			=> '',
 				
-				'DELETE_LINK'		=> $this->u_action . '&action=delete&infraction_id=' . $infraction['infraction_id'] ,
+				'DELETE_LINK'		=> ($auth->acl_get('m_infractions_delete') ? append_sid($this->u_action . '&action=delete&infraction_id=' . $infraction['infraction_id']) : ''),
 			));
 		}
 		
@@ -516,6 +525,7 @@ class mcp_infractions
 		
 		$user_id = request_var('user_id', 0);
 		clear_expired_infractions($user_id);
+		$start = request_var('start', 0);
 		
 		// Load avatars, colours, etc
 		// Can we make use of the get_infraction function? - will cacheing for 1 second make the latter quciker?
@@ -536,20 +546,21 @@ class mcp_infractions
 
 			'RANK_TITLE'		=> $rank_title,
 			'JOINED'			=> $user->format_date($user_row['user_regdate']),
-			'POSTS'			=> $user_row['user_posts'],
-			'INFRACTIONS'		=> $user_row['infraction_points'] ,
+			'POSTS'				=> $user_row['user_posts'],
+			'INFRACTION_POINTS'	=> $user_row['infraction_points'] ,
 
-			'USERNAME'		=> $user_row['username'],
+			'USERNAME'			=> $user_row['username'],
 			'USER_PROFILE'		=> get_username_string('full', $user_row['user_id'], $user_row['username'], $user_row['user_colour']),
 
 			'AVATAR_IMG'		=> $avatar_img,
-			'RANK_IMG'		=> $rank_img,
+			'RANK_IMG'			=> $rank_img,
+	
 		));
 
 		// TODO : Pagination, so, get limit and offset?
 		
 		// Get infractions
-		$infractions_list = $this->get_infractions(25, 0, 0, $user_id);
+		$infractions_list = $this->get_infractions(25, $start, 0, $user_id);
 
 		if(!$infractions_list)
 		{
@@ -561,26 +572,35 @@ class mcp_infractions
 		{
 	
 			$template->assign_block_vars('infraction', array(
-				'INFRACTION_ID'	=> $infraction['infraction_id'],
+				'INFRACTION_ID'		=> $infraction['infraction_id'],
 				'POST_ID'			=> $infraction['post_id'],
 				'ISSUE_TIME'	 	=> $user->format_date($infraction['issue_time']),
 				'EXPIRE_TIME'	 	=> $user->format_date($infraction['expire_time']),
 				
-				'USERNAME'		=> $infraction['username'],
+				'USERNAME'			=> $infraction['username'],
 				'USER_PROFILE'		=> get_username_string('full', $infraction['user_id'], $infraction['username'], $infraction['user_colour']),
 				
 				'USER_ID'			=> $infraction['user_id'],
 				'REASON'			=> $infraction['reason'],
-				'POINTS_ISSUED'	=> $infraction['infraction_points'],
+				'POINTS_ISSUED'		=> $infraction['infraction_points'],
 				'TOTAL_POINTS'		=> $infraction['total_points'],
 				'ACTIONS'			=> '',
 				
+				'DELETE_LINK'		=> ($auth->acl_get('m_infractions_delete') ? append_sid($this->u_action . '&action=delete&infraction_id=' . $infraction['infraction_id'] . '&user_id=' . $user_id . '&start=' . $start) : ''),
 				// TODO actions
 			));
 		}
 		
-		// Do pagination
-		// $total_infractions = $this->last_get_infraction_total();			
+		// Pagination
+		$total_infractions = $this->last_get_infraction_total();	
+		$pagination_url = append_sid($phpbb_root_path . 'mcp.' . $phpEx, array('i' => 'infractions', 'mode' => 'view', 'user_id' => $user_id));
+
+		
+		$template->assign_vars(array(
+			'PAGINATION'      		  => generate_pagination($pagination_url, $total_infractions, 25, $start),
+			'PAGE_NUMBER'    		  => on_page($total_infractions, 25, $start),
+			'TOTAL_INFRACTIONS'       => $total_infractions . ' Infractions',
+		));		
 	}
 	
 	/**
@@ -629,6 +649,7 @@ class mcp_infractions
 		return $post_row;
 	}
 	
+	
 	/** 
 	 * Get the infractions
 	 * Underlying function
@@ -637,7 +658,7 @@ class mcp_infractions
 	 * @param $forum_id - forum id to sele
 	 * @return array infractions demanded
 	 */
-	public function get_infractions($limit = 25, $offset = 0, $start_date = 0,  $user_id = false, $forum_id = false,  $show_void = true)
+	public function get_infractions($limit = 25, $offset = 0, $start_date = 0,  $user_id = false, $forum_id = false,  $show_void = false)
 	{
 		global $auth, $db, $user, $template;
 		global $config, $phpbb_root_path, $phpEx;
@@ -657,7 +678,7 @@ class mcp_infractions
 					'FROM'	=> array(POSTS_TABLE => 'p'),
 					'ON'		=> 'i.post_id = p.post_id'
 				),
-				// NOTE : Need to link to users too - impact on performance now?
+			
 				array(
 					'FROM'	=> array(USERS_TABLE => 'u'),
 					'ON'		=> 'i.user_id = u.user_id',
@@ -718,7 +739,7 @@ class mcp_infractions
 	 * NOTE this way its optional if pagination is required, - needs a better way though?
 	 *
 	 * Not used yet, need to figure it out
-	 
+	 */
 	public function last_get_infraction_total()
 	{
 		global $auth, $db, $user, $template;
@@ -742,7 +763,6 @@ class mcp_infractions
 		
 		return $total_infractions;
 	}
-	*/
 	
 }
 

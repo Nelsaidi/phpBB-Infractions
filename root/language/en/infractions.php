@@ -33,6 +33,8 @@ $lang = array_merge($lang, array(
 	'MCP_INFRACTIONS'			=> 'Infractions',
 	'MCP_INFRACTIONS_VIEW'		=> 'View Infractions',
 	'MCP_INFRACTIONS_ISSUE'		=> 'Issue Infraction',
+	
+	'VIEW_INFRACTIONS'		=> 'View Infractions',
 
 	'INFRACTION_PM_BODY'		=> "Dear %s \nYou have been issued an infraction with the following details:\n\nReason: %s\nInfraction Points: %s\n\nYour total infraction points is now %s",
 	'INFRACTION_PM_SUBJECT'		=> 'You have been issued an infraction ',
@@ -44,6 +46,7 @@ $lang = array_merge($lang, array(
 	
 	'acl_m_infractions'   		 => array('lang' => 'Can view infractions', 'cat' => 'misc'),
 	'acl_m_infractions_issue'    => array('lang' => 'Can issue infractions', 'cat' => 'misc'),
+	'acl_m_infractions_delete'    => array('lang' => 'Can delete infractions', 'cat' => 'misc'),
 	
 ));
 

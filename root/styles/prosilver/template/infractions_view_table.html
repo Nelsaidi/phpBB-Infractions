@@ -27,7 +27,7 @@
 				<td>{infraction.TOTAL_POINTS}</td>
 				<td><!-- Logic to check action, display Ban,Group Modifications --></td>
 				
-				<td><a href="{infraction.DELETE_LINK}">Delete</a></td>
+				<td><!-- IF infraction.DELETE_LINK --><a href="{infraction.DELETE_LINK}">Delete</a><!-- ENDIF --></td>
 				<!-- TODO - Actions can move OUT of groups aswell? - would be awesome!!!!!-->
 
 			</tr>
@@ -35,5 +35,10 @@
 		
 	 </table>
 	 
+	 <!-- IF PAGINATION -->
+	 <ul class="linklist">
+			<li class="rightside pagination">{TOTAL_INFRACTIONS} &bull; <!-- IF PAGINATION --><a href="#" onclick="jumpto(); return false;" title="{L_JUMP_TO_PAGE}">{PAGE_NUMBER}</a> &bull; <span>{PAGINATION}</span><!-- ELSE -->{PAGE_NUMBER}<!-- ENDIF --></li>
+		</ul>
+	 <!-- ENDIF -->
 
  </div>
