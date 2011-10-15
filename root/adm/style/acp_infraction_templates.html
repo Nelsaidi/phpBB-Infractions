@@ -1,39 +1,37 @@
 <!-- INCLUDE overall_header.html -->
 <!-- IF S_TEMPLATE_FORM -->
-<h3>Add Infraction Template</h3>
+<h3>{ACP_INFRACTION_ADD_TEMPLATE}</h3>
 <form id="" method="post" action="{TEMPLATE_ADD}">
 <fieldset>
 		<dl>
-			<dt><label for="ban">Name:</label></dt>
+			<dt><label for="ban">{INFRACTION_TEMPLATE_NAME}:</label></dt>
 			<dd><input name="name" type="text" class="text medium" maxlength="255" id="name" /></dd>
 		</dl>
 
 		<dl>
-			<dt><label for="reason">Reason</label><br/><span>The reason presented to the user for this infraction</span></dt>
+			<dt><label for="reason">{INFRACTION_REASON}</label><br/><span>{INFRACTION_REASON_DESC}</span></dt>
 			<dd><textarea rows="2" cols="40" class="text medium" id="ban" name="reason"></textarea></dd>
 			
 		</dl>
 		
-		
 		<dl>
-			<!-- TODO a method of doing default date -->
-			<dt><label for="duration">Duration</label></dt>
+			<dt><label for="duration">{INFRACTION_POINTS}</label></dt>
 				<dd><select name="duration" onchange="if(this.value==-1){document.getElementById('duration_custom').style.display = 'block';}else{document.getElementById('duration_custom').style.display='none';}">
-				<option value="1440">1 Day</option>
-				<option value="10080">7 Days</option>
-				<option value="43200" checked="checked">30 Days</option>
-				<option value="86400">60 Days</option>
-				<option value="0">Permanent</option>
-				<option value="-1">Custom</option>
-				<!-- You know what, show a calendar and let JS calculate the duration by difference from now till then --> 
+				<option value="1440">1 {INFRACTION_DAY}</option>
+				<option value="10080">7 {INFRACTION_DAYS}</option>
+				<option value="43200" checked="checked">30 {INFRACTION_DAYS}</option>
+				<option value="86400">60 {INFRACTION_DAYS}</option>
+				<option value="0">{INFRACTION_PERMANENT}</option>
+				<option value="-1">{INFRACTION_DURATION_CUSTOM}</option>
+				
 			</select>
 			<dd id="duration_custom" style="display: none">
-				<input type="text" maxlength="255" class="text medium" name="duration_custom" />
+				<label for <input type="text" maxlength="255" class="text medium" name="duration_custom" />
 			</dd>
 		</dl>
 		
 		<dl>
-			<dt><label for="infraction_points">Infraction Points</label></dt>
+			<dt><label for="infraction_points">{INFRACTION_POINTS}</label></dt>
 			<dd><input type="text" maxlength="255" class="text medium" name="infraction_points"></dd>
 			
 		</dl>
@@ -46,30 +44,12 @@
 </fieldset>
 </form>
 <!-- ELSE -->
-<a href="{TEMPLATE_ADD}">Add template</a><br/>
+<a href="{ACP_INFRACTION_ADD_TEMPLATE}"></a><br/>
 <!-- IF S_NO_TEMPLATES eq 1 -->
-<p>No templates set</p>
+<p>{INFRACTION_NO_TEMPLATES}</p>
 <!-- ELSE -->
 <table>
 	<thead>
-		<th>Name</th>
-		<th>Reason</th>
-		<th>Infraction Points</th>
-		<th>Duration</th>
-		<th></th>
-		<th></th>
-		<th></th>
-	</thead>
-	<!-- BEGIN templates -->
-	<tr>
-		<td>{templates.NAME}</td>
-		<td>{templates.REASON}</td>
-		<td>{templates.INFRACTION_POINTS}</td>
-		<td>{templates.DURATION}</td>
-		<td><a href="{U_ACTION}&action=delete&template_id={templates.TEMPLATE_ID}">Delete</a> </td>
-		<td><a href="{U_ACTION}&action=moveup&template_id={templates.TEMPLATE_ID}">Move Up</a> </td>
-		<td><a href="{U_ACTION}&action=movedown&template_id={templates.TEMPLATE_ID}">Move Down</a> </td>
-		
 	</tr>
 	<!-- END templates -->
 </table>

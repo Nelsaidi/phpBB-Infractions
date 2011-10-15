@@ -14,38 +14,15 @@
 
 		<author-group>
 			<author>
-				<realname>Nelsaidi</realname>
-				<username phpbbcom="no">nelsaidi</username>
-				<homepage>http://www.github.com/</homepage>
-				
+				<username phpbbcom="yes">Nelsaidi</username>
 			</author>
 		</author-group>
 
-		<mod-version>1.0.1</mod-version>
-		
-		<history>
-			<entry>
-				<date>12-10-2011</date>
-				<rev-version>1.0.1</rev-version>
-				<changelog lang="en">
-					<change>Custom duration now entered verbally (eg, one month)</change>
-					<change>Warning module now disabled on install</change>
-				</changelog>
-			</entry>
-			
-			<entry>
-				<date>06-10-2011</date>
-				<rev-version>1.0.0</rev-version>
-				<changelog lang="en">
-					<change>Initial Release</change>
-				</changelog>
-			</entry> 
-			
-		</history>
+		<mod-version>1.0.1</mod-version>	
 
 		<installation>
 			<level>easy</level>
-			<time>5</time>
+			<time>600</time>
 			<target-version>3.0.9</target-version>
 		</installation>
 	</header>

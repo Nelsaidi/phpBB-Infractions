@@ -56,17 +56,6 @@ $language_file = 'infractions';
 * The version numbering must otherwise be compatible with the version_compare function - http://php.net/manual/en/function.version-compare.php
 */
 $versions = array(
-	'1.0.1'	=> array(
-		
-		'table_column_update' => array(
-			array('phpbb_infraction_templates', 'duration', array('VARCHAR', 255)),
-		),
-			
-		'module_remove' => array(
-			array('mcp', '', 'MCP_WARN'),
-		),	
-	)
-	
 	'1.0.0' => array(
 
 		'permission_add' => array(
@@ -140,6 +129,8 @@ $versions = array(
 
 		'config_add' => array(
 			array('infractions_installed', '1', 0),
+			array('infractions_delete_method', '0', 0),
+			array('infraction_delete_keep_time', '0', 0),
 		),
 
 		'module_add' => array(
@@ -155,7 +146,11 @@ $versions = array(
 				array('module_basename'	=> 'infractions'),
 			),
 		),
-
+		
+		'module_remove' => array(
+			array('mcp', '', 'MCP_WARN'),
+		),	
+		
 	),
 );
 

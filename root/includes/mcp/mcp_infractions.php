@@ -409,7 +409,7 @@ class mcp_infractions
 		
 		if($infraction_id == 0 OR !is_numeric($infraction_id))
 		{
-			trigger_error('Invalid infraction ID');
+			trigger_error('INFRACTION_NOT_EXIST');
 		}
 		
 		// Get a copy of the infraction to allow for full reversal
@@ -420,12 +420,18 @@ class mcp_infractions
 		
 		if(sizeof($infraction) == 0)
 		{
-			trigger_error('Infraction does not exist');
+			trigger_error('INFRACTION_NOT_EXIST');
 		}
 		
 		// $delete_mode = request_var('delete_mode', 'delete');
 		$delete_mode = 'delete';
 		
+		/*
+		************************
+		***********************
+		Use $config['infraction_delete_method']
+		*************************
+		 *************/
 		if($delete_mode == 'delete')
 		{
 			// Delete it fully out of the DB
