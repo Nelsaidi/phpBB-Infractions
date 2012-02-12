@@ -17,7 +17,7 @@
 	
 		</dl>
 			<dl>
-			<dt><label for="duration">{INFRACTION_POINTS}</label></dt>
+			<dt><label for="duration">{INFRACTION_DURATION}</label></dt>
 				<dd><select name="duration" onchange="if(this.value==-1){document.getElementById('duration_custom').style.display = 'block';}else{document.getElementById('duration_custom').style.display='none';}">
 				<option value="3 day">3 {INFRACTION_DAYS}</option>
 				<option value="1 week">1 {INFRACTION_WEEK}</option>
@@ -36,9 +36,9 @@
 				<span>{INFRACTION_DUR_CUSTOM_NOTE}</span>
 			</dt>
 			
-			<dt>
+			<dd>
 				<input type="text" class="inputbox" name="duration_custom" />
-			</dt>
+			</dd>
 		</dl>
 		
 		

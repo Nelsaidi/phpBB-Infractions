@@ -81,28 +81,23 @@
 	<div class="inner"><span class="corners-top"><span></span></span>
 
 	<h3>Issue Infraction</h3>
-	<p>Enter infraction details</p>
 
-	
 	<fieldset>
-	<dl>
-		<dt><label for="infraction_template">Template</label></dt>
-		<dd><select name="infraction_template" onchange="if(this.value==0){document.getElementById('infraction_details').style.display = 'block';}else{document.getElementById('infraction_details').style.display='none';}">
-			<option value="0" >Custom</option>
-			<!-- BEGIN infraction_templates -->
-			<option value="{infraction_templates.TEMPLATE_ID}" >{infraction_templates.NAME}</option>
-			<!-- END infraction_templates -->
-		</select></dd>
-	</dl>
-	
-	<fieldset id="infraction_details" >
 		<dl>
-			<dt><label for="reason">Reason</label><br/><span>The reason displayed to the user for this infraction</span></dt>
-			<dd><textarea rows="2" cols="40" class="inputbox" id="ban" name="reason"></textarea></dd>
+			<dt><label for="ban">{INFRACTION_TEMPLATE_NAME}:</label></dt>
+			<dd><input name="name" type="text" class="text medium" maxlength="255" id="name" /></dd>
+		</dl>
+
+		<dl>
+			<dt><label for="reason">{INFRACTION_REASON}</label><br/><span>{INFRACTION_REASON_DESC}</span></dt>
+			<dd><textarea rows="2" cols="40" class="text medium" id="ban" name="reason"></textarea></dd>
 			
 		</dl>
+		
+	
+		</dl>
 			<dl>
-			<dt><label for="duration">{INFRACTION_POINTS}</label></dt>
+			<dt><label for="duration">{INFRACTION_DURATION}</label></dt>
 				<dd><select name="duration" onchange="if(this.value==-1){document.getElementById('duration_custom').style.display = 'block';}else{document.getElementById('duration_custom').style.display='none';}">
 				<option value="3 day">3 {INFRACTION_DAYS}</option>
 				<option value="1 week">1 {INFRACTION_WEEK}</option>
@@ -121,18 +116,23 @@
 				<span>{INFRACTION_DUR_CUSTOM_NOTE}</span>
 			</dt>
 			
-			<dt>
+			<dd>
 				<input type="text" class="inputbox" name="duration_custom" />
-			</dt>
+			</dd>
 		</dl>
 		
 		<dl>
-			<dt><label for="points">Infraction Points</label></dt>
-			<dd><input type="text" maxlength="255" class="inputbox" name="points" /></dd>
+			<dt><label for="infraction_points">{INFRACTION_POINTS}</label></dt>
+			<dd><input type="text" maxlength="255" class="text medium" name="infraction_points"></dd>
 			
 		</dl>
-	</fieldset>
-
+		
+		<fieldset class="submit-buttons">
+			<input type="reset" value="{L_RESET}" name="reset" class="button2" />&nbsp; 
+			<input type="submit" name="submit" value="Submit" class="button1" />
+			{S_FORM_TOKEN}
+		</fieldset>
+		
 	</fieldset>
 	
 	<span class="corners-bottom"><span></span></span></div>
