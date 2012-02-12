@@ -17,10 +17,10 @@
 		<dl>
 			<dt><label for="duration">{INFRACTION_POINTS}</label></dt>
 				<dd><select name="duration" onchange="if(this.value==-1){document.getElementById('duration_custom').style.display = 'block';}else{document.getElementById('duration_custom').style.display='none';}">
-				<option value="1440">1 {INFRACTION_DAY}</option>
-				<option value="10080">7 {INFRACTION_DAYS}</option>
-				<option value="43200" checked="checked">30 {INFRACTION_DAYS}</option>
-				<option value="86400">60 {INFRACTION_DAYS}</option>
+				<option value="3 day">3 {INFRACTION_DAYS}</option>
+				<option value="1 week">1 {INFRACTION_WEEK}</option>
+				<option value="1 month" checked="checked">1 {INFRACTION_MONTH}</option>
+				<option value="3 months">3 {INFRACTION_MONTHS}</option>
 				<option value="0">{INFRACTION_PERMANENT}</option>
 				<option value="-1">{INFRACTION_DURATION_CUSTOM}</option>
 				

@@ -101,22 +101,25 @@
 			<dd><textarea rows="2" cols="40" class="inputbox" id="ban" name="reason"></textarea></dd>
 			
 		</dl>
-		
-		
-		<dl>
-			<!-- TODO a method of doing default date -->
-			<dt><label for="duration" >Duration</label></dt>
-			<dd><select name="duration" onchange="if(this.value==-1){document.getElementById('duration_custom').style.display = 'block';}else{document.getElementById('duration_custom').style.display='none';}">
-				<option value="1440">1 Day</option>
-				<option value="10080">7 Days</option>
-				<option value="43200" checked="che">30 Days</option>
-				<option value="86400">60 Days</option>
-				<option value="0">Permanent</option>
-				<option value="-1">Custom</option>
-				<!-- You know what, show a calendar and let JS calculate the duration by difference from now till then --> 
+			<dl>
+			<dt><label for="duration">{INFRACTION_POINTS}</label></dt>
+				<dd><select name="duration" onchange="if(this.value==-1){document.getElementById('duration_custom').style.display = 'block';}else{document.getElementById('duration_custom').style.display='none';}">
+				<option value="3 day">3 {INFRACTION_DAYS}</option>
+				<option value="1 week">1 {INFRACTION_WEEK}</option>
+				<option value="1 month" checked="checked">1 {INFRACTION_MONTH}</option>
+				<option value="3 months">3 {INFRACTION_MONTHS}</option>
+				<option value="0">{INFRACTION_PERMANENT}</option>
+				<option value="-1">{INFRACTION_DURATION_CUSTOM}</option>
+				
 			</select>
-			<span id="duration_custom" style="display:none"><input type="text" maxlength="255" class="inputbox" name="duration_custom" />	</span>
-			</dd>
+		</dl>
+		
+		<dl id="duration_custom">
+			<dt>
+				<label for "duration_custom">{INFRACTION_DURATION_CUSTOM}</label>
+				<br/>
+				<span>{INFRACTION_DUR_CUSTOM_NOTE}</span>
+			
 		</dl>
 		
 		<dl>

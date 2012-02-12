@@ -249,7 +249,7 @@ class mcp_infractions
 		// Populate infraction details with already known stuff
 		$infraction = array(
 			'user_id'		=> $user_id,
-			'issuer_id'	=> $user->data['user_id'],
+			'issuer_id'		=> $user->data['user_id'],
 			'issue_time'	=> time(), 
 		);
 		
@@ -315,19 +315,6 @@ class mcp_infractions
 			{
 				$infraction['duration'] = $infraction['expire_time'] - time();
 			}
-		}
-
-		// Calculate expire from duration, 0 = non expiring
-		$infraction['expire_time'] = ($infraction['duration'] == 0) ? 0 : time() + $infraction['duration'] * 60;
-		
-		if($infraction['duration'] == 0)
-		{
-			// Permanent infraction
-			$infraction['expire_time'] = 0;
-		}
-		else
-		{
-			$infraction['expire_time'] = $infraction['duration'] * 60 + time(); // (final) Duration is given in minutes
 		}
 		
 		$sql = 'INSERT INTO ' . INFRACTIONS_TABLE . ' ' . $db->sql_build_array('INSERT', $infraction);
