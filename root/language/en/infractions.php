@@ -37,7 +37,8 @@ $lang = array_merge($lang, array(
 	'ACP_INFRACTION_ADD_TEMPLATE'	=> 'Add Template',
 	'ACP_INFRACTION_GENERAL'		=> 'General Settings',
 	
-	'INFRACTION_LOG_ISSUED'			=> 'Issued an infraction',
+	'INFRACTION_LOG_ISSUED'			=> 'Issued an infraction to %s',
+	'INFRACTION_LOG_DELETED'		=> 'Deleted an infraction issued to %s',
 	
 	'INFRACTION_TEMPLATE_NAME'		=> 'Template Name',
 	'INFRACTION_NO_TEMPLATES'		=> 'No templates exist',

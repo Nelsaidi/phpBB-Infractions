@@ -342,9 +342,9 @@ class mcp_infractions
 		$pm_data = array(
 			'from_user_id'			=> $user->data['user_id'],
 			'from_user_ip'			=> $user->ip,
-			'from_username'		=> $user->data['username'],
+			'from_username'			=> $user->data['username'], // Why does it need this?
 			'enable_sig'			=> false,
-			'enable_bbcode'		=> true,
+			'enable_bbcode'			=> true,
 			'enable_smilies'		=> true,
 			'enable_urls'			=> false,
 			'icon_id'				=> 0,
@@ -355,7 +355,7 @@ class mcp_infractions
 		);
 
 		submit_pm('post', $lang['INFRACTION_PM_SUBJECT'], $pm_data, false);
-		add_log('mod', 0, 0, 'INFRACTION_LOG_ISSUED');	
+		add_log('mod', 0, 0, sprintf('INFRACTION_LOG_ISSUED', $user_row['username']));	
 		
 		// TODO RUN HOOK: infraction_issued !!
 
@@ -375,7 +375,10 @@ class mcp_infractions
 	 * If infraction id is NOT supplied, it will get it from the URI
 	 * And then redirect
 	 *
+	 * 
+	 * Needs to be seperated out once actions are implemented, and do the below.
 	 * Optimisations - modify the users table only once if multiple deletes?
+	 * A batch user table update perhaps, so store all point modifications in an array
 	 */
 	public function delete_infraction($infraction_id = false)
 	{
@@ -451,9 +454,15 @@ class mcp_infractions
 		
 		// TODO RUN HOOK: infraction_deleted
 		
-		if($infraction_id === false)
+		if($infraction_id !== false)
 		{
-			add_log('mod', 0, 0, 'Infraction deleted');		
+			// Get the username for listing in log
+			$sql = 'SELECT username FROM ' . USERS_TABLE . ' WHERE user_id = ' . $user_id;
+			$result = $db->sql_query($sql);
+			$username = db->sql_fetchfield('username', 0, $result);
+			$db->sql_freeresult($result);
+			
+			add_log('mod', 0, 0, sprintf('INFRACTION_LOG_DELETED', $username));		
 			redirect(append_sid($this->u_action));
 		}
 		
