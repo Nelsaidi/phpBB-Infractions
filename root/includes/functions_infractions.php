@@ -79,3 +79,37 @@ function clear_expired_infractions($user_id = '')
 	
 	return $deleted;
 }
+
+/**
+ * Converts a stringed duration into seconds
+ * String in the form of  y for years, m for months, w for weeks, d for days, h for hours. 
+ * e.g, 3m or 1d 12h or 1m 3d 6h 
+ *
+ * @param $duration the stringed duration
+ */
+function nel_duration_parser($duration)
+{
+	
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

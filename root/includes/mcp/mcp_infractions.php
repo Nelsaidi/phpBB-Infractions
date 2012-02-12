@@ -121,7 +121,7 @@ class mcp_infractions
 		
 		if($user_id == ANONYMOUS)
 		{
-			trigger_error('Cannot issue a warning to this user');
+			trigger_error('INFRACTIOS_ISSUE_GUEST');
 		}
 		
 		// Get the user ID of the selected user, and redirect to a URL with the id appended
@@ -134,7 +134,7 @@ class mcp_infractions
 			
 			if(!isset($user_row['user_id']))
 			{
-				trigger_error('user does not exist');
+				trigger_error('INFRACTION_USER_NOT_EXIST');
 			}
 			
 			redirect(append_sid("{$phpbb_root_path}mcp.$phpEx", "i=infractions&mode=issue&user_id={$user_row['user_id']}"));
@@ -160,13 +160,13 @@ class mcp_infractions
 		
 		if(!isset($user_row['user_id']))
 		{
-			trigger_error('Selected user does not exist.');
+			trigger_error('INFRACTION_USER_NOT_EXIST');
 		}
 		
 	
 		if($user->data['user_id'] == $user_row['user_id'])
 		{
-			trigger_error('You cannot issue an infraction to your self.');
+			trigger_error('INFRACTION_ISSUE_YOURSELF');
 		}	
 		
 
@@ -272,7 +272,7 @@ class mcp_infractions
 			
 			if(sizeof($template_row) == 0)
 			{
-				trigger_error('invalid template selected');
+				trigger_error('INFRACTION_OOPS');
 			}
 
 			$infraction = array_merge($infraction, array(
@@ -295,7 +295,7 @@ class mcp_infractions
 		// Validate infraction details
 		if($infraction['infraction_points'] < 0)
 		{
-			trigger_error('');
+			trigger_error('INFRACTION_NEGATIVE_POINTS');
 		}
 		
 		if($infraction['duration'] == 0)
@@ -309,7 +309,7 @@ class mcp_infractions
 			$infraction['expire_time'] = strtotime('+' . $infraction['duration']);
 			if($infraction['expire_time'] < time())
 			{
-				trigger_error('Invalid Date');
+				trigger_error('INFRACTION_INVALID_DATE');
 			}
 			else
 			{
@@ -368,7 +368,7 @@ class mcp_infractions
 		);
 
 		submit_pm('post', $lang['INFRACTION_PM_SUBJECT'], $pm_data, false);
-		add_log('mod', 0, 0, 'Infraction issued');	
+		add_log('mod', 0, 0, 'INFRACTION_LOG_ISSUED');	
 		
 		// TODO RUN HOOK: infraction_issued !!
 
@@ -444,7 +444,7 @@ class mcp_infractions
 		}
 		else
 		{
-			trigger_error('Unexepected delete method');
+			trigger_error('INFRACTION_OOPS');
 		}
 		
 		$db->sql_query($removal_sql);

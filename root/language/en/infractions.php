@@ -47,13 +47,24 @@ $lang = array_merge($lang, array(
 	'INFRACTION_DURATION_CUSTOM'	=> 'Custom Duration',
 	'INFRACTION_PERMANENT'			=> 'Permanent',
 	'INFRACTION_POINTS'				=> 'Infraction Points',
-	'INFRACTION_DELETE'
-	'INFRACTION_MOVE_UP'
-	'INFRACTION_MOVE_DOWN'
+	'INFRACTION_DELETE'				=> 'Delete',
+	'INFRACTION_MOVE_UP'			=> 'Up',
+	'INFRACTION_MOVE_DOWN'			=> 'Down',
 	'INFRACTION_DAY'				=> 'Day',
 	'INFRACTION_DAYS'				=> 'Days',
 	'INFRACTION_REASON_DESC'		=> 'The reason presented to the user for this infraction',
 	'INFRACTION_NOT_EXIST'			=> 'Infraction does not exist',
+	
+	'INFRACTION_OOPS'				=> 'Oops, something went wrong, go back and try again.',
+	'INFRACTION_USER_NOT_EXIST'		=> 'The selected user does not exist',
+	'INFRACTION_ISSUE_YOURSELF'		=> 'You cannot issue an infraction to yourself',
+	'INFRACTIOS_ISSUE_GUEST'		=> 'You cannot issue an infraction to a guest user',
+	
+	'INFRACTION_NEGATIVE_POINTS'	=> 'You cant issue negative points, try removing infractions to reduce point count',
+	'INFRACTION_INVALID_DATE'		=> 'Invalid date, the date must be after today and exist'
+	
+	'INFRACTION_DUR_CUSTOM_NOTE'	=> 'Use y for years, m for months, w for weeks, d for days, h for hours. <br/> e.g, 3m or 1d 12h or 1m 3d 6h',
+
 	
 	'INFRACTION_PM_SUBJECT'			=> 'You have recieved an infraction',
 	// %1$s > Username, %2$s > Reason , %3$s > Infraction Points, %4$s >  Total Infraction Points, %5$s > Signature
@@ -65,27 +76,11 @@ $lang = array_merge($lang, array(
 										. '  \n'
 										. 'Your total infraction points is now %4$s  \n'
 										. '%5$s',
+										
 );
 	
 
 $lang = array_merge($lang, array(
-	'ACP_INFRACTIONS'			=> 'Infractions',
-	
-	
-	'MCP_INFRACTIONS'			=> 'Infractions',
-	'MCP_INFRACTIONS_VIEW'		=> 'View Infractions',
-	'MCP_INFRACTIONS_ISSUE'		=> 'Issue Infraction',
-	
-	'VIEW_INFRACTIONS'		=> 'View Infractions',
-
-	'INFRACTION_PM_BODY'		=> "Dear %s \nYou have been issued an infraction with the following details:\n\nReason: %s\nInfraction Points: %s\n\nYour total infraction points is now %s",
-	'INFRACTION_PM_SUBJECT'		=> 'You have been issued an infraction ',
-	
-	'INFRACTION_LOG'			=> 'Issued an infraction',
-	
-	'ISSUE_INFRACTION'			=> 'Issue Infraction',
-	'INFRACTION_POINTS'			=> 'Infraction Points',
-	
 	'acl_m_infractions'   		 => array('lang' => 'Can view infractions', 'cat' => 'misc'),
 	'acl_m_infractions_issue'    => array('lang' => 'Can issue infractions', 'cat' => 'misc'),
 	'acl_m_infractions_delete'    => array('lang' => 'Can delete infractions', 'cat' => 'misc'),
