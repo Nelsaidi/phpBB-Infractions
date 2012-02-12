@@ -25,7 +25,6 @@ class acp_infractions
 	{
 		global $auth, $db, $user, $template;
 		global $config, $phpbb_root_path, $phpEx;
-		global $infractions;
 		
 		add_form_key('acp_infractions');
 		$template->assign_var('U_ACTION', $this->u_action);
@@ -34,13 +33,13 @@ class acp_infractions
 		{
 			case 'general':
 				$this->infraction_general();
-				$this->tpl_name = 'acp_infraction_genreal';	
-				$this->page_title = 'Infraction Settings';
+				$this->tpl_name = 'acp_infraction_general';	
+				$this->page_title = 'ACP_INFRACTION_GENERAL';
 			break;
 			case 'templates':
 				$this->infraction_templates();
 				$this->tpl_name = 'acp_infraction_templates';	
-				$this->page_title = 'Infraction Templates';
+				$this->page_title = 'ACP_INFRACTION_TEMPLATES';
 			break;
 			
 		}
@@ -48,12 +47,22 @@ class acp_infractions
 	
 	public function infraction_general()
 	{
+		global $auth, $db, $user, $template;
+		global $config, $phpbb_root_path, $phpEx;
+		
+		$action	= request_var('action', '');
+		$submit = (isset($_POST['submit']) || isset($_POST['allow_quick_reply_enable'])) ? true : false;
+		
+		$form_key = 'acp_infractions';
+		add_form_key($form_key);
+		
 		$display_vars = array(
-					'title'	=> 'ACP_INFRACTIONS_GENERAL',
+					'title'	=> 'ACP_INFRACTION_GENERAL',
 					'vars'	=> array(
-						'infractions_delete_type'	=> array('lang' => 'INFRACTION_DELETE_TYPE', 'validate' => 'bool',	'radio:yes_no' => 'custom', 'explain' => true),						
-						'infractions_pm_sig'	=> array('lang' => 'INFRACTION_ISSUE_PM_SIG', 'validate' => 'string',	'type' => 'text:40:255', 'explain' => true),
-					);
+						'legend1'				=> 'ACP_INFRACTION_GENERAL',
+						'infractions_delete_type'	=> array('lang' => 'INFRACTION_DELETE_TYPE', 'validate' => 'bool',	'type' => 'radio:yes_no', 'explain' => true),						
+						'infractions_pm_sig'	=> array('lang' => 'INFRACTION_PM_SIG', 'validate' => 'string',	'type' => 'textarea:4:40', 'explain' => true),
+					),
 				);
 
 		// ---------

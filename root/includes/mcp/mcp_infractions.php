@@ -342,10 +342,10 @@ class mcp_infractions
 
 		$message_parser = new parse_message();
 
-		$message = sprintf($lang['INFRACTION_PM_BODY'], $user_row['username'], $infraction['reason'], $infraction['infraction_points'], $infraction['infraction_points'] + $user_row['infraction_points'])
+		$message = sprintf($lang['INFRACTION_PM_BODY'], $user_row['username'], $infraction['reason'], $infraction['infraction_points'], $infraction['infraction_points'] + $user_row['infraction_points']);
 		$message .= sprintf($config['infractions_pm_sig'], $user->data['username']);
 		
-		$message_parser->message = $message
+		$message_parser->message = $message;
 		$message_parser->parse(true, true, true, false, false, true, true);
 
 		$pm_data = array(

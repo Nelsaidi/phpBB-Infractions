@@ -80,7 +80,6 @@ $versions = array(
 			array('phpbb_infractions', array(
 				'COLUMNS' => array(
 					'infraction_id' 	=> array('INT:11', null, 'auto_increment'),
-					// 'type' 			=> array('BOOL', 0),
 					'void'			=> array('BOOL', 0),
 					'user_id' 		=> array('INT:11', 0),
 					'post_id' 		=> array('INT:11', 0),
@@ -91,12 +90,6 @@ $versions = array(
 					'expire_time' 		=> array('INT:11', 0),
 					'duration' 		=> array('INT:11', 0),
 					'reason' 			=> array('TEXT', ''),
-					
-					// In next version
-					// 'banned' 			=> array('BOOL', 0),
-					// 'ban_id' 			=> array('INT:11', 0),
-					// 'ban_duration' 	=> array('INT:11', 0),
-					// 'groups'			=> array('TEXT', ''),
 				),
 
 				'PRIMARY_KEY'	=> 'infraction_id',
