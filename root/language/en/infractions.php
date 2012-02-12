@@ -39,6 +39,7 @@ $lang = array_merge($lang, array(
 	
 	'INFRACTION_LOG_ISSUED'			=> 'Issued an infraction to %s',
 	'INFRACTION_LOG_DELETED'		=> 'Deleted an infraction issued to %s',
+	'INFRACTION_LOG_UPDATED'		=> 'Infraction settings changed',
 	
 	'INFRACTION_TEMPLATE_NAME'		=> 'Template Name',
 	'INFRACTION_NO_TEMPLATES'		=> 'No templates exist',
@@ -66,8 +67,6 @@ $lang = array_merge($lang, array(
 	'INFRACTION_USER_NOT_EXIST'		=> 'The selected user does not exist',
 	'INFRACTION_ISSUE_YOURSELF'		=> 'You cannot issue an infraction to yourself',
 	'INFRACTIOS_ISSUE_GUEST'		=> 'You cannot issue an infraction to a guest user',
-	
-	'INFRACTION_ENTER_USERNAME'		=> 'Please use this form to enter a username or use the Issue Infraction button on posts to issue for posts',
 	
 	'INFRACTION_NEGATIVE_POINTS'	=> 'You cant issue negative points, try removing infractions to reduce point count',
 	'INFRACTION_INVALID_DATE'		=> 'Invalid date, the date must be after today and exist',

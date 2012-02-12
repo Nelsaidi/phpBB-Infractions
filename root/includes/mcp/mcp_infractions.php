@@ -418,31 +418,19 @@ class mcp_infractions
 		{
 			trigger_error('INFRACTION_NOT_EXIST');
 		}
-		
-		// $delete_mode = request_var('delete_mode', 'delete');
-		$delete_mode = 'delete';
-		
-		/*
-		************************
-		***********************
-		Use $config['infraction_delete_method']
-		*************************
-		 *************/
-		if($delete_mode == 'delete')
+
+
+		if($config['infractions_delete_type'] == INFRACTION_DELETE_HARD)
 		{
 			// Delete it fully out of the DB
 			$removal_sql = 'DELETE FROM ' . INFRACTIONS_TABLE . " WHERE infraction_id = $infraction_id";
 		}
-		else if($delete_mode == 'void')
-		{
-			// Just void it, still display it - cron job will purge
-			// $removal_sql = 'UPDATE ' . INFRACTIONS_TABLE . " SET void = 1 WHERE infraction_id = $infraction_id";
-		}
 		else
 		{
-			trigger_error('INFRACTION_OOPS');
+			// Just void it, still display it - cron job will purge
+			$removal_sql = 'UPDATE ' . INFRACTIONS_TABLE . " SET void = 1 WHERE infraction_id = $infraction_id";
 		}
-		
+
 		$db->sql_query($removal_sql);
 		unset($removal_sql);
 		

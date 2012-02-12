@@ -18,7 +18,7 @@
 			</author>
 		</author-group>
 
-		<mod-version>1.0.1</mod-version>	
+		<mod-version>1.0b1</mod-version>	
 
 		<installation>
 			<level>easy</level>
@@ -29,7 +29,7 @@
 	
 	<action-group>
 	
-		<php-installer>install/infractions_umil.php</php-installer>
+		<php-installer>infractions_umil.php</php-installer>
 	
 		<copy>
 			<file from="root/*.*" to="*.*" />
@@ -40,6 +40,12 @@
 				<find>define('ZEBRA_TABLE',				$table_prefix . 'zebra');</find>
 				<action type="after-add">define('INFRACTIONS_TABLE',			$table_prefix . 'infractions');
 define('INFRACTION_TEMPLATES_TABLE', 	$table_prefix . 'infraction_templates');</action>
+			</edit>
+			
+			<edit>
+				<find><![CDATA[// Additional constants]]></find>
+				<action type="after-add"><![CDATA[define('INFRACTION_DELETE_HARD', 1);
+define('INFRACTION_DELETE_SOFT', 0);]]></action>
 			</edit>
 		</open>
 		

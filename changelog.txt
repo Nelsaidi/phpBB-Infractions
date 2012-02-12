@@ -1,27 +1,25 @@
--------------------------------
-phpBB Infractions System v1.0.0
+-----------------------------
+phpBB Infractions System v1.0
 By Nelsaidi
 Changelog
--------------------------------
+-----------------------------
 
 
-v1.0.0
+v1.0
 ------
 [15/10/2011]
 
 Changes/Additions :
 -------------------
-- Now logging changes
 - Replaced hardcoded text with language variables
 - Added 'General Settings' to ACP
 - Added a custom signature to sign of issued infraction PM
 - Now uses a cron to regularly remove expired infractions
 - Added capability to soft delete infractions, and a "keep for after delete" time
-- Changed custom duration to be entered in days and not minutes
-- Added a calendar to custom duration
 - Warning module now removed on install
 - Added permision 'a_infractions_manage' 
 - Added default delete method (soft/hard) (1 => hard, 0 => soft)
+- All durations now handled by PHP's strtotime function
 
 Bug Fixes:
 ----------
