@@ -313,7 +313,7 @@ class mcp_infractions
 			}
 			else
 			{
-				$infraction['duration'] = $infraction['expire_time'] - time();
+				$infraction['duration'] = $infraction['expire_time'] - time(); // Great, duration is good
 			}
 		}
 		

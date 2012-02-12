@@ -68,7 +68,15 @@ class acp_infractions
 					
 					if($duration == -1)
 					{
-						$duration = request_var('duration_custom', 0);
+						$duration = request_var('duration_custom', '');
+						
+						// Test duratio nis valid
+						$test_date = strtotime('+' . $duration);
+						if($duration === false)
+						{
+							trigger_error('INFRACTION_INVALID_DATE');
+						}
+						
 					}
 					
 					if($infraction_points < 0)
@@ -90,8 +98,8 @@ class acp_infractions
 							
 						$sql = 'INSERT INTO ' . INFRACTION_TEMPLATES_TABLE . ' (name, reason, duration, infraction_points, position) VALUES ("' . 
 							$db->sql_escape($name) . '", "'.
-							$db->sql_escape($reason) . 
-							"\", $duration, $infraction_points, $position ) ";
+							$db->sql_escape($reason) . '", "'. 
+							$db->sql_escape($duration) . "\", $infraction_points, $position ) ";
 							
 						$db->sql_query($sql);
 					
