@@ -37,6 +37,12 @@ $lang = array_merge($lang, array(
 	'ACP_INFRACTION_ADD_TEMPLATE'	=> 'Add Template',
 	'ACP_INFRACTION_GENERAL'		=> 'General Settings',
 	
+	'INFRACTION_PM_SIG'				=> 'PM signature',
+	'INFRACTION_PM_SIG_EXPLAIN' 	=> 'Signature of PM sent to users who recieve infractions, use %s to show the username of the user issuing',
+	'INFRACTION_DELETE_TYPE'		=> 'Hard delete',
+	'INFRACTION_DELETE_TYPE_EXPLAIN'=> 'If you want to keep infractions in the database for hisorical purposes select no',
+	
+	
 	'INFRACTION_LOG_ISSUED'			=> 'Issued an infraction to %s',
 	'INFRACTION_LOG_DELETED'		=> 'Deleted an infraction issued to %s',
 	'INFRACTION_LOG_UPDATED'		=> 'Infraction settings changed',

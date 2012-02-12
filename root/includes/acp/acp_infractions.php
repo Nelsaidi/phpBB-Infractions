@@ -50,18 +50,10 @@ class acp_infractions
 	public function infraction_general()
 	{
 		$display_vars = array(
-					'title'	=> 'ACP_BOARD_SETTINGS',
+					'title'	=> 'ACP_INFRACTIONS_GENERAL',
 					'vars'	=> array(
-						'legend1'				=> 'ACP_BOARD_SETTINGS',
-						'sitename'				=> array('lang' => 'SITE_NAME',				'validate' => 'string',	'type' => 'text:40:255', 'explain' => false),
-						'site_desc'				=> array('lang' => 'SITE_DESC',				'validate' => 'string',	'type' => 'text:40:255', 'explain' => false),
-						'board_disable'			=> array('lang' => 'DISABLE_BOARD',			'validate' => 'bool',	'type' => 'custom', 'method' => 'board_disable', 'explain' => true),
-						'board_disable_msg'		=> false,
-						'default_lang'			=> array('lang' => 'DEFAULT_LANGUAGE',		'validate' => 'lang',	'type' => 'select', 'function' => 'language_select', 'params' => array('{CONFIG_VALUE}'), 'explain' => false),
-						'default_dateformat'	=> array('lang' => 'DEFAULT_DATE_FORMAT',	'validate' => 'string',	'type' => 'custom', 'method' => 'dateformat_select', 'explain' => true),
-						'board_timezone'		=> array('lang' => 'SYSTEM_TIMEZONE',		'validate' => 'string',	'type' => 'select', 'function' => 'tz_select', 'params' => array('{CONFIG_VALUE}', 1), 'explain' => true),
-						'board_dst'				=> array('lang' => 'SYSTEM_DST',			'validate' => 'bool',	'type' => 'radio:yes_no', 'explain' => false),
-						'default_style'			=> array('lang' => 'DEFAULT_STYLE',			'validate' => 'int',	'type' => 'select', 'function' => 'style_select', 'params' => array('{CONFIG_VALUE}', false), 'explain' => false),
+						'infractions_delete_type'	=> array('lang' => 'INFRACTION_DELETE_TYPE', 'validate' => 'bool',	'radio:yes_no' => 'custom', 'explain' => true),						
+						'infractions_pm_sig'	=> array('lang' => 'INFRACTION_ISSUE_PM_SIG', 'validate' => 'string',	'type' => 'text:40:255', 'explain' => true),
 					);
 				);
 
