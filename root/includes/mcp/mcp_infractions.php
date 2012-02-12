@@ -298,7 +298,13 @@ class mcp_infractions
 			trigger_error('INFRACTION_NEGATIVE_POINTS');
 		}
 		
-		if($infraction['duration'] == 0)
+		// Load custom time
+		if($infraction['duration'] === -1)
+		{
+			$infraction['duration'] = request_var('duration_custom', '');
+		}
+		
+		if($infraction['duration'] === 0)
 		{
 			// Permanent 
 			$infraction['expire_time'] = 0;
@@ -459,7 +465,7 @@ class mcp_infractions
 			// Get the username for listing in log
 			$sql = 'SELECT username FROM ' . USERS_TABLE . ' WHERE user_id = ' . $user_id;
 			$result = $db->sql_query($sql);
-			$username = db->sql_fetchfield('username', 0, $result);
+			$username = $db->sql_fetchfield('username', 0, $result);
 			$db->sql_freeresult($result);
 			
 			add_log('mod', 0, 0, sprintf('INFRACTION_LOG_DELETED', $username));		

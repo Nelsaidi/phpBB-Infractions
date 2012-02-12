@@ -56,7 +56,7 @@ $lang = array_merge($lang, array(
 	'INFRACTION_WEEK'				=> 'Week',
 	'INFRACTION_WEEKS'				=> 'Weeks',
 	'INFRACTION_MONTH'				=> 'Month',
-	'INFRACTION_MONTHS'				=> 'Months'
+	'INFRACTION_MONTHS'				=> 'Months',
 	'INFRACTION_REASON_DESC'		=> 'The reason presented to the user for this infraction',
 	'INFRACTION_NOT_EXIST'			=> 'Infraction does not exist',
 	
@@ -66,10 +66,10 @@ $lang = array_merge($lang, array(
 	'INFRACTIOS_ISSUE_GUEST'		=> 'You cannot issue an infraction to a guest user',
 	
 	'INFRACTION_NEGATIVE_POINTS'	=> 'You cant issue negative points, try removing infractions to reduce point count',
-	'INFRACTION_INVALID_DATE'		=> 'Invalid date, the date must be after today and exist'
+	'INFRACTION_INVALID_DATE'		=> 'Invalid date, the date must be after today and exist',
 	
 	// Note, week, days, hours, etc should be as such and english, they are parsed by PHP.
-	'INFRACTION_DUR_CUSTOM_NOTE'	=> 'Enter custom duration in the form of 1 week 2 days 4 hours 2 second',
+	'INFRACTION_DUR_CUSTOM_NOTE'	=> 'Enter custom duration, such as 1 week 2 days 4 hours 2 second',
 
 	
 	'INFRACTION_PM_SUBJECT'			=> 'You have recieved an infraction',
@@ -82,8 +82,8 @@ $lang = array_merge($lang, array(
 										. '  \n'
 										. 'Your total infraction points is now %4$s  \n'
 										. '%5$s',
-										
-);
+
+));
 	
 
 $lang = array_merge($lang, array(
