@@ -85,7 +85,6 @@ define('INFRACTION_TEMPLATES_TABLE', 	$table_prefix . 'infraction_templates');</
 			<edit>
 				<find><![CDATA[$this->add_lang($lang_set);]]></find>
 				<action type="after-add"><![CDATA[		$this->add_lang('infractions');
-		$this->add_lang('infractions');
 		include_once($phpbb_root_path . 'includes/functions_infractions.' . $phpEx);
 		if(isset($config['infractions_installed'])){clear_expired_infractions($this->data['user_id']);}]]></action>
 			</edit>
