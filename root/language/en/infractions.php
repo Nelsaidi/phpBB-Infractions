@@ -60,6 +60,8 @@ $lang = array_merge($lang, array(
 	'INFRACTION_REASON_DESC'		=> 'The reason presented to the user for this infraction',
 	'INFRACTION_NOT_EXIST'			=> 'Infraction does not exist',
 	
+	'INFRACTION_ENTER_USERNAME'		=> 'Please use this form to enter a username or use the Issue Infraction button on posts to issue for posts',
+	
 	'INFRACTION_OOPS'				=> 'Oops, something went wrong, go back and try again.',
 	'INFRACTION_USER_NOT_EXIST'		=> 'The selected user does not exist',
 	'INFRACTION_ISSUE_YOURSELF'		=> 'You cannot issue an infraction to yourself',
