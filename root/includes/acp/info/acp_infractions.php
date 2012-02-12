@@ -27,11 +27,11 @@ class acp_infractions_info
 		return array(
 			'filename'	=> 'acp_infractions',
 			'title'		=> 'ACP_INFRACTIONS',
-			'version'	=> '1.0.0',
+			'version'	=> '1.0',
 			'modes'		=> array(
 				'general'		=> array('title' => 'ACP_INFRACTION_GENERAL', 'auth' => 'a_infractions_manage', 'cat' => array('ACP_INFRACTIONS')),
 				'templates'		=> array('title' => 'ACP_INFRACTION_TEMPLATES', 'auth' => 'a_infractions_manage', 'cat' => array('ACP_INFRACTIONS')),
-				
+
 			),
 		);
 	}

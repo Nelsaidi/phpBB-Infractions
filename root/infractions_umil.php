@@ -56,12 +56,13 @@ $language_file = 'infractions';
 * The version numbering must otherwise be compatible with the version_compare function - http://php.net/manual/en/function.version-compare.php
 */
 $versions = array(
-	'1.0.0' => array(
+	'1.0b1' => array(
 
 		'permission_add' => array(
 			array('m_infractions_issue', 1),
 			array('m_infractions', 1),
 			array('m_infractions_delete', 1),
+			array('a_infractions_manage', 1),
 		),
 
 		'permission_set' => array(
@@ -71,6 +72,8 @@ $versions = array(
 			array('ROLE_MOD_FULL', 'm_infractions_issue'),
 			array('ROLE_MOD_FULL', 'm_infractions'),
 			array('ROLE_MOD_FULL', 'm_infractions_delete'),
+			
+			array('ROLE_ADMIN_FULL', 'a_infractions_manage'),
 		),
 
 		'table_add' => array(
@@ -129,8 +132,11 @@ $versions = array(
 
 		'config_add' => array(
 			array('infractions_installed', '1', 0),
-			array('infractions_delete_method', '0', 0),
-			array('infraction_delete_keep_time', '0', 0),
+			
+			array('infractions_pm_sig', '', 0),
+			
+			array('infractions_delete_type', '1', 0),
+			array('infractions_deleted_keep_time', '90', 0),
 		),
 
 		'module_add' => array(
@@ -146,10 +152,7 @@ $versions = array(
 				array('module_basename'	=> 'infractions'),
 			),
 		),
-		
-		'module_remove' => array(
-			array('mcp', '', 'MCP_WARN'),
-		),	
+
 		
 	),
 );

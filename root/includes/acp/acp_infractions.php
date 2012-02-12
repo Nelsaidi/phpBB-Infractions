@@ -26,18 +26,17 @@ class acp_infractions
 		global $auth, $db, $user, $template;
 		global $config, $phpbb_root_path, $phpEx;
 		global $infractions;
-
-		// Block Users
-		if($user->data['user_id'] != 2)
-		{
-			trigger_error('Sorry dudes, still in development');
-		}
 		
 		add_form_key('acp_infractions');
 		$template->assign_var('U_ACTION', $this->u_action);
 		
 		switch($mode)
 		{
+			case 'general':
+				$this->infraction_general();
+				$this->tpl_name = 'acp_infraction_genreal';	
+				$this->page_title = 'Infraction Settings';
+			break;
 			case 'templates':
 				$this->infraction_templates();
 				$this->tpl_name = 'acp_infraction_templates';	
