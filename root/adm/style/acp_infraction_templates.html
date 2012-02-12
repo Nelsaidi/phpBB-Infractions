@@ -62,6 +62,24 @@
 <!-- ELSE -->
 <table>
 	<thead>
+		<th>{INFRACTION_TEMPLATE_NAME}</th>
+		<th>{INFRACTION_REASON}</th>
+		<th>{INFRACTION_POINTS}</th>
+		<th>{INFRACTION_DURATION}</th>
+		<th></th>
+		<th></th>
+		<th></th>
+	</thead>
+	<!-- BEGIN templates -->
+	<tr>
+		<td>{templates.NAME}</td>
+		<td>{templates.REASON}</td>
+		<td>{templates.INFRACTION_POINTS}</td>
+		<td>{templates.DURATION}</td>
+		<td><a href="{U_ACTION}&action=delete&template_id={templates.TEMPLATE_ID}">{INFRACTION_DELETE}</a> </td>
+		<td><a href="{U_ACTION}&action=moveup&template_id={templates.TEMPLATE_ID}">{INFRACTION_MOVE_UP}</a> </td>
+		<td><a href="{U_ACTION}&action=movedown&template_id={templates.TEMPLATE_ID}">{INFRACTION_MOVE_DOWN}</a> </td>
+		
 	</tr>
 	<!-- END templates -->
 </table>
