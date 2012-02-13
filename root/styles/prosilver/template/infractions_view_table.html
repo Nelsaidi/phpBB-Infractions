@@ -3,17 +3,13 @@
 	 <table class="table1">
 		<thead>
 			<tr>
-				<!-- click row to expand more detail - think of source mod bans system -->
-				<!-- nah, open in a new page - also for sql details, for actions we need group names no? -->
-				<th>Date</th> <!-- NOTE What order should date be? -->
-				<th>Username</th>
-				<th>Reason</th> <!-- include post subject title -->
-				<th>Points Issued</th> <!-- Have points then in brackets (total X) ?? -->
-				<th>Expire</th>
-				<th>Total Points</th>
-				<th>Actions</th>
+				<th>{L_INFRACTION_DATE}</th> 
+				<th>{L_USERNAME}</th>
+				<th>{L_INFRACTION_REASON}</th>
+				<th>{L_INFRACTION_POINTS}</th> 
+				<th>{L_INFRACTION_EXPIRE}</th>
+				<th>{L_INFRACTION_TOTAL_POINTS}</th>
 				<th></th>
-				<!-- too much info? -->
 			</tr>
 		</thead>
 		
@@ -25,11 +21,7 @@
 				<td>{infraction.POINTS_ISSUED}</td>
 				<td>{infraction.EXPIRE_TIME}</td>
 				<td>{infraction.TOTAL_POINTS}</td>
-				<td><!-- Logic to check action, display Ban,Group Modifications --></td>
-				
 				<td><!-- IF infraction.DELETE_LINK --><a href="{infraction.DELETE_LINK}">Delete</a><!-- ENDIF --></td>
-				<!-- TODO - Actions can move OUT of groups aswell? - would be awesome!!!!!-->
-
 			</tr>
 		<!-- END infraction -->
 		

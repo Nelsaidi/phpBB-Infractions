@@ -30,8 +30,8 @@ $lang = array_merge($lang, array(
 	'ACP_INFRACTIONS'				=> 'Infractions',
 	'MCP_INFRACTIONS'				=> 'Infractions',
 	
-	'ISSUE_INFRACTION'				=> 'Issue Infraction',
-	'VIEW_INFRACTIONS'				=> 'View Infractions',
+	'MCP_ISSUE_INFRACTION'			=> 'Issue Infraction',
+	'MCP_VIEW_INFRACTIONS'			=> 'View Infractions',
 	
 	'ACP_INFRACTION_TEMPLATES'		=> 'Templates',
 	'ACP_INFRACTION_ADD_TEMPLATE'	=> 'Add Template',
@@ -66,6 +66,11 @@ $lang = array_merge($lang, array(
 	'INFRACTION_MONTHS'				=> 'Months',
 	'INFRACTION_REASON_DESC'		=> 'The reason presented to the user for this infraction',
 	'INFRACTION_NOT_EXIST'			=> 'Infraction does not exist',
+	'INFRACTION_POINTS_ISSUED'		=> 'Points Issued',
+	'INFRACTION_NONE_CURRENT'		=> 'There are current infractions',
+	'INFRACTION_DATE'				=> 'Date',
+	'INFRACTION_EXPIRE'				=> 'Expire Date',
+	'INFRACTION_TOTAL_POINTS'		=> 'Total Points',
 	
 	'INFRACTION_ENTER_USERNAME'		=> 'Please use this form to enter a username or use the Issue Infraction button on posts to issue for posts',
 	

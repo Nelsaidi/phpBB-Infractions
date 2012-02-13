@@ -1,15 +1,15 @@
 <!-- INCLUDE overall_header.html -->
 <!-- IF S_TEMPLATE_FORM -->
-<h3>{ACP_INFRACTION_ADD_TEMPLATE}</h3>
+<h1>{L_ACP_INFRACTION_ADD_TEMPLATE}</h1>
 <form id="" method="post" action="{TEMPLATE_ADD}">
 <fieldset>
 		<dl>
-			<dt><label for="ban">{INFRACTION_TEMPLATE_NAME}:</label></dt>
+			<dt><label for="ban">{L_INFRACTION_TEMPLATE_NAME}:</label></dt>
 			<dd><input name="name" type="text" class="text medium" maxlength="255" id="name" /></dd>
 		</dl>
 
 		<dl>
-			<dt><label for="reason">{INFRACTION_REASON}</label><br/><span>{INFRACTION_REASON_DESC}</span></dt>
+			<dt><label for="reason">{L_INFRACTION_REASON}</label><br/><span>{L_INFRACTION_REASON_DESC}</span></dt>
 			<dd><textarea rows="2" cols="40" class="text medium" id="ban" name="reason"></textarea></dd>
 			
 		</dl>
@@ -17,23 +17,23 @@
 	
 		</dl>
 			<dl>
-			<dt><label for="duration">{INFRACTION_DURATION}</label></dt>
+			<dt><label for="duration">{L_INFRACTION_DURATION}</label></dt>
 				<dd><select name="duration" onchange="if(this.value==-1){document.getElementById('duration_custom').style.display = 'block';}else{document.getElementById('duration_custom').style.display='none';}">
-				<option value="3 day">3 {INFRACTION_DAYS}</option>
-				<option value="1 week">1 {INFRACTION_WEEK}</option>
-				<option value="1 month" checked="checked">1 {INFRACTION_MONTH}</option>
-				<option value="3 months">3 {INFRACTION_MONTHS}</option>
-				<option value="0">{INFRACTION_PERMANENT}</option>
-				<option value="-1">{INFRACTION_DURATION_CUSTOM}</option>
+				<option value="3 day">3 {L_INFRACTION_DAYS}</option>
+				<option value="1 week">1 {L_INFRACTION_WEEK}</option>
+				<option value="1 month" checked="checked">1 {L_INFRACTION_MONTH}</option>
+				<option value="3 months">3 {L_INFRACTION_MONTHS}</option>
+				<option value="0">{L_INFRACTION_PERMANENT}</option>
+				<option value="-1">{L_INFRACTION_DURATION_CUSTOM}</option>
 				
 			</select>
 		</dl>
 		
 		<dl id="duration_custom" stlye="display: none;">
 			<dt>
-				<label for="duration_custom">{INFRACTION_DURATION_CUSTOM}</label>
+				<label for="duration_custom">{L_INFRACTION_DURATION_CUSTOM}</label>
 				<br/>
-				<span>{INFRACTION_DUR_CUSTOM_NOTE}</span>
+				<span>{L_INFRACTION_DUR_CUSTOM_NOTE}</span>
 			</dt>
 			
 			<dd>
@@ -43,7 +43,7 @@
 		
 		
 		<dl>
-			<dt><label for="infraction_points">{INFRACTION_POINTS}</label></dt>
+			<dt><label for="infraction_points">{L_INFRACTION_POINTS}</label></dt>
 			<dd><input type="text" maxlength="255" class="text medium" name="infraction_points"></dd>
 			
 		</dl>
@@ -56,6 +56,7 @@
 </fieldset>
 </form>
 <!-- ELSE -->
+<h1>{L_ACP_INFRACTION_TEMPLATE}</h1>
 <a href="{ACP_INFRACTION_ADD_TEMPLATE}"></a><br/>
 <!-- IF S_NO_TEMPLATES eq 1 -->
 <p>{INFRACTION_NO_TEMPLATES}</p>

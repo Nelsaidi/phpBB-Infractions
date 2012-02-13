@@ -500,7 +500,7 @@ class mcp_infractions
 				'USER_PROFILE'		=> get_username_string('full', $infraction['user_id'], $infraction['username'], $infraction['user_colour']),
 				
 				'USER_ID'			=> $infraction['user_id'],
-				'REASON'			=> $infraction['reason'],
+				'REASON'			=> (!empty($infraction['topic_id'])) ? "<strong><a href=\"./viewtopic.php?t={$infraction['topic_id']}\">{$infraction['post_subject']}</a></strong><br/>{$infraction['reason']}" : $infraction['reason'];
 				'POINTS_ISSUED'		=> $infraction['infraction_points'],
 				'TOTAL_POINTS'		=> $infraction['total_points'],
 				'ACTIONS'			=> '',
@@ -580,7 +580,7 @@ class mcp_infractions
 				'USER_PROFILE'		=> get_username_string('full', $infraction['user_id'], $infraction['username'], $infraction['user_colour']),
 				
 				'USER_ID'			=> $infraction['user_id'],
-				'REASON'			=> $infraction['reason'],
+				'REASON'			=> (!empty($infraction['topic_id'])) ? "<strong><a href=\"./viewtopic.php?t={$infraction['topic_id']}\">{$infraction['post_subject']}</a></strong><br/>{$infraction['reason']}" : $infraction['reason'];
 				'POINTS_ISSUED'		=> $infraction['infraction_points'],
 				'TOTAL_POINTS'		=> $infraction['total_points'],
 				'ACTIONS'			=> '',
@@ -662,11 +662,8 @@ class mcp_infractions
 		global $auth, $db, $user, $template;
 		global $config, $phpbb_root_path, $phpEx;
 		
-		// Records + offset for pagination - which i should learn how to dodododo
-		$sql = 'SELECT * FROM ' . INFRACTIONS_TABLE . ' WHERE ';
-
 		$sql_array = array(
-			'SELECT'		=> 'i.*, p.post_subject, u.username, u.user_colour, u.infraction_points AS total_points',
+			'SELECT'		=> 'i.*, p.post_subject, u.username, u.user_colour, u.infraction_points AS total_points, p.topic_id',
 			
 			'FROM'		=> array(
 				INFRACTIONS_TABLE	=> 'i',

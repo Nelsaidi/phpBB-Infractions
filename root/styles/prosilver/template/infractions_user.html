@@ -16,7 +16,7 @@
 				<!-- IF RANK_IMG --><dt><!-- IF RANK_TITLE -->&nbsp;<!-- ELSE -->{L_RANK}:<!-- ENDIF --></dt><dd>{RANK_IMG}</dd><!-- ENDIF -->
 				<dt>{L_JOINED}:</dt><dd>{JOINED}</dd>
 				<dt>{L_TOTAL_POSTS}:</dt><dd>{POSTS}</dd>
-				<dt>Infraction Points: </dt><dd>{INFRACTION_POINTS}</dd>
+				<dt>{L_INFRACTION_POINTS}: </dt><dd>{INFRACTION_POINTS}</dd>
 			</dl>
 		</div>
 	</div>
@@ -26,9 +26,9 @@
 
 <div class="panel">
 	<div class="inner"><span class="corners-top"><span></span></span>
-	<h3>Infractions</h3>	
+	<h3>{L_INFRACTIONS}</h3>	
 	<!-- IF S_INFRACTIONS_NONE eq 1 -->
-	<p>No infractions available</p>
+	<p>{L_INFRACTION_NONE_CURRENT}</p>
 	<!-- ELSE -->
 	
 	<!-- TODO a form for filtering options? -->
