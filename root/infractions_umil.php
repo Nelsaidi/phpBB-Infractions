@@ -56,7 +56,7 @@ $language_file = 'infractions';
 * The version numbering must otherwise be compatible with the version_compare function - http://php.net/manual/en/function.version-compare.php
 */
 $versions = array(
-	'1.0b1' => array(
+	'1.0' => array(
 
 		'permission_add' => array(
 			array('m_infractions_issue', 1),
@@ -134,6 +134,8 @@ $versions = array(
 
 		'module_add' => array(
 			array('mcp', '', 'MCP_INFRACTIONS'),
+			
+			array('ucp', '', 'UCP_YOUR_INFRACTIONS'),
 			 
 			array('acp', 'ACP_CAT_USERGROUP', 'ACP_INFRACTIONS'),
 			 
@@ -143,6 +145,10 @@ $versions = array(
 			
 			array('acp', 'ACP_INFRACTIONS',
 				array('module_basename'	=> 'infractions'),
+			),
+			
+			array('ucp', 'UCP_YOUR_INFRACTIONS',
+				array('module_basename'	=> 'your_infractions'),
 			),
 		),
 

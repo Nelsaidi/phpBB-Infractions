@@ -30,6 +30,8 @@ $lang = array_merge($lang, array(
 	'ACP_INFRACTIONS'				=> 'Infractions',
 	'MCP_INFRACTIONS'				=> 'Infractions',
 	
+	'UCP_YOUR_INFRACTIONS'			=> 'Your Infractions',
+	
 	'MCP_ISSUE_INFRACTION'			=> 'Issue Infraction',
 	'MCP_VIEW_INFRACTIONS'			=> 'View Infractions',
 	
@@ -41,7 +43,6 @@ $lang = array_merge($lang, array(
 	'INFRACTION_PM_SIG_EXPLAIN' 	=> 'Signature of PM sent to users who recieve infractions, use %s to show the username of the user issuing',
 	'INFRACTION_DELETE_TYPE'		=> 'Hard delete',
 	'INFRACTION_DELETE_TYPE_EXPLAIN'=> 'If you want to keep infractions in the database for hisorical purposes select no',
-	
 	
 	'INFRACTION_LOG_ISSUED'			=> 'Issued an infraction to %s',
 	'INFRACTION_LOG_DELETED'		=> 'Deleted an infraction issued to %s',
@@ -85,6 +86,7 @@ $lang = array_merge($lang, array(
 	// Note, week, days, hours, etc should be as such and english, they are parsed by PHP.
 	'INFRACTION_DUR_CUSTOM_NOTE'	=> 'Enter custom duration, such as 1 week 2 days 4 hours 2 second',
 
+	'INFRACTION_YOUR_TOTAL'			=> 'You have <strong>%d</strong> points in total',
 	
 	'INFRACTION_PM_SUBJECT'			=> 'You have recieved an infraction',
 	// %1$s > Username, %2$s > Reason , %3$s > Infraction Points, %4$s >  Total Infraction Points, %5$s > Signature

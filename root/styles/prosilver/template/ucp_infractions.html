@@ -1,0 +1,37 @@
+<!-- INCLUDE ucp_header.html -->
+<div class="panel">
+	<div class="inner"><span class="corners-top"><span></span></span>
+	<h3>{L_INFRACTIONS}</h3>	
+	<!-- IF S_INFRACTIONS_NONE eq 1 -->
+	<p>{L_INFRACTION_NONE_CURRENT}</p>
+	<!-- ELSE -->
+	<p>{TOTAL_POINTS}</p>
+	<table class="table1">
+		<thead>
+			<tr>
+				<th>{L_INFRACTION_DATE}</th> 
+				<th>{L_INFRACTION_REASON}</th>
+				<th>{L_INFRACTION_POINTS}</th> 
+				<th>{L_INFRACTION_EXPIRE}</th>
+				<th></th>
+			</tr>
+		</thead>
+		
+		<!-- BEGIN infraction -->
+			<tr id="infraction{infraction.INFRACTION_ID}" class="<!-- IF infraction.S_ROW_COUNT is even -->bg1<!-- ELSE -->bg2<!-- ENDIF -->">
+				<td>{infraction.ISSUE_TIME}</td>
+				<td>{infraction.REASON}</td>
+				<td>{infraction.POINTS_ISSUED}</td>
+				<td>{infraction.EXPIRE_TIME}</td>
+			</tr>
+		<!-- END infraction -->
+		
+	 </table>
+	 
+	
+	<!-- ENDIF -->
+	
+	<!-- TODO Pagination here! -->
+	<span class="corners-bottom"><span></span></span></div>
+</div>
+<!-- INCLUDE ucp_footer.html -->

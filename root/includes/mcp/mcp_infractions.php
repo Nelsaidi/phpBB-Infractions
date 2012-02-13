@@ -27,7 +27,6 @@ class mcp_infractions
 	{
 		global $auth, $db, $user, $template;
 		global $config, $phpbb_root_path, $phpEx;
-		global $infractions;
 		
 		$action = request_var('action', '');
 
@@ -43,12 +42,11 @@ class mcp_infractions
 		{
 			case 'issue':
 				$this->issue_infraction();
-				$this->tpl_name = 'infractions_issue';	
-				$this->page_title = 'Issue Infraction';
+				$this->tpl_name = 'mcp_infractions_issue';	
+				$this->page_title = 'INFRACTION_ISSUE';
 			break;
 
 			case 'view':
-			
 				if($action == 'delete')
 				{
 					$this->delete_infraction();					
@@ -59,7 +57,7 @@ class mcp_infractions
 				
 				if($username != '')
 				{
-					$sql = 'SELECT user_id FROM ' . USERS_TABLE . ' WHERE username_clean = "' . $db->sql_escape(utf8_clean_string($username)) . '"';
+					$sql = 'SELECT user_id, FROM ' . USERS_TABLE . ' WHERE username_clean = "' . $db->sql_escape(utf8_clean_string($username)) . '"';
 					$result = $db->sql_query($sql);
 					$user_row = $db->sql_fetchrow($result);	
 					$db->sql_freeresult($result);
@@ -76,14 +74,14 @@ class mcp_infractions
 				if($user_id > 0)
 				{
 					$this->view_infractions_user();
-					$this->tpl_name = 'infractions_user';
-					$this->page_title = 'Infractions user: '; // append username to this
+					$this->tpl_name = 'mcp_infractions_user';
+					$this->page_title = 'INFRACTIONS' // append username to this
 				}
 				else
 				{
 					$this->view_infractions();
-					$this->tpl_name = 'infractions_index';
-					$this->page_title = 'List Infractions';
+					$this->tpl_name = 'mcp_infractions_index';
+					$this->page_title = 'INFRACTIONS';
 				}
 			
 			break;
@@ -99,7 +97,6 @@ class mcp_infractions
 	{
 		global $auth, $db, $user, $template;
 		global $config, $phpbb_root_path, $phpEx;
-		global $infractions;
 		
 		// Check if the user can issue an infraction
 		if(!$auth->acl_get('m_infractions_issue'))
@@ -121,7 +118,7 @@ class mcp_infractions
 		
 		if($user_id == ANONYMOUS)
 		{
-			trigger_error('INFRACTIOS_ISSUE_GUEST');
+			trigger_error('INFRACTION_ISSUE_GUEST');
 		}
 		
 		// Get the user ID of the selected user, and redirect to a URL with the id appended
@@ -332,9 +329,7 @@ class mcp_infractions
 			$sql = 'UPDATE ' . USERS_TABLE . " SET infraction_points = infraction_points + {$infraction['infraction_points']} WHERE user_id = {$user_row['user_id']}";
 			$db->sql_query($sql);
 		}
-		
-		// TODO Actions!!
-		
+			
 		include_once($phpbb_root_path . 'includes/functions_privmsgs.' . $phpEx);
 		include_once($phpbb_root_path . 'includes/message_parser.' . $phpEx);
 
@@ -393,7 +388,6 @@ class mcp_infractions
 	{
 		global $auth, $db, $user, $template;
 		global $config, $phpbb_root_path, $phpEx;
-
 		
 		// Loaded via the URI
 		if($infraction_id === false)
@@ -449,7 +443,6 @@ class mcp_infractions
 			$db->sql_query($sql);
 		}
 		
-		// TODO RUN HOOK: infraction_deleted
 		
 		if($infraction_id !== false)
 		{
@@ -475,14 +468,11 @@ class mcp_infractions
 		global $auth, $db, $user, $template;
 		global $config, $phpbb_root_path, $phpEx;
 		
-		// Do pagination
-		
 		clear_expired_infractions();
 		$infractions_list = $this->get_infractions();
 		
 		if(!$infractions_list)
 		{
-			// Something templatey about no infractions
 			$template->assign_var('S_INFRACTIONS_NONE', 1);
 			return;
 		}
@@ -527,7 +517,6 @@ class mcp_infractions
 		$start = request_var('start', 0);
 		
 		// Load avatars, colours, etc
-		// Can we make use of the get_infraction function? - will cacheing for 1 second make the latter quciker?
 		$sql = 'SELECT * FROM ' . USERS_TABLE . ' WHERE user_id = ' . $user_id;
 		$result = $db->sql_query($sql);
 		$user_row = $db->sql_fetchrow($result);
@@ -556,7 +545,6 @@ class mcp_infractions
 	
 		));
 
-		// TODO : Pagination, so, get limit and offset?
 		
 		// Get infractions
 		$infractions_list = $this->get_infractions(25, $start, 0, $user_id);
