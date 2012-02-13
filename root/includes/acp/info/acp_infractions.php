@@ -29,8 +29,8 @@ class acp_infractions_info
 			'title'		=> 'ACP_INFRACTIONS',
 			'version'	=> '1.0',
 			'modes'		=> array(
-				'general'		=> array('title' => 'ACP_INFRACTION_GENERAL', 'auth' => 'a_infractions_manage', 'cat' => array('ACP_INFRACTIONS')),
-				'templates'		=> array('title' => 'ACP_INFRACTION_TEMPLATES', 'auth' => 'a_infractions_manage', 'cat' => array('ACP_INFRACTIONS')),
+				'general'		=> array('title' => 'ACP_INFRACTION_GENERAL', 'auth' => 'acl_a_infractions_manage', 'cat' => array('ACP_INFRACTIONS')),
+				'templates'		=> array('title' => 'ACP_INFRACTION_TEMPLATES', 'auth' => 'acl_a_infractions_manage', 'cat' => array('ACP_INFRACTIONS')),
 			),
 		);
 	}
