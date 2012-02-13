@@ -34,11 +34,21 @@ function clear_expired_infractions($user_id = '')
 		$sql .= " AND user_id = $user_id ";
 	}
 	
-	
 	$result = $db->sql_query($sql);
 	
 	$infractions = $db->sql_fetchrowset($result);
 	$db->sql_freeresult($result);
+	
+	if($config['infractions_deleted_keep_time'] > 0)
+	{
+		$void_time = time() - $config['infractions_deleted_keep_time'] * 24 * 60 * 60;
+		$sql = 'DELTE FROM ' . INFRACTIONS_TABLE . ' WHERE expire_time < ' . $void_time . ' OR deleted_time < ' . $void_time;
+		if(is_numeric($user_id))
+		{
+			$sql .= " AND user_id = $user_id ";
+		}
+		$db->sql_query($sql);
+	}
 	
 	// No infractions
 	if(sizeof($infractions) == 0)
@@ -86,13 +96,7 @@ function clear_expired_infractions($user_id = '')
 	
 	$db->sql_query($sql);
 	
-	// Now purge expired soft deleted infractions
-	if($config['infractions_deleted_keep_time'] > 0)
-	{
-		$void_time = time() - $config['infractions_deleted_keep_time'] * 24 * 60 * 60;
-		$sql = 'DELTE FROM ' . INFRACTIONS_TABLE . ' WHERE expire_time < ' . $void_time . ' OR deleted_time < ' . $void_time;
-		$db->sql_query($sql);
-	}
+	return true;
 	
 }
 
