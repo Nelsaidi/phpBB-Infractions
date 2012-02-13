@@ -32,12 +32,16 @@ $lang = array_merge($lang, array(
 	
 	'UCP_YOUR_INFRACTIONS'			=> 'Your Infractions',
 	
+	'ISSUE_INFRACTION'				=> 'Issue Infraction',
+	'VIEW_INFRACTION'				=> 'View Infractions',
+	
 	'MCP_ISSUE_INFRACTION'			=> 'Issue Infraction',
 	'MCP_VIEW_INFRACTIONS'			=> 'View Infractions',
 	
 	'ACP_INFRACTION_TEMPLATES'		=> 'Templates',
 	'ACP_INFRACTION_ADD_TEMPLATE'	=> 'Add Template',
 	'ACP_INFRACTION_GENERAL'		=> 'General Settings',
+	'ACP_INFRACTION_NO_TEMPLATES'	=> 'There are no templates, use the link above to add one',
 	
 	'INFRACTION_PM_SIG'				=> 'PM signature',
 	'INFRACTION_PM_SIG_EXPLAIN' 	=> 'Signature of PM sent to users who recieve infractions, use %s to show the username of the user issuing',
@@ -50,6 +54,8 @@ $lang = array_merge($lang, array(
 	
 	'INFRACTION_TEMPLATE_NAME'		=> 'Template Name',
 	'INFRACTION_NO_TEMPLATES'		=> 'No templates exist',
+	'INFRACTION_TEMPLATE'			=> 'Template',
+	'INFRACTION_CUSTOM'				=> 'Custom',
 	
 	'INFRACTION_REASON'				=> 'Reason',
 	'INFRACTION_DURATION'			=> 'Duration',
@@ -68,10 +74,11 @@ $lang = array_merge($lang, array(
 	'INFRACTION_REASON_DESC'		=> 'The reason presented to the user for this infraction',
 	'INFRACTION_NOT_EXIST'			=> 'Infraction does not exist',
 	'INFRACTION_POINTS_ISSUED'		=> 'Points Issued',
-	'INFRACTION_NONE_CURRENT'		=> 'There are current infractions',
+	'INFRACTION_NONE_CURRENT'		=> 'There are no current infractions',
 	'INFRACTION_DATE'				=> 'Date',
 	'INFRACTION_EXPIRE'				=> 'Expire Date',
 	'INFRACTION_TOTAL_POINTS'		=> 'Total Points',
+	'INFRACTION_NEVER'				=> 'Never',
 	
 	'INFRACTION_ENTER_USERNAME'		=> 'Please use this form to enter a username or use the Issue Infraction button on posts to issue for posts',
 	
@@ -90,14 +97,14 @@ $lang = array_merge($lang, array(
 	
 	'INFRACTION_PM_SUBJECT'			=> 'You have recieved an infraction',
 	// %1$s > Username, %2$s > Reason , %3$s > Infraction Points, %4$s >  Total Infraction Points, %5$s > Signature
-	'INFRACTION_PM_BODY'			=>    'Dear %1$s, \n' 
-										. 'You have been issued an infraction with the following details: \n'
-										. '  \n'
-										. 'Reason: %2$s \n'
-										. 'Infraction Points: %3$s\n'
-										. '  \n'
-										. 'Your total infraction points is now %4$s  \n'
-										. '%5$s',
+	'INFRACTION_PM_BODY'			=>    "Dear %1$s, \n" 
+										. "You have been issued an infraction with the following details: \n"
+										. "  \n"
+										. "Reason: %2$s \n"
+										. "Infraction Points: %3$s\n"
+										. "  \n"
+										. "Your total infraction points is now %4$s  \n"
+										. "%5$s",
 
 ));
 	

@@ -43,7 +43,7 @@ define('INFRACTION_TEMPLATES_TABLE', 	$table_prefix . 'infraction_templates');</
 			</edit>
 			
 			<edit>
-				<find><![CDATA[// Additional constants]]></find>
+				<find><![CDATA[define('VOTE_CONVERTED', 127);]]></find>
 				<action type="after-add"><![CDATA[define('INFRACTION_DELETE_HARD', 1);
 define('INFRACTION_DELETE_SOFT', 0);]]></action>
 			</edit>
@@ -84,7 +84,7 @@ define('INFRACTION_DELETE_SOFT', 0);]]></action>
 			
 			<edit>
 				<find><![CDATA[<dd><strong>{WARNINGS}</strong><!-- IF U_NOTES or U_WARN --> [ <!-- IF U_NOTES --><a href="{U_NOTES}">{L_VIEW_NOTES}</a><!-- ENDIF --> <!-- IF U_WARN --><!-- IF U_NOTES --> | <!-- ENDIF --><a href="{U_WARN}">{L_WARN_USER}</a><!-- ENDIF --> ]<!-- ENDIF --></dd>]]></find>
-				<action type="replace-with"><![CDATA[<dd><strong>{INFRACTION_POINTS}</strong><!-- IF U_NOTES --> [<a href="{U_NOTES}">{L_VIEW_NOTES}</a>]<!-- ENDIF --><!-- IF U_ISSUE_INFRACTION --> [<a href="{U_ISSUE_INFRACTION}">{L_ISSUE_INFRACTION}</a>]<!-- ENDIF --><!-- IF U_VIEW_INFRACTIONS --> [<a href="{U_VIEW_INFRACTIONS}">View Infractions</a>]<!-- ENDIF --> </dd>]]></action>
+				<action type="replace-with"><![CDATA[<dd><strong>{INFRACTION_POINTS}</strong><!-- IF U_NOTES --> [<a href="{U_NOTES}">{L_VIEW_NOTES}</a>]<!-- ENDIF --><!-- IF U_ISSUE_INFRACTION --> [<a href="{U_ISSUE_INFRACTION}">{L_ISSUE_INFRACTION}</a>]<!-- ENDIF --><!-- IF U_VIEW_INFRACTIONS --> [<a href="{U_VIEW_INFRACTIONS}">{L_VIEW_INFRACTIONS}</a>]<!-- ENDIF --> </dd>]]></action>
 			</edit>
 		</open>
 		<open src="includes/session.php">

@@ -148,7 +148,7 @@ $versions = array(
 			),
 			
 			array('ucp', 'UCP_YOUR_INFRACTIONS',
-				array('module_basename'	=> 'your_infractions'),
+				array('module_basename'	=> 'infractions'),
 			),
 		),
 

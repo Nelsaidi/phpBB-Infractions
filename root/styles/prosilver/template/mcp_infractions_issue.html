@@ -84,19 +84,29 @@
 
 	<fieldset>
 		<dl>
-			<dt><label for="ban">{L_INFRACTION_TEMPLATE_NAME}:</label></dt>
-			<dd><input name="name" type="text" class="text medium" maxlength="255" id="name" /></dd>
+			<dt>
+				<label for="infraction_template">{L_INFRACTION_TEMPLATE}</label>
+			</dt>
+			
+			<dd>
+				<select name="infraction_template" onchange="if(this.value==0){document.getElementById('infraction_details').style.display = 'block';}else{document.getElementById('infraction_details').style.display='none';}">
+				<option value="0" >{L_INFRACTION_CUSTOM}</option>
+					<!-- BEGIN infraction_templates -->
+					<option value="{infraction_templates.TEMPLATE_ID}" >{infraction_templates.NAME}</option>
+					<!-- END infraction_templates -->
+				</select>
+			</dd>
 		</dl>
-
+	</fieldset>
+	
+	<fieldset id="infraction_details">
 		<dl>
 			<dt><label for="reason">{L_INFRACTION_REASON}</label><br/><span>{L_INFRACTION_REASON_DESC}</span></dt>
 			<dd><textarea rows="2" cols="40" class="text medium" id="ban" name="reason"></textarea></dd>
 			
 		</dl>
 		
-	
-		</dl>
-			<dl>
+		<dl>
 			<dt><label for="duration">{L_INFRACTION_DURATION}</label></dt>
 				<dd><select name="duration" onchange="if(this.value==-1){document.getElementById('duration_custom').style.display = 'block';}else{document.getElementById('duration_custom').style.display='none';}">
 				<option value="3 day">3 {L_INFRACTION_DAYS}</option>
@@ -109,7 +119,7 @@
 			</select>
 		</dl>
 		
-		<dl id="duration_custom" stlye="display: none;">
+		<dl id="duration_custom" style="display: none;">
 			<dt>
 				<label for="duration_custom">{L_INFRACTION_DURATION_CUSTOM}</label>
 				<br/>
@@ -134,15 +144,9 @@
 		</fieldset>
 		
 	</fieldset>
-	
+	</form>
 	<span class="corners-bottom"><span></span></span></div>
 </div>
 
-<form method="post" id="mcp" action="{U_POST_ACTION}">
-<fieldset class="submit-buttons">
-	<input type="reset" value="{L_RESET}" name="reset" class="button2" />&nbsp; 
-	<input type="submit" name="issue_infraction" value="Submit" class="button1" />
-	{S_FORM_TOKEN}
-</fieldset>
 <!-- ENDIF -->
 <!-- INCLUDE mcp_footer.html -->

@@ -17,8 +17,7 @@ if (!defined('IN_PHPBB'))
 	exit;
 }
 
-// Extend mcp to get the get_infraction method
-class ucp_infractions extends mcp_infractions
+class ucp_infractions 
 {
 	public $p_master;
 	public $u_action;
@@ -34,7 +33,11 @@ class ucp_infractions extends mcp_infractions
 		$this->tpl_name = 'ucp_infractions';	
 		$this->page_title = 'INFRACTIONS';
 		
-		$infractions_list = $this->get_infractions(0, 0, 0, $user->data['user_id']);
+		// Load the MCP infractions class to get the get_infraction method
+		include($phpbb_root_path . 'includes/mcp/mcp_infractions.' . $phpEx);
+		$i = new mcp_infractions;
+		$infractions_list = $i->get_infractions(0, 0, 0, $user->data['user_id']);
+		unset($i);
 			
 		if(!$infractions_list)
 		{
@@ -42,7 +45,7 @@ class ucp_infractions extends mcp_infractions
 			return;
 		}
 		
-		$template->assign_var('TOTAL_POINTS', sprintf($user->lang('INFRACTION_YOUR_TOTAL_A'), $user->data['infraction_points']));
+		$template->assign_var('TOTAL_POINTS', sprintf($user->lang['INFRACTION_YOUR_TOTAL'], $user->data['infraction_points']));
 		
 		foreach($infractions_list as $infraction)
 		{			
@@ -50,9 +53,9 @@ class ucp_infractions extends mcp_infractions
 				'INFRACTION_ID'	=> $infraction['infraction_id'],
 				
 				'ISSUE_TIME'	 	=> $user->format_date($infraction['issue_time']),
-				'EXPIRE_TIME'	 	=> $user->format_date($infraction['expire_time']),
+				'EXPIRE_TIME'	 	=> (($infraction['expire_time'] == 0) ? $user->lang['INFRACTION_NEVER'] : $user->format_date($infraction['expire_time'])),
 
-				'REASON'			=> (!empty($infraction['topic_id'])) ? "<strong><a href=\"./viewtopic.php?t={$infraction['topic_id']}\">{$infraction['post_subject']}</a></strong><br/>{$infraction['reason']}" : $infraction['reason'];
+				'REASON'			=> (!empty($infraction['topic_id']) ? "<strong><a href=\"./viewtopic.php?t={$infraction['topic_id']}\">{$infraction['post_subject']}</a></strong><br/>{$infraction['reason']}" : $infraction['reason']),
 				'POINTS_ISSUED'		=> $infraction['infraction_points'],
 
 			));

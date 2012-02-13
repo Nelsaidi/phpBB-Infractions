@@ -75,7 +75,7 @@ class mcp_infractions
 				{
 					$this->view_infractions_user();
 					$this->tpl_name = 'mcp_infractions_user';
-					$this->page_title = 'INFRACTIONS' // append username to this
+					$this->page_title = 'INFRACTIONS'; // append username to this
 				}
 				else
 				{
@@ -168,7 +168,7 @@ class mcp_infractions
 		
 
 		// Check if the form has been submitted, if not, display the form to issue an infraction
-		if(!isset($_POST['issue_infraction']))
+		if(!isset($_POST['submit']))
 		{
 			$template->assign_vars(array(
 				'U_POST_ACTION'		=> append_sid("{$phpbb_root_path}mcp.$phpEx", 'i=infractions&amp;mode=issue&amp;user_id=' . $user_id . '&amp;post_id=' . $post_id),
@@ -283,7 +283,7 @@ class mcp_infractions
 		{
 		
 			$infraction = array_merge($infraction, array(
-				'infraction_points'		=> request_var('points', 0),
+				'infraction_points'		=> request_var('infraction_points', 0),
 				'duration'				=> request_var('duration', ''),
 				'reason'				=> request_var('reason', ''),
 			));
@@ -296,12 +296,13 @@ class mcp_infractions
 		}
 		
 		// Load custom time
-		if($infraction['duration'] === -1)
+		if($infraction['duration'] == -1)
 		{
 			$infraction['duration'] = request_var('duration_custom', '');
+
 		}
 		
-		if($infraction['duration'] === 0)
+		if($infraction['duration'] == 0)
 		{
 			// Permanent 
 			$infraction['expire_time'] = 0;
@@ -336,11 +337,8 @@ class mcp_infractions
 		include($phpbb_root_path . 'language/' . basename($user_row['user_lang']) . "/infractions.$phpEx");
 
 		$message_parser = new parse_message();
-
-		$message = sprintf($lang['INFRACTION_PM_BODY'], $user_row['username'], $infraction['reason'], $infraction['infraction_points'], $infraction['infraction_points'] + $user_row['infraction_points']);
-		$message .= sprintf($config['infractions_pm_sig'], $user->data['username']);
+		$message_parser->message = sprintf($lang['INFRACTION_PM_BODY'], $user_row['username'], $infraction['reason'], $infraction['infraction_points'], $infraction['infraction_points'] + $user_row['infraction_points'],  sprintf($config['infractions_pm_sig'], $user->data['username']));
 		
-		$message_parser->message = $message;
 		$message_parser->parse(true, true, true, false, false, true, true);
 
 		$pm_data = array(
@@ -484,13 +482,13 @@ class mcp_infractions
 				'POST_ID'			=> $infraction['post_id'],
 				'ISSUE_TIME'	 	=> $user->format_date($infraction['issue_time']),
 				
-				'EXPIRE_TIME'	 	=> $user->format_date($infraction['expire_time']),
+				'EXPIRE_TIME'	 	=> (($infraction['expire_time'] == 0) ? $user->lang['INFRACTION_NEVER'] : $user->format_date($infraction['expire_time'])),
 				
 				'USERNAME'			=> $infraction['username'],
 				'USER_PROFILE'		=> get_username_string('full', $infraction['user_id'], $infraction['username'], $infraction['user_colour']),
 				
 				'USER_ID'			=> $infraction['user_id'],
-				'REASON'			=> (!empty($infraction['topic_id'])) ? "<strong><a href=\"./viewtopic.php?t={$infraction['topic_id']}\">{$infraction['post_subject']}</a></strong><br/>{$infraction['reason']}" : $infraction['reason'];
+				'REASON'			=> (!empty($infraction['topic_id']) ? "<strong><a href=\"./viewtopic.php?t={$infraction['topic_id']}\">{$infraction['post_subject']}</a></strong><br/>{$infraction['reason']}" : $infraction['reason']),
 				'POINTS_ISSUED'		=> $infraction['infraction_points'],
 				'TOTAL_POINTS'		=> $infraction['total_points'],
 				'ACTIONS'			=> '',
@@ -562,16 +560,15 @@ class mcp_infractions
 				'INFRACTION_ID'		=> $infraction['infraction_id'],
 				'POST_ID'			=> $infraction['post_id'],
 				'ISSUE_TIME'	 	=> $user->format_date($infraction['issue_time']),
-				'EXPIRE_TIME'	 	=> $user->format_date($infraction['expire_time']),
+				'EXPIRE_TIME'	 	=> (($infraction['expire_time'] == 0) ? $user->lang['INFRACTION_NEVER'] : $user->format_date($infraction['expire_time'])),
 				
 				'USERNAME'			=> $infraction['username'],
 				'USER_PROFILE'		=> get_username_string('full', $infraction['user_id'], $infraction['username'], $infraction['user_colour']),
 				
 				'USER_ID'			=> $infraction['user_id'],
-				'REASON'			=> (!empty($infraction['topic_id'])) ? "<strong><a href=\"./viewtopic.php?t={$infraction['topic_id']}\">{$infraction['post_subject']}</a></strong><br/>{$infraction['reason']}" : $infraction['reason'];
+				'REASON'			=> (!empty($infraction['topic_id']) ? "<strong><a href=\"./viewtopic.php?t={$infraction['topic_id']}\">{$infraction['post_subject']}</a></strong><br/>{$infraction['reason']}" : $infraction['reason']),
 				'POINTS_ISSUED'		=> $infraction['infraction_points'],
 				'TOTAL_POINTS'		=> $infraction['total_points'],
-				'ACTIONS'			=> '',
 				
 				'DELETE_LINK'		=> ($auth->acl_get('m_infractions_delete') ? append_sid($this->u_action . '&action=delete&infraction_id=' . $infraction['infraction_id'] . '&user_id=' . $user_id . '&start=' . $start) : ''),
 				// TODO actions

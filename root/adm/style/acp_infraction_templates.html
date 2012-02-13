@@ -29,7 +29,7 @@
 			</select>
 		</dl>
 		
-		<dl id="duration_custom" stlye="display: none;">
+		<dl id="duration_custom" style="display: none;">
 			<dt>
 				<label for="duration_custom">{L_INFRACTION_DURATION_CUSTOM}</label>
 				<br/>
@@ -56,17 +56,17 @@
 </fieldset>
 </form>
 <!-- ELSE -->
-<h1>{L_ACP_INFRACTION_TEMPLATE}</h1>
-<a href="{ACP_INFRACTION_ADD_TEMPLATE}"></a><br/>
+<h1>{L_ACP_TEMPLATES}</h1>
+<a href="{TEMPLATE_ADD}">{L_ACP_INFRACTION_ADD_TEMPLATE}</a><br/>
 <!-- IF S_NO_TEMPLATES eq 1 -->
-<p>{INFRACTION_NO_TEMPLATES}</p>
+<p>{L_INFRACTION_NO_TEMPLATES}</p>
 <!-- ELSE -->
 <table>
 	<thead>
-		<th>{INFRACTION_TEMPLATE_NAME}</th>
-		<th>{INFRACTION_REASON}</th>
-		<th>{INFRACTION_POINTS}</th>
-		<th>{INFRACTION_DURATION}</th>
+		<th>{L_INFRACTION_TEMPLATE_NAME}</th>
+		<th>{L_INFRACTION_REASON}</th>
+		<th>{L_INFRACTION_POINTS}</th>
+		<th>{L_INFRACTION_DURATION}</th>
 		<th></th>
 		<th></th>
 		<th></th>
@@ -77,9 +77,9 @@
 		<td>{templates.REASON}</td>
 		<td>{templates.INFRACTION_POINTS}</td>
 		<td>{templates.DURATION}</td>
-		<td><a href="{U_ACTION}&action=delete&template_id={templates.TEMPLATE_ID}">{INFRACTION_DELETE}</a> </td>
-		<td><a href="{U_ACTION}&action=moveup&template_id={templates.TEMPLATE_ID}">{INFRACTION_MOVE_UP}</a> </td>
-		<td><a href="{U_ACTION}&action=movedown&template_id={templates.TEMPLATE_ID}">{INFRACTION_MOVE_DOWN}</a> </td>
+		<td><a href="{U_ACTION}&action=delete&template_id={templates.TEMPLATE_ID}">{L_INFRACTION_DELETE}</a> </td>
+		<td><a href="{U_ACTION}&action=moveup&template_id={templates.TEMPLATE_ID}">{L_INFRACTION_MOVE_UP}</a> </td>
+		<td><a href="{U_ACTION}&action=movedown&template_id={templates.TEMPLATE_ID}">{L_INFRACTION_MOVE_DOWN}</a> </td>
 		
 	</tr>
 	<!-- END templates -->
