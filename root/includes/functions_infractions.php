@@ -58,7 +58,7 @@ function clear_expired_infractions($user_id = '')
 		// Possibly a little bit more costly possibly more efficient, 
 		if($infraction['infraction_points'] > 0)
 		{
-			$user[$infraction['userid'] += $infraction['infraction_points'];
+			$user[$infraction['userid']] += $infraction['infraction_points'];
 		}
 		
 	}

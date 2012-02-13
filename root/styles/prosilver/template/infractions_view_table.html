@@ -14,7 +14,7 @@
 		</thead>
 		
 		<!-- BEGIN infraction -->
-			<tr id="infraction{infraction.INFRACTION_ID}" class="<!-- IF infraction.S_ROW_COUNT is even -->bg1<!-- ELSE -->bg2<!-- ENDIF -->">
+			<tr id="infraction{infraction.INFRACTION_ID}" class="<!-- IF infraction.S_ROW_COUNT is even -->bg1<!-- ELSE -->bg2<!-- ENDIF -->" <!-- IF infraction.VOID eq 1 -->style="background: #cccccc"<!-- ENDIF --> >
 				<td>{infraction.ISSUE_TIME}</td>
 				<td>{infraction.USER_PROFILE}</td>
 				<td>{infraction.REASON}</td>

@@ -411,6 +411,11 @@ class mcp_infractions
 			trigger_error('INFRACTION_NOT_EXIST');
 		}
 
+		if($infraction['void'] == 1)
+		{
+			trigger_error('INFRACTION_NOT_EXIST');
+		}
+		
 		if($config['infractions_delete_type'] == INFRACTION_DELETE_HARD)
 		{
 			// Delete it fully out of the DB
@@ -418,8 +423,7 @@ class mcp_infractions
 		}
 		else
 		{
-			// Just void it, still display it - cron job will purge
-			$removal_sql = 'UPDATE ' . INFRACTIONS_TABLE . ' SET void = 1 AND deleted_time = ' . time() . " WHERE infraction_id = $infraction_id";
+			$removal_sql = 'UPDATE ' . INFRACTIONS_TABLE . ' SET void = 1, deleted_time = ' . time() . " WHERE infraction_id = $infraction_id";
 		}
 
 		$db->sql_query($removal_sql);
@@ -444,8 +448,7 @@ class mcp_infractions
 		$username = $db->sql_fetchfield('username', 0, $result);
 		$db->sql_freeresult($result);
 		
-		add_log('mod', 0, 0, "Deleted an infraction issued to {$username}"));		
-		redirect(append_sid($this->u_action));
+		add_log('mod', 0, 0, "Deleted an infraction issued to {$username}");		
 		
 		return true;
 	}
@@ -486,7 +489,7 @@ class mcp_infractions
 				'TOTAL_POINTS'		=> $infraction['total_points'],
 				'ACTIONS'			=> '',
 				
-				'DELETE_LINK'		=> ($auth->acl_get('m_infractions_delete') ? append_sid($this->u_action . '&action=delete&infraction_id=' . $infraction['infraction_id']) : ''),
+				'DELETE_LINK'		=> (($auth->acl_get('m_infractions_delete') && $infraction['void'] == 0) ? append_sid($this->u_action . '&action=delete&infraction_id=' . $infraction['infraction_id']) : ''),
 			));
 		}
 		
@@ -538,7 +541,7 @@ class mcp_infractions
 
 		
 		// Get infractions
-		$infractions_list = $this->get_infractions(25, $start, 0, $user_id);
+		$infractions_list = $this->get_infractions(25, $start, 0, $user_id, false, true);
 
 		if(!$infractions_list)
 		{
@@ -563,7 +566,9 @@ class mcp_infractions
 				'POINTS_ISSUED'		=> $infraction['infraction_points'],
 				'TOTAL_POINTS'		=> $infraction['total_points'],
 				
-				'DELETE_LINK'		=> ($auth->acl_get('m_infractions_delete') ? append_sid($this->u_action . '&action=delete&infraction_id=' . $infraction['infraction_id'] . '&user_id=' . $user_id . '&start=' . $start) : ''),
+				'VOID'				=> $infraction['void'],
+				
+				'DELETE_LINK'		=> (($auth->acl_get('m_infractions_delete') && $infraction['void'] == 0) ? append_sid($this->u_action . '&action=delete&infraction_id=' . $infraction['infraction_id'] . '&user_id=' . $user_id . '&start=' . $start) : ''),
 				// TODO actions
 			));
 		}
