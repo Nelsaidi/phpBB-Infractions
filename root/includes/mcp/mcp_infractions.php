@@ -357,7 +357,7 @@ class mcp_infractions
 		);
 		
 		submit_pm('post', $lang['INFRACTION_PM_SUBJECT'], $pm_data, false);
-		add_log('mod', 0, 0, sprintf('INFRACTION_LOG_ISSUED', $user_row['username']));	
+		add_log('mod', 0, 0, "Issued an infraction to {$user_row['username']}"); // Do this using languages is not possible?	
 		
 		// TODO RUN HOOK: infraction_issued !!
 
@@ -450,7 +450,7 @@ class mcp_infractions
 			$username = $db->sql_fetchfield('username', 0, $result);
 			$db->sql_freeresult($result);
 			
-			add_log('mod', 0, 0, sprintf('INFRACTION_LOG_DELETED', $username));		
+			add_log('mod', 0, 0, "Deleted an infraction issued to {$username}"));		
 			redirect(append_sid($this->u_action));
 		}
 		
