@@ -404,7 +404,7 @@ class mcp_infractions
 			);
 
 			//display mode
-			confirm_box(false, 'INFRACTION_REMOVE_CONFIRM', $s_hidden_fields);
+			confirm_box(false, 'INFRACTION_DELETE', $s_hidden_fields);
 			return;
 		}
 		

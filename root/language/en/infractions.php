@@ -54,7 +54,7 @@ $lang = array_merge($lang, array(
 	'INFRACTION_LOG_DELETED'		=> 'Deleted an infraction issued to %s',
 	'INFRACTION_LOG_UPDATED'		=> 'Infraction settings changed',
 	
-	'INFRACTION_REMOVE_CONFIRM'		=> 'Are you sure you want to remove this infraction',
+	'INFRACTION_DELETE_CONFIRM'		=> 'Are you sure you want to remove this infraction',
 	
 	'INFRACTION_TEMPLATE_NAME'		=> 'Template Name',
 	'INFRACTION_NO_TEMPLATES'		=> 'No templates exist',

@@ -27,8 +27,8 @@ class mcp_infractions_info
 			'title'	   => 'MCP_INFRACTIONS',
 			'version'    => '1.0.0',
 			'modes'	   => array(
-				'view'        => array('title' => 'MCP_INFRACTIONS_VIEW', 'auth' => '', 'cat' => array('MCP_INFRACTIONS')),
-				'issue'        => array('title' => 'MCP_INFRACTIONS_ISSUE', 'auth' => '', 'cat' => array('MCP_INFRACTIONS')),
+				'view'        => array('title' => 'MCP_VIEW_INFRACTIONS', 'auth' => '', 'cat' => array('MCP_INFRACTIONS')),
+				'issue'        => array('title' => 'MCP_ISSUE_INFRACTION', 'auth' => '', 'cat' => array('MCP_INFRACTIONS')),
 			),
 		);
 	   
