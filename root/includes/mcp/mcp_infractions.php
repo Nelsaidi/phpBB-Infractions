@@ -392,6 +392,22 @@ class mcp_infractions
 			trigger_error('NOT_AUTHORISED');
 		}
 		
+		if(!confirm_box(true))
+		{
+			$s_hidden_fields = build_hidden_fields(array(
+				'submit'		=> true,
+				'action' 		=> 'delete',
+				'infraction_id' => request_var('infraction_id', 0),
+				'user_id'		=> request_var('user_id', 0),
+				'start'			=> request_var('start', 0),
+				)
+			);
+
+			//display mode
+			confirm_box(false, 'INFRACTION_REMOVE_CONFIRM', $s_hidden_fields);
+			return;
+		}
+		
 		$infraction_id = request_var('infraction_id', 0);
 		
 		

@@ -22,14 +22,14 @@ if (!defined('IN_PHPBB'))
  *
  * @param int Optional - user ID to clear for
  */
-function clear_expired_infractions($user_id = '')
+function clear_expired_infractions($user_id = 0)
 {
 	global $auth, $db, $user, $template;
 	global $config, $phpbb_root_path, $phpEx;
 	
 	$sql = 'SELECT * FROM ' . INFRACTIONS_TABLE  . ' WHERE expire_time < ' . time() . ' AND void = 0 AND expire_time <> 0 ';
 	
-	if(is_numeric($user_id))
+	if(is_numeric($user_id) && $user_id > 1)
 	{
 		$sql .= " AND user_id = $user_id ";
 	}
@@ -41,9 +41,10 @@ function clear_expired_infractions($user_id = '')
 	
 	if($config['infractions_deleted_keep_time'] > 0)
 	{
-		$void_time = time() - $config['infractions_deleted_keep_time'] * 24 * 60 * 60;
-		$sql = 'DELTE FROM ' . INFRACTIONS_TABLE . ' WHERE expire_time < ' . $void_time . ' OR deleted_time < ' . $void_time;
-		if(is_numeric($user_id))
+		$void_time = time() - ($config['infractions_deleted_keep_time'] * 24 * 60 * 60);
+		$sql = 'DELETE FROM ' . INFRACTIONS_TABLE . " WHERE (expire_time < $void_time AND expire_time <> 0) OR (deleted_time < $void_time AND deleted_time <> 0)";
+		
+		if(is_numeric($user_id)  && $user_id > 1)
 		{
 			$sql .= " AND user_id = $user_id ";
 		}
@@ -58,7 +59,7 @@ function clear_expired_infractions($user_id = '')
 	
 	// Note - bans are dealt by the default bans, here we deal with group moves, luckily they are stored in an array
 	
-	$users = array();
+	$infraction_sums = array();
 	
 	foreach($infractions as $infraction)
 	{
@@ -68,12 +69,12 @@ function clear_expired_infractions($user_id = '')
 		// Possibly a little bit more costly possibly more efficient, 
 		if($infraction['infraction_points'] > 0)
 		{
-			$user[$infraction['userid']] += $infraction['infraction_points'];
+			$infraction_sums[$infraction['user_id']] += $infraction['infraction_points'];
 		}
 		
 	}
 	
-	foreach($user as $key => $value)
+	foreach($infraction_sums as $key => $value)
 	{
 		$sql = "UPDATE " . USERS_TABLE . " SET infraction_points = infraction_points - $value WHERE user_id = $key";
 		$db->sql_query($sql);
@@ -89,7 +90,7 @@ function clear_expired_infractions($user_id = '')
 		$sql = 'UPDATE ' . INFRACTIONS_TABLE . ' SET void = 1 WHERE expire_time < ' . time() . ' ';
 	}
 
-	if(is_numeric($user_id))
+	if(is_numeric($user_id) && $user_id > 1)
 	{
 		$sql .= " AND user_id = $user_id ";
 	}
