@@ -4,7 +4,7 @@
 * phpBB Infraction System
 * 
 * @package phpBB3
-* @copyright (c) 2011 Nelsaidi
+* @copyright (c) 2012 Nelsaidi
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 *
 */
@@ -29,10 +29,8 @@ class acp_infractions_info
 			'title'		=> 'ACP_INFRACTIONS',
 			'version'	=> '1.0',
 			'modes'		=> array(
-				// auth => 'a_infractions_manage'
-				'general'		=> array('title' => 'ACP_INFRACTION_GENERAL', 'auth' => '', 'cat' => array('ACP_INFRACTIONS')),
-				'templates'		=> array('title' => 'ACP_INFRACTION_TEMPLATES', 'auth' => '', 'cat' => array('ACP_INFRACTIONS')),
-
+				'general'		=> array('title' => 'ACP_INFRACTION_GENERAL', 'auth' => 'a_infractions_manage', 'cat' => array('ACP_INFRACTIONS')),
+				'templates'		=> array('title' => 'ACP_INFRACTION_TEMPLATES', 'auth' => 'a_infractions_manage', 'cat' => array('ACP_INFRACTIONS')),
 			),
 		);
 	}

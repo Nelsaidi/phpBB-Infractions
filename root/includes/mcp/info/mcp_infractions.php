@@ -4,7 +4,7 @@
 * phpBB Infraction System
 * 
 * @package phpBB3
-* @copyright (c) 2011 Nelsaidi
+* @copyright (c) 2012 Nelsaidi
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 *
 */
