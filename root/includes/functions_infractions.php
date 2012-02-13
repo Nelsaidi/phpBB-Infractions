@@ -55,23 +55,44 @@ function clear_expired_infractions($user_id = '')
 		// TODO - Undo groups once groups are implemented
 		// check if new groups -  iterate through infraction new groups , do group_user_del(4, 53);
 		
+		// Possibly a little bit more costly possibly more efficient, 
 		if($infraction['infraction_points'] > 0)
 		{
-			$sql = "UPDATE " . USERS_TABLE . " SET infraction_points = infraction_points - {$infraction['infraction_points']} WHERE user_id = {$infraction['user_id']}";
-			$db->sql_query($sql);
+			$user[$infraction['userid'] += $infraction['infraction_points'];
 		}
 		
 	}
 	
+	foreach($user as $key => $value)
+	{
+		$sql = "UPDATE " . USERS_TABLE . " SET infraction_points = infraction_points - $value WHERE user_id = $key";
+		$db->sql_query($sql);
+	}
 	
-	$sql = "DELETE FROM " . INFRACTIONS_TABLE . " WHERE expire_time < " . time() . ' AND void = 0 ';
+	if($config['infractions_delete_type'] == INFRACTION_DELETE_HARD)
+	{
+		// Delete it fully out of the DB
+		$sql = 'DELETE FROM ' . INFRACTIONS_TABLE . ' WHERE expire_time < ' . time() . ' AND void = 0 ';
+	}
+	else
+	{
+		$sql = 'UPDATE ' . INFRACTIONS_TABLE . ' SET void = 1 WHERE expire_time < ' . time() . ' ';
+	}
+
 	if(is_numeric($user_id))
 	{
 		$sql .= " AND user_id = $user_id ";
 	}
 	
-	$deleted = $db->sql_query($sql);
+	$db->sql_query($sql);
 	
-	return $deleted;
+	// Now purge expired soft deleted infractions
+	if($config['infractions_deleted_keep_time'] > 0)
+	{
+		$void_time = time() - $config['infractions_deleted_keep_time'] * 24 * 60 * 60;
+		$sql = 'DELTE FROM ' . INFRACTIONS_TABLE . ' WHERE expire_time < ' . $void_time . ' OR deleted_time < ' . $void_time;
+		$db->sql_query($sql);
+	}
+	
 }
 

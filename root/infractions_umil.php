@@ -80,14 +80,15 @@ $versions = array(
 			array('phpbb_infractions', array(
 				'COLUMNS' => array(
 					'infraction_id' 	=> array('INT:11', null, 'auto_increment'),
-					'void'			=> array('BOOL', 0),
+					'void'					=> array('BOOL', 0),
 					'user_id' 		=> array('INT:11', 0),
-					'post_id' 		=> array('INT:11', 0),
-					'forum_id' 		=> array('INT:11', 0),
+					'post_id' 			=> array('INT:11', 0),
+					'forum_id' 			=> array('INT:11', 0),
 					'issuer_id' 		=> array('INT:11', 0),
 					'infraction_points' => array('INT:11', 0),
 					'issue_time' 		=> array('INT:11', 0),
 					'expire_time' 		=> array('INT:11', 0),
+					'deleted_time' 		=> array('INT:11', 0),
 					'duration' 		=> array('INT:11', 0),
 					'reason' 			=> array('TEXT', ''),
 				),
@@ -103,11 +104,11 @@ $versions = array(
 			array('phpbb_infraction_templates', array(
 				'COLUMNS' => array(
 					'template_id'		=> array('INT:11', null, 'auto_increment'),
-					'position' 		=> array('USINT', 0),
-					'name' 			=> array('VCHAR', ''),
+					'position' 			=> array('USINT', 0),
+					'name' 				=> array('VCHAR', ''),
 					'reason' 			=> array('TEXT', ''),
 					'infraction_points' => array('INT:11', 0),
-					'duration' 		=> array('VCHAR', ''),
+					'duration' 			=> array('VCHAR', ''),
 				),
 
 				'PRIMARY_KEY'	=> 'template_id',
@@ -127,7 +128,7 @@ $versions = array(
 			array('infractions_installed', '1', 0),
 			array('infractions_pm_sig', '', 0),
 			array('infractions_delete_type', '1', 0),
-			array('infractions_deleted_keep_time', '90', 0),
+			array('infractions_deleted_keep_time', '0', 0),
 		),
 
 		'module_add' => array(

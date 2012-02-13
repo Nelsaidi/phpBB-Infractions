@@ -387,16 +387,13 @@ class mcp_infractions
 		global $auth, $db, $user, $template;
 		global $config, $phpbb_root_path, $phpEx;
 		
-		// Loaded via the URI
-		if($infraction_id === false)
+		if(!$auth->acl_get('m_infractions_delete'))
 		{
-			if(!$auth->acl_get('m_infractions_delete'))
-			{
-				trigger_error('NOT_AUTHORISED');
-			}
-			
-			$infraction_id = request_var('infraction_id', 0);
+			trigger_error('NOT_AUTHORISED');
 		}
+		
+		$infraction_id = request_var('infraction_id', 0);
+		
 		
 		if($infraction_id == 0 OR !is_numeric($infraction_id))
 		{
@@ -414,7 +411,6 @@ class mcp_infractions
 			trigger_error('INFRACTION_NOT_EXIST');
 		}
 
-
 		if($config['infractions_delete_type'] == INFRACTION_DELETE_HARD)
 		{
 			// Delete it fully out of the DB
@@ -423,7 +419,7 @@ class mcp_infractions
 		else
 		{
 			// Just void it, still display it - cron job will purge
-			$removal_sql = 'UPDATE ' . INFRACTIONS_TABLE . " SET void = 1 WHERE infraction_id = $infraction_id";
+			$removal_sql = 'UPDATE ' . INFRACTIONS_TABLE . ' SET void = 1 AND deleted_time = ' . time() . " WHERE infraction_id = $infraction_id";
 		}
 
 		$db->sql_query($removal_sql);
@@ -441,18 +437,15 @@ class mcp_infractions
 			$db->sql_query($sql);
 		}
 		
+
+		// Get the username for listing in log
+		$sql = 'SELECT username FROM ' . USERS_TABLE . ' WHERE user_id = ' . $user_id;
+		$result = $db->sql_query($sql);
+		$username = $db->sql_fetchfield('username', 0, $result);
+		$db->sql_freeresult($result);
 		
-		if($infraction_id !== false)
-		{
-			// Get the username for listing in log
-			$sql = 'SELECT username FROM ' . USERS_TABLE . ' WHERE user_id = ' . $user_id;
-			$result = $db->sql_query($sql);
-			$username = $db->sql_fetchfield('username', 0, $result);
-			$db->sql_freeresult($result);
-			
-			add_log('mod', 0, 0, "Deleted an infraction issued to {$username}"));		
-			redirect(append_sid($this->u_action));
-		}
+		add_log('mod', 0, 0, "Deleted an infraction issued to {$username}"));		
+		redirect(append_sid($this->u_action));
 		
 		return true;
 	}
