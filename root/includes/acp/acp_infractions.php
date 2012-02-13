@@ -263,6 +263,21 @@ class acp_infractions
 			case 'delete':
 				$template_id = request_var('template_id', 0);
 				
+				if(!confirm_box(true))
+				{
+					$s_hidden_fields = build_hidden_fields(array(
+						'submit'		=> true,
+						'action' 		=> 'delete',
+						'template_id' 	=> $template_id,
+
+						)
+					);
+
+					//display mode
+					confirm_box(false, 'INFRACTION_TEMPLATE_DELETE', $s_hidden_fields);
+					return;
+				}
+				
 				// Get position so we can rearrange list after delete
 				$sql = "SELECT position FROM " . INFRACTION_TEMPLATES_TABLE . " WHERE template_id = $template_id";
 				$result = $db->sql_query($sql);

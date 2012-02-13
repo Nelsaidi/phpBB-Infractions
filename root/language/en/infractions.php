@@ -54,7 +54,7 @@ $lang = array_merge($lang, array(
 	'INFRACTION_LOG_DELETED'		=> 'Deleted an infraction issued to %s',
 	'INFRACTION_LOG_UPDATED'		=> 'Infraction settings changed',
 	
-	'INFRACTION_DELETE_CONFIRM'		=> 'Are you sure you want to remove this infraction',
+	'INFRACTION_DELETE_CONFIRM'		=> 'Are you sure you want to remove this infraction?',
 	
 	'INFRACTION_TEMPLATE_NAME'		=> 'Template Name',
 	'INFRACTION_NO_TEMPLATES'		=> 'No templates exist',
@@ -83,6 +83,9 @@ $lang = array_merge($lang, array(
 	'INFRACTION_EXPIRE'				=> 'Expire Date',
 	'INFRACTION_TOTAL_POINTS'		=> 'Total Points',
 	'INFRACTION_NEVER'				=> 'Never',
+	
+	'INFRACTION_TEMPLATE_DELETE'	=> 'Delete Template',
+	'INFRACTION_TEMPLATE_DELETE_CONFIRM' => 'Are you sure you want to delete this template?',
 	
 	'INFRACTION_ENTER_USERNAME'		=> 'Please use this form to enter a username or use the Issue Infraction button on posts to issue for posts',
 	
