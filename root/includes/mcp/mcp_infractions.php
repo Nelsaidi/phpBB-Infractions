@@ -57,7 +57,7 @@ class mcp_infractions
 				
 				if($username != '')
 				{
-					$sql = 'SELECT user_id, FROM ' . USERS_TABLE . ' WHERE username_clean = "' . $db->sql_escape(utf8_clean_string($username)) . '"';
+					$sql = 'SELECT user_id FROM ' . USERS_TABLE . ' WHERE username_clean = "' . $db->sql_escape(utf8_clean_string($username)) . '"';
 					$result = $db->sql_query($sql);
 					$user_row = $db->sql_fetchrow($result);	
 					$db->sql_freeresult($result);

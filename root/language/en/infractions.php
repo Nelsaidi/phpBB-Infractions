@@ -45,8 +45,10 @@ $lang = array_merge($lang, array(
 	
 	'INFRACTION_PM_SIG'				=> 'PM signature',
 	'INFRACTION_PM_SIG_EXPLAIN' 	=> 'Signature of PM sent to users who recieve infractions, use %s to show the username of the user issuing',
+	'INFRACTION_DELETE_KEEP_TIME'	=> 'Time to keep soft deleted infractions',
 	'INFRACTION_DELETE_TYPE'		=> 'Hard delete',
 	'INFRACTION_DELETE_TYPE_EXPLAIN'=> 'If you want to keep infractions in the database for hisorical purposes select no',
+	
 	
 	'INFRACTION_LOG_ISSUED'			=> 'Issued an infraction to %s',
 	'INFRACTION_LOG_DELETED'		=> 'Deleted an infraction issued to %s',
@@ -97,14 +99,14 @@ $lang = array_merge($lang, array(
 	
 	'INFRACTION_PM_SUBJECT'			=> 'You have recieved an infraction',
 	// %1$s > Username, %2$s > Reason , %3$s > Infraction Points, %4$s >  Total Infraction Points, %5$s > Signature
-	'INFRACTION_PM_BODY'			=>    "Dear %1$s, \n" 
+	'INFRACTION_PM_BODY'			=>    "Dear %1\$s, \n" 
 										. "You have been issued an infraction with the following details: \n"
 										. "  \n"
-										. "Reason: %2$s \n"
-										. "Infraction Points: %3$s\n"
+										. "Reason: %2\$s \n"
+										. "Infraction Points: %3\$s\n"
 										. "  \n"
-										. "Your total infraction points is now %4$s  \n"
-										. "%5$s",
+										. "Your total infraction points is now %4\$s  \n"
+										. "%5\$s",
 
 ));
 	

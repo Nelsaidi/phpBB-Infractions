@@ -59,9 +59,10 @@ class acp_infractions
 		$display_vars = array(
 					'title'	=> 'ACP_INFRACTION_GENERAL',
 					'vars'	=> array(
-						'legend1'				=> 'ACP_INFRACTION_GENERAL',
-						'infractions_delete_type'	=> array('lang' => 'INFRACTION_DELETE_TYPE', 'validate' => 'bool',	'type' => 'radio:yes_no', 'explain' => true),						
-						'infractions_pm_sig'	=> array('lang' => 'INFRACTION_PM_SIG', 'validate' => 'string',	'type' => 'textarea:4:40', 'explain' => true),
+						'legend1'						=> 'ACP_INFRACTION_GENERAL',
+						'infractions_delete_type'		=> array('lang' => 'INFRACTION_DELETE_TYPE', 'validate' => 'bool',	'type' => 'radio:yes_no', 'explain' => true),		
+						'infractions_deleted_keep_time'	=> array('lang' => 'INFRACTION_DELETE_KEEP_TIME', 'validate' => 'int',	'type' => 'text:40:40', 'explain' => false),						
+						'infractions_pm_sig'			=> array('lang' => 'INFRACTION_PM_SIG', 'validate' => 'string',	'type' => 'textarea:4:40', 'explain' => true),
 					),
 				);
 

@@ -107,7 +107,7 @@ $versions = array(
 					'name' 			=> array('VCHAR', ''),
 					'reason' 			=> array('TEXT', ''),
 					'infraction_points' => array('INT:11', 0),
-					'duration' 		=> array('INT:11', 0),
+					'duration' 		=> array('VCHAR', ''),
 				),
 
 				'PRIMARY_KEY'	=> 'template_id',
@@ -125,9 +125,7 @@ $versions = array(
 
 		'config_add' => array(
 			array('infractions_installed', '1', 0),
-			
 			array('infractions_pm_sig', '', 0),
-			
 			array('infractions_delete_type', '1', 0),
 			array('infractions_deleted_keep_time', '90', 0),
 		),

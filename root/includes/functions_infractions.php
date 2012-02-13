@@ -63,11 +63,6 @@ function clear_expired_infractions($user_id = '')
 		
 	}
 	
-	// TODO
-	// Check config - time to keep infractions for in table for
-	// Issue - now that they are variable, we have to do this each time?
-	// Or does another script handle that? a cron job perhaps
-	// Yep, that sounds best - we just set a flag
 	
 	$sql = "DELETE FROM " . INFRACTIONS_TABLE . " WHERE expire_time < " . time() . ' AND void = 0 ';
 	if(is_numeric($user_id))
@@ -79,37 +74,4 @@ function clear_expired_infractions($user_id = '')
 	
 	return $deleted;
 }
-
-/**
- * Converts a stringed duration into seconds
- * String in the form of  y for years, m for months, w for weeks, d for days, h for hours. 
- * e.g, 3m or 1d 12h or 1m 3d 6h 
- *
- * @param $duration the stringed duration
- */
-function nel_duration_parser($duration)
-{
-	
-
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
