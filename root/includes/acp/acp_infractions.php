@@ -286,22 +286,24 @@ class acp_infractions
 
 					//display mode
 					confirm_box(false, 'INFRACTION_TEMPLATE_DELETE', $s_hidden_fields);
-					return;
 				}
+				else
+				{
 				
-				// Get position so we can rearrange list after delete
-				$sql = "SELECT position FROM " . INFRACTION_TEMPLATES_TABLE . " WHERE template_id = $template_id";
-				$result = $db->sql_query($sql);
-				$current_position = (int) $db->sql_fetchfield('position');
-				unset($sql);
-				
-				// Remove template from DB
-				$sql = "DELETE FROM " . INFRACTION_TEMPLATES_TABLE . " WHERE template_id = $template_id";
-				$db->sql_query($sql);
-				
-				// Rearrange list
-				$sql = "UPDATE " . INFRACTION_TEMPLATES_TABLE . " SET position = position - 1 WHERE position > $current_position";
-				$db->sql_query($sql);
+					// Get position so we can rearrange list after delete
+					$sql = "SELECT position FROM " . INFRACTION_TEMPLATES_TABLE . " WHERE template_id = $template_id";
+					$result = $db->sql_query($sql);
+					$current_position = (int) $db->sql_fetchfield('position');
+					unset($sql);
+					
+					// Remove template from DB
+					$sql = "DELETE FROM " . INFRACTION_TEMPLATES_TABLE . " WHERE template_id = $template_id";
+					$db->sql_query($sql);
+					
+					// Rearrange list
+					$sql = "UPDATE " . INFRACTION_TEMPLATES_TABLE . " SET position = position - 1 WHERE position > $current_position";
+					$db->sql_query($sql);
+				}
 				
 			break;
 			

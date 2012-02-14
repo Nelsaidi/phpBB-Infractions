@@ -83,6 +83,7 @@ $lang = array_merge($lang, array(
 	'INFRACTION_EXPIRE'				=> 'Expire Date',
 	'INFRACTION_TOTAL_POINTS'		=> 'Total Points',
 	'INFRACTION_NEVER'				=> 'Never',
+	'L_INFRACTION_T_DELETE'			=> 'Delete',
 	
 	'INFRACTION_TEMPLATE_DELETE'	=> 'Delete Template',
 	'INFRACTION_TEMPLATE_DELETE_CONFIRM' => 'Are you sure you want to delete this template?',
