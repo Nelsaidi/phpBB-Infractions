@@ -91,7 +91,7 @@ function clear_expired_infractions($user_id = 0)
 		$db->sql_query($sql);
 	}
 	
-	if($config['infractions_delete_type'] == INFRACTION_DELETE_HARD)
+	if($config['infractions_hard_delete'] == 1)
 	{
 		// Delete it fully out of the DB
 		$sql = 'DELETE FROM ' . INFRACTIONS_TABLE . ' WHERE expire_time < ' . time() . ' AND void = 0 ';

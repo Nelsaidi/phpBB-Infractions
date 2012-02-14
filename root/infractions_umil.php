@@ -139,7 +139,7 @@ $versions = array(
 		'config_add' => array(
 			array('infractions_installed', '1', 0),
 			array('infractions_pm_sig', '', 0),
-			array('infractions_delete_type', '1', 0),
+			array('infractions_hard_delete', '1', 0),
 			array('infractions_deleted_keep_time', '0', 0),
 		),
 

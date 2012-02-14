@@ -43,12 +43,6 @@
 				<action type="after-add">define('INFRACTIONS_TABLE',			$table_prefix . 'infractions');
 define('INFRACTION_TEMPLATES_TABLE', 	$table_prefix . 'infraction_templates');</action>
 			</edit>
-			
-			<edit>
-				<find>define('VOTE_CONVERTED', 127);</find>
-				<action type="after-add"><![CDATA[define('INFRACTION_DELETE_HARD', 1);
-define('INFRACTION_DELETE_SOFT', 0);]]></action>
-			</edit>
 		</open>
 		
 		<open src="styles/prosilver/template/viewtopic_body.html">

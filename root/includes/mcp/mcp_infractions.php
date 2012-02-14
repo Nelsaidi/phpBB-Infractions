@@ -443,7 +443,7 @@ class mcp_infractions
 			trigger_error('INFRACTION_NOT_EXIST');
 		}
 		
-		if($config['infractions_delete_type'] == INFRACTION_DELETE_HARD)
+		if($config['infractions_hard_delete'] == 1)
 		{
 			// Delete it fully out of the DB
 			$removal_sql = 'DELETE FROM ' . INFRACTIONS_TABLE . " WHERE infraction_id = $infraction_id";
