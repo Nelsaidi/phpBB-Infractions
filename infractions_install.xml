@@ -30,6 +30,8 @@
 	<action-group>
 	
 		<php-installer>infractions_umil.php</php-installer>
+		
+		<diy-instructions>You may want to disable the warnings module entirely from the ACP</diy-instructions>
 	
 		<copy>
 			<file from="root/*.*" to="*.*" />
@@ -43,7 +45,7 @@ define('INFRACTION_TEMPLATES_TABLE', 	$table_prefix . 'infraction_templates');</
 			</edit>
 			
 			<edit>
-				<find><![CDATA[define('VOTE_CONVERTED', 127);]]></find>
+				<find>define('VOTE_CONVERTED', 127);</find>
 				<action type="after-add"><![CDATA[define('INFRACTION_DELETE_HARD', 1);
 define('INFRACTION_DELETE_SOFT', 0);]]></action>
 			</edit>
