@@ -71,10 +71,10 @@ $versions = array(
 	'1.0' => array(
 
 		'permission_add' => array(
-			array('m_infractions_issue', 1),
-			array('m_infractions', 1),
-			array('m_infractions_delete', 1),
-			array('a_infractions_manage', 1),
+			array('m_infractions_issue', true),
+			array('m_infractions', true),
+			array('m_infractions_delete', true),
+			array('a_infractions_manage', true),
 		),
 
 		'permission_set' => array(

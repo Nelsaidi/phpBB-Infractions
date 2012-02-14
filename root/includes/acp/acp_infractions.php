@@ -267,9 +267,8 @@ class acp_infractions
 				}
 				
 				$template->assign_var('S_TEMPLATE_FORM', 1);
-				
-			
-				
+				return;
+
 			break;
 			
 			case 'delete':
@@ -303,9 +302,6 @@ class acp_infractions
 				// Rearrange list
 				$sql = "UPDATE " . INFRACTION_TEMPLATES_TABLE . " SET position = position - 1 WHERE position > $current_position";
 				$db->sql_query($sql);
-				
-				redirect($this->u_action);
-				
 				
 			break;
 			
@@ -347,40 +343,34 @@ class acp_infractions
 					$sql = 'UPDATE ' . INFRACTION_TEMPLATES_TABLE . ' SET position = ' . ($current_position + 1) . ' WHERE template_id = ' . $template_id;
 					$db->sql_query($sql);
 				}
-				
-				
-
-			// No break - continue on displaying the templates
-			
-			default:
-				// Index
-				$sql = 'SELECT * FROM ' . INFRACTION_TEMPLATES_TABLE . ' ORDER BY position ASC';
-				$result = $db->sql_query($sql);
-				$infraction_templates = $db->sql_fetchrowset($result);
-				$db->sql_freeresult($result);
-				
-				$template->assign_var('TEMPLATE_ADD', append_sid($this->u_action, 'action=add'));
-				
-				if(sizeof($infraction_templates) == 0)
-				{
-					$template->assign_var('S_NO_TEMPLATES', 1);
-				}
-				else
-				{
-					foreach($infraction_templates as $infraction_template)
-					{
-						$template->assign_block_vars('templates', array(
-							'TEMPLATE_ID'			=>  $infraction_template['template_id'],
-							'NAME'				=>  $infraction_template['name'],
-							'REASON'				=>  $infraction_template['reason'],
-							'INFRACTION_POINTS'		=>  $infraction_template['infraction_points'],
-							'DURATION'			=>  $infraction_template['duration'],
-							
-						));
-					}
-				}
-
 		}
+		
+			// Index
+			$sql = 'SELECT * FROM ' . INFRACTION_TEMPLATES_TABLE . ' ORDER BY position ASC';
+			$result = $db->sql_query($sql);
+			$infraction_templates = $db->sql_fetchrowset($result);
+			$db->sql_freeresult($result);
+			
+			$template->assign_var('TEMPLATE_ADD', append_sid($this->u_action, 'action=add'));
+			
+			if(sizeof($infraction_templates) == 0)
+			{
+				$template->assign_var('S_NO_TEMPLATES', 1);
+			}
+			else
+			{
+				foreach($infraction_templates as $infraction_template)
+				{
+					$template->assign_block_vars('templates', array(
+						'TEMPLATE_ID'			=>  $infraction_template['template_id'],
+						'NAME'				=>  $infraction_template['name'],
+						'REASON'				=>  $infraction_template['reason'],
+						'INFRACTION_POINTS'		=>  $infraction_template['infraction_points'],
+						'DURATION'			=>  $infraction_template['duration'],
+						
+					));
+				}
+			}
 	
 	}
 	
