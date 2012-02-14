@@ -68,8 +68,6 @@
 		<th>{L_INFRACTION_POINTS}</th>
 		<th>{L_INFRACTION_DURATION}</th>
 		<th></th>
-		<th></th>
-		<th></th>
 	</thead>
 	<!-- BEGIN templates -->
 	<tr>
@@ -77,9 +75,7 @@
 		<td>{templates.REASON}</td>
 		<td>{templates.INFRACTION_POINTS}</td>
 		<td>{templates.DURATION}</td>
-		<td><a href="{U_ACTION}&action=moveup&template_id={templates.TEMPLATE_ID}">{L_INFRACTION_MOVE_UP}</a> </td>
-		<td><a href="{U_ACTION}&action=movedown&template_id={templates.TEMPLATE_ID}">{L_INFRACTION_MOVE_DOWN}</a> </td>
-		<td><a href="{U_ACTION}&action=delete&template_id={templates.TEMPLATE_ID}">{L_INFRACTION_T_DELETE}</a> </td>
+		<td><a href="{U_ACTION}&action=moveup&template_id={templates.TEMPLATE_ID}">{ICON_MOVE_UP}</a> <a href="{U_ACTION}&action=movedown&template_id={templates.TEMPLATE_ID}">{ICON_MOVE_DOWN}</a> <a href="{U_ACTION}&action=delete&template_id={templates.TEMPLATE_ID}">{ICON_DELETE}</a></td>
 	</tr>
 	<!-- END templates -->
 </table>

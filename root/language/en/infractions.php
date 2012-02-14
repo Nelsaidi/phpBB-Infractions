@@ -45,9 +45,10 @@ $lang = array_merge($lang, array(
 	
 	'INFRACTION_PM_SIG'				=> 'PM signature',
 	'INFRACTION_PM_SIG_EXPLAIN' 	=> 'Signature of PM sent to users who recieve infractions, use %s to show the username of the user issuing',
-	'INFRACTION_DELETE_KEEP_TIME'	=> 'Time to keep soft deleted infractions',
+	'INFRACTION_DELETE_KEEP_TIME'	=> 'Time to keep removed infractions (days)',
+	'INFRACTION_DELETE_KEEP_TIME_EXPLAIN' => 'Applicable only when above is set to No, enter 0 to keep for ever',
 	'INFRACTION_DELETE_TYPE'		=> 'Hard delete',
-	'INFRACTION_DELETE_TYPE_EXPLAIN'=> 'If you want to keep infractions in the database for hisorical purposes select no',
+	'INFRACTION_DELETE_TYPE_EXPLAIN'=> 'If you want to keep infractions in the database for hisorical purposes select No',
 	
 	
 	'INFRACTION_LOG_ISSUED'			=> 'Issued an infraction to %s',

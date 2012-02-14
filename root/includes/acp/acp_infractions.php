@@ -73,7 +73,7 @@ class acp_infractions
 					'vars'	=> array(
 						'legend1'						=> 'ACP_INFRACTION_GENERAL',
 						'infractions_hard_delete'		=> array('lang' => 'INFRACTION_DELETE_TYPE', 'validate' => 'bool',	'type' => 'radio:yes_no', 'explain' => true),		
-						'infractions_deleted_keep_time'	=> array('lang' => 'INFRACTION_DELETE_KEEP_TIME', 'validate' => 'int',	'type' => 'text:40:40', 'explain' => false),						
+						'infractions_deleted_keep_time'	=> array('lang' => 'INFRACTION_DELETE_KEEP_TIME', 'validate' => 'int',	'type' => 'text:40:40', 'explain' => true),						
 						'infractions_pm_sig'			=> array('lang' => 'INFRACTION_PM_SIG', 'validate' => 'string',	'type' => 'textarea:4:40', 'explain' => true),
 					),
 				);
@@ -206,7 +206,6 @@ class acp_infractions
 		switch($action)
 		{
 			case 'add':
-			case 'edit':
 				if(isset($_POST['submit']))
 				{
 					$name = request_var('name', '');
@@ -236,33 +235,19 @@ class acp_infractions
 						trigger_error('INFRACTION_NO_REASON_NAME');
 					}
 					
-					if($action == 'add')
-					{
-						// Determine position
-						$sql = "SELECT MAX(position) as max_position FROM " . INFRACTION_TEMPLATES_TABLE;
-						$db->sql_query($sql);
-						$position = $db->sql_fetchfield('max_position') + 1;
-							
-						$sql = 'INSERT INTO ' . INFRACTION_TEMPLATES_TABLE . ' (name, reason, duration, infraction_points, position) VALUES ("' . 
-							$db->sql_escape($name) . '", "'.
-							$db->sql_escape($reason) . '", "'. 
-							$db->sql_escape($duration) . "\", $infraction_points, $position ) ";
-							
-						$db->sql_query($sql);
-					
-					}
-					else
-					{
-						$sql = '';
-					}
+					// Determine position
+					$sql = "SELECT MAX(position) as max_position FROM " . INFRACTION_TEMPLATES_TABLE;
+					$db->sql_query($sql);
+					$position = $db->sql_fetchfield('max_position') + 1;
+						
+					$sql = 'INSERT INTO ' . INFRACTION_TEMPLATES_TABLE . ' (name, reason, duration, infraction_points, position) VALUES ("' . 
+						$db->sql_escape($name) . '", "'.
+						$db->sql_escape($reason) . '", "'. 
+						$db->sql_escape($duration) . "\", $infraction_points, $position ) ";
+						
+					$db->sql_query($sql);
 					
 					redirect($this->u_action);
-				}
-				
-				if($action == 'edit')
-				{
-					// Preload data into form
-					$template_id = request_var('template_id', 0);
 				}
 				
 				$template->assign_var('S_TEMPLATE_FORM', 1);

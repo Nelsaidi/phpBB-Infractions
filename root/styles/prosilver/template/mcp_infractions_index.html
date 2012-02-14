@@ -1,40 +1,25 @@
 <!-- INCLUDE mcp_header.html -->
-<h2>Infractions Index</h2>
+<h2>{L_INFRACTIONS}</h2>
 <div class="panel">
 	<div class="inner"><span class="corners-top"><span></span></span>
 	<!-- Not in iff deliberately, get user links and that - maybe future has more stuff -->
-	<h3>Search User</h3>
+	<h3>{L_FIND_USERNAME}</h3>
 	<form method="post" id="mcp" action="{U_POST_ACTION}">
-	
 		<fieldset>
 			<label for="username">{L_SELECT_USER}: </label> 
 			<input name="username" id="username" type="text" class="" size="20" />
 			<a href="{U_FIND_USERNAME}" onclick="find_username(this.href); return false;">{L_FIND_USERNAME}</a>
 			<input type="submit" name="submit" value="{L_SUBMIT}" class="button1" />
 		</fieldset>
-		
 		{S_FORM_TOKEN}
 	</form>
-	
-	<!-- IF S_INFRACTION_DELETED eq 1 -->
-		<div class="inner" style="background: yellow"><span class="corners-top"><span></span></span>
-		Infraction deleted
-		<span class="corners-bottom"><span></span></span></div>
-	<!-- ENDIF -->
-	
 	<!-- IF S_INFRACTIONS_NONE eq 1 -->
 	<p>No infractions available</p>
-	
 	<!-- ELSE -->
 	<!-- TODO a form for filtering options? -->	
-	<h3>Recent Infractions</h3>
+	<h3>{L_INFRACTIONS}</h3>
 	<!-- INCLUDE infractions_view_table.html -->
-	
 	<!-- ENDIF -->
-	
-	<!-- TODO Pagination here! -->
 	<span class="corners-bottom"><span></span></span></div>
 </div>
-
-
 <!-- INCLUDE mcp_footer.html -->
