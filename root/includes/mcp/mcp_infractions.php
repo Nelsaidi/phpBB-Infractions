@@ -197,17 +197,18 @@ class mcp_infractions
 
 			$template->assign_vars(array(
 				// 'U_POST_ACTION'	=> $this->u_action,
+				'U_VIEW_INFRACTIONS'	=> append_sid("{$phpbb_root_path}mcp.$phpEx", 'i=infractions&amp;mode=view&amp;user_id=' . $user_id),
 
-				'RANK_TITLE'		=> $rank_title,
-				'JOINED'			=> $user->format_date($user_row['user_regdate']),
-				'POSTS'			=> $user_row['user_posts'],
+				'RANK_TITLE'			=> $rank_title,
+				'JOINED'				=> $user->format_date($user_row['user_regdate']),
+				'POSTS'					=> $user_row['user_posts'],
 				'INFRACTION_POINTS'		=> $user_row['infraction_points'] ,
 
-				'USERNAME'		=> $user_row['username'],
-				'USER_PROFILE'		=> get_username_string('full', $user_row['user_id'], $user_row['username'], $user_row['user_colour']),
+				'USERNAME'				=> $user_row['username'],
+				'USER_PROFILE'			=> get_username_string('full', $user_row['user_id'], $user_row['username'], $user_row['user_colour']),
 
-				'AVATAR_IMG'		=> $avatar_img,
-				'RANK_IMG'		=> $rank_img,
+				'AVATAR_IMG'			=> $avatar_img,
+				'RANK_IMG'				=> $rank_img,
 			));
 
 			// Is the infraction for a post?
@@ -377,6 +378,12 @@ class mcp_infractions
 		{
 			redirect(append_sid("{$phpbb_root_path}posting.php", "mode=edit&f={$infraction['forum_id']}&p={$infraction['post_id']}"));
 		}
+		
+		// Redirec to topic after issuing an infraction
+		if(isset($post_row))
+		{
+			redirect(append_sid("{$phpbb_root_path}viewtopic.php", "p={$infraction['post_id']}"));
+		}		
 		
 		// Redirect to infractions page for instantness
 		redirect(append_sid("{$phpbb_root_path}mcp.$phpEx", "i=infractions"));
@@ -552,6 +559,8 @@ class mcp_infractions
 		$avatar_img = get_user_avatar($user_row['user_avatar'], $user_row['user_avatar_type'], $user_row['user_avatar_width'], $user_row['user_avatar_height']);
 
 		$template->assign_vars(array(
+			'U_ISSUE_INFRACTION'	=> append_sid("{$phpbb_root_path}mcp.$phpEx", 'i=infractions&amp;mode=issue&amp;user_id=' . $user_id),
+			'U_VIEW_INFRACTIONS'	=> append_sid("{$phpbb_root_path}mcp.$phpEx", 'i=infractions&amp;mode=view&amp;user_id=' . $user_id),
 
 			'RANK_TITLE'		=> $rank_title,
 			'JOINED'			=> $user->format_date($user_row['user_regdate']),
