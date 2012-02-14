@@ -308,13 +308,13 @@ class mcp_infractions
 		}
 		
 		// Load custom time
-		if($infraction['duration'] == -1)
+		if($infraction['duration'] == '-1')
 		{
 			$infraction['duration'] = request_var('duration_custom', '');
 
 		}
 		
-		if($infraction['duration'] == 0)
+		if($infraction['duration'] == '0')
 		{
 			// Permanent 
 			$infraction['expire_time'] = 0;

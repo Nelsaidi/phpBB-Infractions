@@ -211,30 +211,29 @@ class acp_infractions
 				{
 					$name = request_var('name', '');
 					$reason = request_var('reason', '');
-					$duration = request_var('duration', 0);
+					$duration = request_var('duration', '');
 					$infraction_points = request_var('infraction_points', 0);
 					
-					if($duration == -1)
+					if($duration == '-1')
 					{
-						$duration = request_var('duration_custom', '');
-						
-						// Test duratio nis valid
-						$test_date = strtotime('+' . $duration);
-						if($duration === false)
-						{
-							trigger_error('INFRACTION_INVALID_DATE');
-						}
-						
+						$duration = request_var('duration_custom', '');						
+					}
+
+					// Test duratio nis valid
+					$test_date = strtotime('+' . $duration);
+					if($test_date === false)
+					{
+						trigger_error('INFRACTION_INVALID_DATE');
 					}
 					
 					if($infraction_points < 0)
 					{
-						trigger_error('bad infraction points');
+						trigger_error('INFRACTION_NEGATIVE_POINTS');
 					}
 					
 					if(empty($name) || empty($reason))
 					{
-						trigger_error('empty name or reason');
+						trigger_error('INFRACTION_NO_REASON_NAME');
 					}
 					
 					if($action == 'add')
