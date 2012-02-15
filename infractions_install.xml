@@ -31,7 +31,7 @@
 	
 		<php-installer>infractions_umil.php</php-installer>
 		
-		<diy-instructions>You may want to disable the warnings module entirely from the ACP</diy-instructions>
+		<diy-instructions lang="en">You may want to disable the warnings module entirely from the ACP</diy-instructions>
 	
 		<copy>
 			<file from="root/*.*" to="*.*" />
