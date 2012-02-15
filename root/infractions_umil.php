@@ -92,8 +92,8 @@ $versions = array(
 			array('phpbb_infractions', array(
 				'COLUMNS' => array(
 					'infraction_id' 	=> array('INT:11', null, 'auto_increment'),
-					'void'					=> array('BOOL', 0),
-					'user_id' 		=> array('INT:11', 0),
+					'void'				=> array('BOOL', 0),
+					'user_id' 			=> array('INT:11', 0),
 					'post_id' 			=> array('INT:11', 0),
 					'forum_id' 			=> array('INT:11', 0),
 					'issuer_id' 		=> array('INT:11', 0),
@@ -101,7 +101,7 @@ $versions = array(
 					'issue_time' 		=> array('INT:11', 0),
 					'expire_time' 		=> array('INT:11', 0),
 					'deleted_time' 		=> array('INT:11', 0),
-					'duration' 		=> array('INT:11', 0),
+					'duration' 			=> array('INT:11', 0),
 					'reason' 			=> array('TEXT', ''),
 				),
 

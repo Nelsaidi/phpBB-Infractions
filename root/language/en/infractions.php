@@ -86,6 +86,7 @@ $lang = array_merge($lang, array(
 	'INFRACTION_NEVER'				=> 'Never',
 	'INFRACTION_T_DELETE'			=> 'Delete',
 	'INFRACTION_NO_REASON_NAME'		=> 'Reason or Name cannot be blank',
+	'INFRACTION_EDIT'				=> 'Edit Infraction',
 	
 	'INFRACTION_TEMPLATE_DELETE'	=> 'Delete Template',
 	'INFRACTION_TEMPLATE_DELETE_CONFIRM' => 'Are you sure you want to delete this template?',

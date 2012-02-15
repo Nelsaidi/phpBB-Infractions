@@ -206,6 +206,34 @@ class acp_infractions
 		switch($action)
 		{
 			case 'add':
+			case 'edit':
+				if($action == 'edit')
+				{
+					$template_id = request_var('template_id', 0);
+
+					$sql = 'SELECT * FROM ' . INFRACTION_TEMPLATES_TABLE . " WHERE template_id = $template_id";
+					$result = $db->sql_query($sql);
+					$template_row = $db->sql_fetchrow($result);
+					$db->sql_freeresult($result);
+					
+					if(sizeof($template_row) == 0)
+					{
+						trigger_error('INFRACTION_OOPS');
+					}
+
+					$template->assign_vars(array(
+						'S_EDIT_TEMPLATE'		=> 1,
+						'NAME'					=> $template_row['name'],
+						'INFRACTION_POINTS'		=> $template_row['infraction_points'],
+						'DURATION'				=> $template_row['duration'],
+						'REASON'				=> $template_row['reason']
+					));
+				}
+				else
+				{
+					$template->assign_var('S_EDIT_TEMPLATE', 0);
+				}
+				
 				if(isset($_POST['submit']))
 				{
 					$name = request_var('name', '');
@@ -236,14 +264,31 @@ class acp_infractions
 					}
 					
 					// Determine position
-					$sql = "SELECT MAX(position) as max_position FROM " . INFRACTION_TEMPLATES_TABLE;
-					$db->sql_query($sql);
-					$position = $db->sql_fetchfield('max_position') + 1;
-						
-					$sql = 'INSERT INTO ' . INFRACTION_TEMPLATES_TABLE . ' (name, reason, duration, infraction_points, position) VALUES ("' . 
-						$db->sql_escape($name) . '", "'.
-						$db->sql_escape($reason) . '", "'. 
-						$db->sql_escape($duration) . "\", $infraction_points, $position ) ";
+					if($action == 'edit')
+					{
+						$position = $template_row['position'];
+					}
+					else
+					{
+						$sql = "SELECT MAX(position) as max_position FROM " . INFRACTION_TEMPLATES_TABLE;
+						$db->sql_query($sql);
+						$position = $db->sql_fetchfield('max_position') + 1;
+					}
+					
+					if($action == 'add')
+					{
+						$sql = 'INSERT INTO ' . INFRACTION_TEMPLATES_TABLE . ' (name, reason, duration, infraction_points, position) VALUES ("' . 
+							$db->sql_escape($name) . '", "'.
+							$db->sql_escape($reason) . '", "'. 
+							$db->sql_escape($duration) . "\", $infraction_points, $position ) ";
+					}
+					else
+					{
+						$sql = 'UPDATE ' . INFRACTION_TEMPLATES_TABLE . ' SET name = "' . $db->sql_escape($name)
+							. '", reason =  "' . $db->sql_escape($reason)
+							. '", duration = "' . $db->sql_escape($duration)
+							. "\", infraction_points = $infraction_points, position = $position WHERE template_id = $template_id";
+					}
 						
 					$db->sql_query($sql);
 					
@@ -349,10 +394,10 @@ class acp_infractions
 				{
 					$template->assign_block_vars('templates', array(
 						'TEMPLATE_ID'			=>  $infraction_template['template_id'],
-						'NAME'				=>  $infraction_template['name'],
+						'NAME'					=>  $infraction_template['name'],
 						'REASON'				=>  $infraction_template['reason'],
 						'INFRACTION_POINTS'		=>  $infraction_template['infraction_points'],
-						'DURATION'			=>  $infraction_template['duration'],
+						'DURATION'				=>  $infraction_template['duration'],
 						
 					));
 				}
