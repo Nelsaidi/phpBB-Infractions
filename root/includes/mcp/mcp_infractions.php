@@ -219,9 +219,9 @@ class mcp_infractions
 				
 				if ($post_row['bbcode_bitfield'])
 				{
-					if(class_exists(bbcode))
+					if(!class_exists('bbcode'))
 					{
-						include_once($phpbb_root_path . 'includes/bbcode.' . $phpEx);
+						include($phpbb_root_path . 'includes/bbcode.' . $phpEx);
 					}
 					
 					$bbcode = new bbcode($post_row['bbcode_bitfield']);

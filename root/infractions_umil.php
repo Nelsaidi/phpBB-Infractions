@@ -133,7 +133,7 @@ $versions = array(
 		),
 
 		'table_column_add' => array(
-			array('phpbb_users', 'infraction_points', array('TINT:11', '0')),
+			array('phpbb_users', 'infraction_points', array('INT:11', '0')),
 		),
 
 		'config_add' => array(
