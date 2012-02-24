@@ -38,6 +38,11 @@ function clear_expired_infractions($user_id = 0)
 	global $auth, $db, $user, $template;
 	global $config, $phpbb_root_path, $phpEx;
 	
+	// No infrations for anonymous
+	if($user_id === 1)
+	{
+		return;
+	}
 	$sql = 'SELECT * FROM ' . INFRACTIONS_TABLE  . ' WHERE expire_time < ' . time() . ' AND void = 0 AND expire_time <> 0 ';
 	
 	if(is_numeric($user_id) && $user_id > 0)
