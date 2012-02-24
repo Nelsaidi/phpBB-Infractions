@@ -297,7 +297,7 @@ class mcp_infractions
 			$infraction = array_merge($infraction, array(
 				'infraction_points'		=> request_var('infraction_points', 0),
 				'duration'				=> request_var('duration', ''),
-				'reason'				=> request_var('reason', ''),
+				'reason'				=> utf8_normalize_nfc(request_var('reason', '', true)),
 			));
 		}
 		
@@ -382,7 +382,7 @@ class mcp_infractions
 		// Redirec to topic after issuing an infraction
 		if(isset($post_row))
 		{
-			redirect(append_sid("{$phpbb_root_path}viewtopic.php", "p={$infraction['post_id']}"));
+			redirect(append_sid("{$phpbb_root_path}viewtopic.php", "p={$infraction['post_id']}#p{$infraction['post_id']}"));
 		}		
 		
 		// Redirect to infractions page for instantness
@@ -751,9 +751,6 @@ class mcp_infractions
 	
 	/**
 	 * A function to get total row count for last infraction view select
-	 * NOTE this way its optional if pagination is required, - needs a better way though?
-	 *
-	 * Not used yet, need to figure it out
 	 */
 	public function last_get_infraction_total()
 	{

@@ -102,7 +102,7 @@ $versions = array(
 					'expire_time' 		=> array('INT:11', 0),
 					'deleted_time' 		=> array('INT:11', 0),
 					'duration' 			=> array('INT:11', 0),
-					'reason' 			=> array('TEXT', ''),
+					'reason' 			=> array('TEXT_UNI', ''),
 				),
 
 				'PRIMARY_KEY'	=> 'infraction_id',

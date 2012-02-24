@@ -19,12 +19,12 @@
 			<dl>
 			<dt><label for="duration">{L_INFRACTION_DURATION}</label></dt>
 				<dd><select name="duration" onchange="if(this.value==-1){document.getElementById('duration_custom').style.display = 'block';}else{document.getElementById('duration_custom').style.display='none';}">
-				<option value="3 days">3 {L_INFRACTION_DAYS}</option>
-				<option value="1 week">1 {L_INFRACTION_WEEK}</option>
-				<option value="1 month" <!-- IF S_EDIT_TEMPLATE eq 0 --> checked="checked" <!-- ENDIF -->>1 {L_INFRACTION_MONTH}</option>
-				<option value="3 months">3 {L_INFRACTION_MONTHS}</option>
-				<option value="0">{L_INFRACTION_PERMANENT}</option>
-				<option value="-1" <!-- IF S_EDIT_TEMPLATE eq 1 -->checked="checked"<!-- ENDIF -->>{L_INFRACTION_DURATION_CUSTOM}</option>
+				<option value="3 days" >3 {L_INFRACTION_DAYS}</option>
+				<option value="1 week" >1 {L_INFRACTION_WEEK}</option>
+				<option value="1 month" >1 {L_INFRACTION_MONTH}</option>
+				<option value="3 months" >3 {L_INFRACTION_MONTHS}</option>
+				<option value="0" >{L_INFRACTION_PERMANENT}</option>
+				<option value="-1" <!-- IF S_EDIT_TEMPLATE eq 1 -->selected="selected"<!-- ENDIF -->>{L_INFRACTION_DURATION_CUSTOM}</option>
 				
 			</select>
 		</dl>

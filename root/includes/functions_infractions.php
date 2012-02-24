@@ -40,7 +40,7 @@ function clear_expired_infractions($user_id = 0)
 	
 	$sql = 'SELECT * FROM ' . INFRACTIONS_TABLE  . ' WHERE expire_time < ' . time() . ' AND void = 0 AND expire_time <> 0 ';
 	
-	if(is_numeric($user_id) && $user_id > 1)
+	if(is_numeric($user_id) && $user_id > 0)
 	{
 		$sql .= " AND user_id = $user_id ";
 	}
@@ -80,6 +80,12 @@ function clear_expired_infractions($user_id = 0)
 		// Possibly a little bit more costly possibly more efficient, 
 		if($infraction['infraction_points'] > 0)
 		{
+		
+			if(!isset($infraction_sums[$infraction['user_id']]))
+			{
+				$infraction_sums[$infraction['user_id']] = 0;
+			}
+			
 			$infraction_sums[$infraction['user_id']] += $infraction['infraction_points'];
 		}
 		

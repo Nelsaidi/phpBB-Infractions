@@ -236,8 +236,8 @@ class acp_infractions
 				
 				if(isset($_POST['submit']))
 				{
-					$name = request_var('name', '');
-					$reason = request_var('reason', '');
+					$name = utf8_normalize_nfc(request_var('name', '', true));
+					$reason = utf8_normalize_nfc(request_var('reason', '', true));
 					$duration = request_var('duration', '');
 					$infraction_points = request_var('infraction_points', 0);
 					
