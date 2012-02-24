@@ -75,8 +75,7 @@ $versions = array(
 			array('phpbb_infraction_templates', 'name', array('TEXT_UNI', '')),
 			array('phpbb_infraction_templates', 'reason', array('TEXT_UNI', '')),
 		),
-	)
-			
+	),
 	
 	'1.1' => array(
 
