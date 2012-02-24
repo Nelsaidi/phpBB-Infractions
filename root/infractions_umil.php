@@ -68,7 +68,15 @@ $language_file = 'infractions';
 * The version numbering must otherwise be compatible with the version_compare function - http://php.net/manual/en/function.version-compare.php
 */
 $versions = array(
-	'1.2' => array(), 
+
+	'1.2' => array(
+		'table_column_update'	=> array(
+			array('phpbb_infractions', 'reason', array('TEXT_UNI', '')), 
+			array('phpbb_infraction_templates', 'name', array('TEXT_UNI', '')),
+			array('phpbb_infraction_templates', 'reason', array('TEXT_UNI', '')),
+		),
+	)
+			
 	
 	'1.1' => array(
 
