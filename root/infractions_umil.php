@@ -68,6 +68,8 @@ $language_file = 'infractions';
 * The version numbering must otherwise be compatible with the version_compare function - http://php.net/manual/en/function.version-compare.php
 */
 $versions = array(
+	'1.2' => array(), 
+	
 	'1.1' => array(
 
 		'permission_add' => array(
