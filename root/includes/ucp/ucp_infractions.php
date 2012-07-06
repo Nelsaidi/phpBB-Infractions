@@ -66,7 +66,7 @@ class ucp_infractions
 				'ISSUE_TIME'	 	=> $user->format_date($infraction['issue_time']),
 				'EXPIRE_TIME'	 	=> (($infraction['expire_time'] == 0) ? $user->lang['INFRACTION_NEVER'] : $user->format_date($infraction['expire_time'])),
 
-				'REASON'			=> (!empty($infraction['topic_id']) ? "<strong><a href=\"./viewtopic.php?t={$infraction['topic_id']}\">{$infraction['post_subject']}</a></strong><br/>{$infraction['reason']}" : $infraction['reason']),
+				'REASON'			=> (!empty($infraction['topic_id']) ? "<strong><a href=\"./viewtopic.php?p={$infraction['post_id']}#p{$infraction['post_id']}\">{$infraction['post_subject']}</a></strong><br/>{$infraction['reason']}" : $infraction['reason']),
 				'POINTS_ISSUED'		=> $infraction['infraction_points'],
 
 			));
