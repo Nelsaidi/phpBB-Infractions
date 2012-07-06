@@ -48,7 +48,7 @@ $lang = array_merge($lang, array(
 	'INFRACTION_DELETE_KEEP_TIME'	=> 'Time to keep removed infractions (days)',
 	'INFRACTION_DELETE_KEEP_TIME_EXPLAIN' => 'Applicable only when above is set to No, enter 0 to keep for ever',
 	'INFRACTION_DELETE_TYPE'		=> 'Hard delete',
-	'INFRACTION_DELETE_TYPE_EXPLAIN'=> 'If you want to keep infractions in the database for hisorical purposes select No',
+	'INFRACTION_DELETE_TYPE_EXPLAIN'=> 'If you want to keep infractions in the database for historical purposes select No',
 	
 	
 	'INFRACTION_LOG_ISSUED'			=> 'Issued an infraction to %s',
@@ -88,6 +88,10 @@ $lang = array_merge($lang, array(
 	'INFRACTION_NO_REASON_NAME'		=> 'Reason or Name cannot be blank',
 	'INFRACTION_EDIT'				=> 'Edit Infraction',
 	
+	'INFRACTIONS_NONE_FOUND'		=> 'No infractions found',
+	'INFRACTION_EDIT_POST'			=> 'Edit post',
+	'INFRACTIONS_FOR'				=> 'Infractions for ',
+	
 	'INFRACTION_TEMPLATE_DELETE'	=> 'Delete Template',
 	'INFRACTION_TEMPLATE_DELETE_CONFIRM' => 'Are you sure you want to delete this template?',
 	
@@ -124,6 +128,9 @@ $lang = array_merge($lang, array(
 	'acl_m_infractions'   		 => array('lang' => 'Can view infractions', 'cat' => 'misc'),
 	'acl_m_infractions_issue'    => array('lang' => 'Can issue infractions', 'cat' => 'misc'),
 	'acl_m_infractions_delete'    => array('lang' => 'Can delete infractions', 'cat' => 'misc'),
+	
+	
+	'acl_a_infractions_manage'    => array('lang' => 'Can manage infraction settings including templates', 'cat' => 'misc'),
 	
 ));
 

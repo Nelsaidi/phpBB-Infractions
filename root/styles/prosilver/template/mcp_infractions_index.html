@@ -10,11 +10,11 @@
 			<input name="username" id="username" type="text" class="" size="20" />
 			<a href="{U_FIND_USERNAME}" onclick="find_username(this.href); return false;">{L_FIND_USERNAME}</a>
 			<input type="submit" name="submit" value="{L_SUBMIT}" class="button1" />
+			{S_FORM_TOKEN}
 		</fieldset>
-		{S_FORM_TOKEN}
 	</form>
 	<!-- IF S_INFRACTIONS_NONE eq 1 -->
-	<p>No infractions available</p>
+	<p>{L_INFRACTIONS_NONE_FOUND}</p>
 	<!-- ELSE -->
 	<!-- TODO a form for filtering options? -->	
 	<h3>{L_INFRACTIONS}</h3>

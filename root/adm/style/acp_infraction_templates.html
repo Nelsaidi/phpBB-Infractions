@@ -1,7 +1,7 @@
 <!-- INCLUDE overall_header.html -->
 <!-- IF S_TEMPLATE_FORM -->
 <h1><!-- IF S_EDIT_TEMPLATE eq 1 -->{L_INFRACTION_EDIT}<!-- ELSE -->{L_ACP_INFRACTION_ADD_TEMPLATE}<!-- ENDIF --></h1>
-<form id="" method="post" action="{TEMPLATE_ADD}">
+<form id="infraction_template" method="post" action="{TEMPLATE_ADD}">
 <fieldset>
 		<dl>
 			<dt><label for="ban">{L_INFRACTION_TEMPLATE_NAME}:</label></dt>
@@ -14,19 +14,18 @@
 			
 		</dl>
 		
-	
-		</dl>
-			<dl>
+		<dl>
 			<dt><label for="duration">{L_INFRACTION_DURATION}</label></dt>
-				<dd><select name="duration" onchange="if(this.value==-1){document.getElementById('duration_custom').style.display = 'block';}else{document.getElementById('duration_custom').style.display='none';}">
-				<option value="3 days" >3 {L_INFRACTION_DAYS}</option>
-				<option value="1 week" >1 {L_INFRACTION_WEEK}</option>
-				<option value="1 month" >1 {L_INFRACTION_MONTH}</option>
-				<option value="3 months" >3 {L_INFRACTION_MONTHS}</option>
-				<option value="0" >{L_INFRACTION_PERMANENT}</option>
-				<option value="-1" <!-- IF S_EDIT_TEMPLATE eq 1 -->selected="selected"<!-- ENDIF -->>{L_INFRACTION_DURATION_CUSTOM}</option>
-				
-			</select>
+				<dd>
+					<select name="duration" onchange="if(this.value==-1){document.getElementById('duration_custom').style.display = 'block';}else{document.getElementById('duration_custom').style.display='none';}">
+						<option value="3 days" >3 {L_INFRACTION_DAYS}</option>
+						<option value="1 week" >1 {L_INFRACTION_WEEK}</option>
+						<option value="1 month" >1 {L_INFRACTION_MONTH}</option>
+						<option value="3 months" >3 {L_INFRACTION_MONTHS}</option>
+						<option value="0" >{L_INFRACTION_PERMANENT}</option>
+						<option value="-1" <!-- IF S_EDIT_TEMPLATE eq 1 -->selected="selected"<!-- ENDIF -->>{L_INFRACTION_DURATION_CUSTOM}</option>
+					</select>
+				</dd>
 		</dl>
 		
 		<dl id="duration_custom" style="<!-- IF S_EDIT_TEMPLATE eq 1 --> display:block; <!-- ELSE --> display: none;  <!-- ENDIF -->">
@@ -44,7 +43,7 @@
 		
 		<dl>
 			<dt><label for="infraction_points">{L_INFRACTION_POINTS}</label></dt>
-			<dd><input type="text" maxlength="255" class="text medium" name="infraction_points" <!-- IF S_EDIT_TEMPLATE eq 1 --> value="{INFRACTION_POINTS}" <!-- ENDIF -->></dd>
+			<dd><input type="text" maxlength="255" class="text medium" name="infraction_points" <!-- IF S_EDIT_TEMPLATE eq 1 --> value="{INFRACTION_POINTS}" <!-- ENDIF --> /></dd>
 			
 		</dl>
 		
@@ -52,7 +51,7 @@
 		
 		<fieldset class="submit-buttons">
 			<input type="reset" value="{L_RESET}" name="reset" class="button2" />&nbsp; 
-			<input type="submit" name="submit" value="Submit" class="button1" />
+			<input type="submit" name="submit" value="{L_SUBMiT}" class="button1" />
 			{S_FORM_TOKEN}
 		</fieldset>
 </fieldset>
@@ -77,7 +76,7 @@
 		<td>{templates.REASON}</td>
 		<td>{templates.INFRACTION_POINTS}</td>
 		<td>{templates.DURATION}</td>
-		<td><a href="{U_ACTION}&action=moveup&template_id={templates.TEMPLATE_ID}">{ICON_MOVE_UP}</a> <a href="{U_ACTION}&action=movedown&template_id={templates.TEMPLATE_ID}">{ICON_MOVE_DOWN}</a> <a href="{U_ACTION}&action=edit&template_id={templates.TEMPLATE_ID}">{ICON_EDIT}</a> <a href="{U_ACTION}&action=delete&template_id={templates.TEMPLATE_ID}">{ICON_DELETE}</a></td>
+		<td><a href="{U_ACTION}&amp;action=moveup&amp;template_id={templates.TEMPLATE_ID}">{ICON_MOVE_UP}</a> <a href="{U_ACTION}&amp;action=movedown&amp;template_id={templates.TEMPLATE_ID}">{ICON_MOVE_DOWN}</a> <a href="{U_ACTION}&amp;action=edit&amp;template_id={templates.TEMPLATE_ID}">{ICON_EDIT}</a> <a href="{U_ACTION}&amp;action=delete&amp;template_id={templates.TEMPLATE_ID}">{ICON_DELETE}</a></td>
 	</tr>
 	<!-- END templates -->
 </table>

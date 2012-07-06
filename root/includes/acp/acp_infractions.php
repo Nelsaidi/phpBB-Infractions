@@ -36,7 +36,7 @@ class acp_infractions
 	public function main($id, $mode)
 	{
 		global $auth, $db, $user, $template;
-		global $config, $phpbb_root_path, $phpEx;
+		global $config, $phpbb_root_path, $phpEx, $phpbb_admin_path;
 		
 		add_form_key('acp_infractions');
 		$template->assign_var('U_ACTION', $this->u_action);
@@ -60,7 +60,7 @@ class acp_infractions
 	public function infraction_general()
 	{
 		global $auth, $db, $user, $template;
-		global $config, $phpbb_root_path, $phpEx;
+		global $config, $phpbb_root_path, $phpEx, $phpbb_admin_path;
 		
 		$action	= request_var('action', '');
 		$submit = (isset($_POST['submit']) || isset($_POST['allow_quick_reply_enable'])) ? true : false;
@@ -198,7 +198,7 @@ class acp_infractions
 	public function infraction_templates()
 	{
 		global $auth, $db, $user, $template;
-		global $config, $phpbb_root_path, $phpEx;
+		global $config, $phpbb_root_path, $phpEx, $phpbb_admin_path;
 		global $infractions;
 		
 		$action = request_var('action', '');		
@@ -246,7 +246,7 @@ class acp_infractions
 						$duration = request_var('duration_custom', '');						
 					}
 
-					// Test duratio nis valid
+					// Test duration is valid
 					$test_date = strtotime('+' . $duration);
 					if($test_date === false)
 					{

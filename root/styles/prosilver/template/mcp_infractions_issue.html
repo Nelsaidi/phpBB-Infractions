@@ -68,7 +68,7 @@
 
 	<fieldset>
 	<dl>
-		<dt><label for="edit_post">Edit Post</label></dt>
+		<dt><label for="edit_post">{L_INFRACTION_EDIT_POST}</label></dt>
 		<dd><input type="checkbox" name="edit_post" value="1" /></dd>
 	</dl>
 	</fieldset>
@@ -108,15 +108,16 @@
 		
 		<dl>
 			<dt><label for="duration">{L_INFRACTION_DURATION}</label></dt>
-				<dd><select name="duration" onchange="if(this.value==-1){document.getElementById('duration_custom').style.display = 'block';}else{document.getElementById('duration_custom').style.display='none';}">
-				<option value="3 day">3 {L_INFRACTION_DAYS}</option>
-				<option value="1 week">1 {L_INFRACTION_WEEK}</option>
-				<option value="1 month" checked="checked">1 {L_INFRACTION_MONTH}</option>
-				<option value="3 months">3 {L_INFRACTION_MONTHS}</option>
-				<option value="0">{L_INFRACTION_PERMANENT}</option>
-				<option value="-1">{L_INFRACTION_DURATION_CUSTOM}</option>
-				
-			</select>
+				<dd>
+					<select name="duration" onchange="if(this.value==-1){document.getElementById('duration_custom').style.display = 'block';}else{document.getElementById('duration_custom').style.display='none';}">
+						<option value="3 day">3 {L_INFRACTION_DAYS}</option>
+						<option value="1 week">1 {L_INFRACTION_WEEK}</option>
+						<option value="1 month" selected="selected">1 {L_INFRACTION_MONTH}</option>
+						<option value="3 months">3 {L_INFRACTION_MONTHS}</option>
+						<option value="0">{L_INFRACTION_PERMANENT}</option>
+						<option value="-1">{L_INFRACTION_DURATION_CUSTOM}</option>
+					</select>
+				</dd>
 		</dl>
 		
 		<dl id="duration_custom" style="display: none;">

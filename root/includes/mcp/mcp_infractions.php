@@ -75,11 +75,10 @@ class mcp_infractions
 					
 					if(!isset($user_row['user_id']))
 					{
-						trigger_error('user does not exist');
+						trigger_error('INFRACTION_USER_NOT_EXIST');
 					}
 					
 					redirect(append_sid("{$phpbb_root_path}mcp.$phpEx", "i=infractions&mode=view&user_id={$user_row['user_id']}"));
-					exit;
 				}		
 				
 				if($user_id > 0)
@@ -158,7 +157,7 @@ class mcp_infractions
 				trigger_error($post_row);
 			}
 			
-			$user_id = $post_row['poster_id'];
+			$user_id = (int) $post_row['poster_id'];
 		}
 		
 		$sql = 'SELECT * FROM ' . USERS_TABLE . " WHERE user_id = $user_id";
@@ -384,7 +383,7 @@ class mcp_infractions
 		// User chose to edit post, redirect
 		if(request_var('edit_post', 0) == 1)
 		{
-			redirect(append_sid("{$phpbb_root_path}posting.php", "mode=edit&f={$infraction['forum_id']}&p={$infraction['post_id']}"));
+			redirect(append_sid("{$phpbb_root_path}posting.php", "mode=edit&amp;f={$infraction['forum_id']}&amp;p={$infraction['post_id']}"));
 		}
 		
 		// Redirec to topic after issuing an infraction
@@ -437,7 +436,7 @@ class mcp_infractions
 		$infraction_id = request_var('infraction_id', 0);
 		
 		
-		if($infraction_id == 0 OR !is_numeric($infraction_id))
+		if($infraction_id == 0 || !is_numeric($infraction_id))
 		{
 			trigger_error('INFRACTION_NOT_EXIST');
 		}
@@ -448,7 +447,7 @@ class mcp_infractions
 		$infraction = $db->sql_fetchrow($result);
 		$db->sql_freeresult($result);
 		
-		if(sizeof($infraction) == 0)
+		if(empty($infraction))
 		{
 			trigger_error('INFRACTION_NOT_EXIST');
 		}
@@ -473,8 +472,8 @@ class mcp_infractions
 		
 		// Infraction now doesnt exist, lets reverse its actions
 
-		$user_id = $infraction['user_id']; // Lets not trust the DB too
-		$infraction_points = $infraction['infraction_points']; 
+		$user_id = (int) $infraction['user_id']; // Lets not trust the DB too
+		$infraction_points = (int) $infraction['infraction_points']; 
 
 		// Remove added points from the user
 		if($infraction_points > 0)
