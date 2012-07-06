@@ -42,6 +42,7 @@ $lang = array_merge($lang, array(
 	'ACP_INFRACTION_ADD_TEMPLATE'	=> 'Add Template',
 	'ACP_INFRACTION_GENERAL'		=> 'General Settings',
 	'ACP_INFRACTION_NO_TEMPLATES'	=> 'There are no templates, use the link above to add one',
+	'INFRACTION_TEMPLATE_EDIT'	=> 'Edit Template',
 	
 	'INFRACTION_PM_SIG'				=> 'PM signature',
 	'INFRACTION_PM_SIG_EXPLAIN' 	=> 'Signature of PM sent to users who recieve infractions, use %s to show the username of the user issuing',

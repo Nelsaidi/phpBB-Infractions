@@ -1,6 +1,6 @@
 <!-- INCLUDE overall_header.html -->
 <!-- IF S_TEMPLATE_FORM -->
-<h1><!-- IF S_EDIT_TEMPLATE eq 1 -->{L_INFRACTION_EDIT}<!-- ELSE -->{L_ACP_INFRACTION_ADD_TEMPLATE}<!-- ENDIF --></h1>
+<h1><!-- IF S_EDIT_TEMPLATE eq 1 -->{L_INFRACTION_TEMPLATE_EDIT}<!-- ELSE -->{L_ACP_INFRACTION_ADD_TEMPLATE}<!-- ENDIF --></h1>
 <form id="infraction_template" method="post" action="{TEMPLATE_ADD}">
 <fieldset>
 		<dl>
@@ -51,7 +51,7 @@
 		
 		<fieldset class="submit-buttons">
 			<input type="reset" value="{L_RESET}" name="reset" class="button2" />&nbsp; 
-			<input type="submit" name="submit" value="{L_SUBMiT}" class="button1" />
+			<input type="submit" name="submit" value="{L_SUBMIT}" class="button1" />
 			{S_FORM_TOKEN}
 		</fieldset>
 </fieldset>
@@ -76,7 +76,7 @@
 		<td>{templates.REASON}</td>
 		<td>{templates.INFRACTION_POINTS}</td>
 		<td>{templates.DURATION}</td>
-		<td><a href="{U_ACTION}&amp;action=moveup&amp;template_id={templates.TEMPLATE_ID}">{ICON_MOVE_UP}</a> <a href="{U_ACTION}&amp;action=movedown&amp;template_id={templates.TEMPLATE_ID}">{ICON_MOVE_DOWN}</a> <a href="{U_ACTION}&amp;action=edit&amp;template_id={templates.TEMPLATE_ID}">{ICON_EDIT}</a> <a href="{U_ACTION}&amp;action=delete&amp;template_id={templates.TEMPLATE_ID}">{ICON_DELETE}</a></td>
+		<td style="width: 100px;"><a href="{U_ACTION}&amp;action=moveup&amp;template_id={templates.TEMPLATE_ID}">{ICON_MOVE_UP}</a> <a href="{U_ACTION}&amp;action=movedown&amp;template_id={templates.TEMPLATE_ID}">{ICON_MOVE_DOWN}</a> <a href="{U_ACTION}&amp;action=edit&amp;template_id={templates.TEMPLATE_ID}">{ICON_EDIT}</a> <a href="{U_ACTION}&amp;action=delete&amp;template_id={templates.TEMPLATE_ID}">{ICON_DELETE}</a></td>
 	</tr>
 	<!-- END templates -->
 </table>
