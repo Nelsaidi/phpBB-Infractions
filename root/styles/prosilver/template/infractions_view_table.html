@@ -1,5 +1,11 @@
  <!-- This is a general one for the table of infractions ?? -->
  <div>
+	 <!-- IF PAGINATION -->
+	<ul class="linklist">
+			<li class="rightside pagination">{TOTAL_INFRACTIONS} &bull; <!-- IF PAGINATION --><a href="#" onclick="jumpto(); return false;" title="{L_JUMP_TO_PAGE}">{PAGE_NUMBER}</a> &bull; <span>{PAGINATION}</span><!-- ELSE -->{PAGE_NUMBER}<!-- ENDIF --></li>
+	</ul>
+	 <!-- ENDIF -->
+	 
 	 <table class="table1">
 		<thead>
 			<tr>
@@ -28,9 +34,9 @@
 	 </table>
 	 
 	 <!-- IF PAGINATION -->
-	 <ul class="linklist">
+	<ul class="linklist">
 			<li class="rightside pagination">{TOTAL_INFRACTIONS} &bull; <!-- IF PAGINATION --><a href="#" onclick="jumpto(); return false;" title="{L_JUMP_TO_PAGE}">{PAGE_NUMBER}</a> &bull; <span>{PAGINATION}</span><!-- ELSE -->{PAGE_NUMBER}<!-- ENDIF --></li>
-		</ul>
+	</ul>
 	 <!-- ENDIF -->
 
  </div>

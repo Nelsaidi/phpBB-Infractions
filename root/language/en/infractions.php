@@ -111,8 +111,8 @@ $lang = array_merge($lang, array(
 	'INFRACTION_PM_BODY'			=>    "Dear %1\$s, \n" 
 										. "You have been issued an infraction with the following details: \n"
 										. "  \n"
-										. "Reason: %2\$s \n"
-										. "Infraction Points: %3\$s\n"
+										. "[b]Reason[/b]: %2\$s \n"
+										. "[b]Infraction Points[/b]: %3\$s\n"
 										. "  \n"
 										. "Your total infraction points is now %4\$s  \n"
 										. "%5\$s",

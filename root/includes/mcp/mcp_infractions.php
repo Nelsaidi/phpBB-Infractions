@@ -349,9 +349,17 @@ class mcp_infractions
 		include($phpbb_root_path . 'language/' . basename($user_row['user_lang']) . "/infractions.$phpEx");
 
 		$message_parser = new parse_message();
+		
+		// Append post topic
+		if(!empty($infraction['post_id']))
+		{
+			$infraction['reason'] = "[url=" . generate_board_url () . "/viewtopic.php?p={$infraction['post_id']}#p{$infraction['post_id']}][b]{$post_row['post_subject']}[/b][/url]\n{$infraction['reason']}";
+		}
+		
+		
 		$message_parser->message = sprintf($lang['INFRACTION_PM_BODY'], $user_row['username'], $infraction['reason'], $infraction['infraction_points'], $infraction['infraction_points'] + $user_row['infraction_points'],  sprintf($config['infractions_pm_sig'], $user->data['username']));
 		
-		$message_parser->parse(true, true, true, false, false, true, true);
+		$message_parser->parse(true, true, false, false, false, true, true);
 
 		$pm_data = array(
 			'from_user_id'			=> $user->data['user_id'],
@@ -360,7 +368,7 @@ class mcp_infractions
 			'enable_sig'			=> false,
 			'enable_bbcode'			=> true,
 			'enable_smilies'		=> true,
-			'enable_urls'			=> false,
+			'enable_urls'			=> true,
 			'icon_id'				=> 0,
 			'bbcode_bitfield'		=> $message_parser->bbcode_bitfield,
 			'bbcode_uid'			=> $message_parser->bbcode_uid,
@@ -497,13 +505,26 @@ class mcp_infractions
 		global $config, $phpbb_root_path, $phpEx;
 		
 		clear_expired_infractions();
-		$infractions_list = $this->get_infractions();
+		
+		$start = request_var('start', 0);
+		
+		$infractions_list = $this->get_infractions(25, $start, 0, 0, false, true);
 		
 		if(!$infractions_list)
 		{
 			$template->assign_var('S_INFRACTIONS_NONE', 1);
 			return;
 		}
+		
+		$total_infractions = $this->last_get_infraction_total();	
+		$pagination_url = append_sid($phpbb_root_path . 'mcp.' . $phpEx, array('i' => 'infractions', 'mode' => 'view'));
+
+		
+		$template->assign_vars(array(
+			'PAGINATION'      		  => generate_pagination($pagination_url, $total_infractions, 25, $start),
+			'PAGE_NUMBER'    		  => on_page($total_infractions, 25, $start),
+			'TOTAL_INFRACTIONS'       => $total_infractions . ' Infractions',
+		));		
 		
 		foreach($infractions_list as $infraction)
 		{			
@@ -518,7 +539,7 @@ class mcp_infractions
 				'USER_PROFILE'		=> get_username_string('full', $infraction['user_id'], $infraction['username'], $infraction['user_colour']),
 				
 				'USER_ID'			=> $infraction['user_id'],
-				'REASON'			=> (!empty($infraction['topic_id']) ? "<strong><a href=\"./viewtopic.php?t={$infraction['topic_id']}\">{$infraction['post_subject']}</a></strong><br/>{$infraction['reason']}" : $infraction['reason']),
+				'REASON'			=> (!empty($infraction['topic_id']) ? "<strong><a href=\"./viewtopic.php?p={$infraction['post_id']}#p{$infraction['post_id']}\">{$infraction['post_subject']}</a></strong><br/>{$infraction['reason']}" : $infraction['reason']),
 				'POINTS_ISSUED'		=> $infraction['infraction_points'],
 				'TOTAL_POINTS'		=> $infraction['total_points'],
 				'ACTIONS'			=> '',
@@ -598,7 +619,7 @@ class mcp_infractions
 				'USER_PROFILE'		=> get_username_string('full', $infraction['user_id'], $infraction['username'], $infraction['user_colour']),
 				
 				'USER_ID'			=> $infraction['user_id'],
-				'REASON'			=> (!empty($infraction['topic_id']) ? "<strong><a href=\"./viewtopic.php?t={$infraction['topic_id']}\">{$infraction['post_subject']}</a></strong><br/>{$infraction['reason']}" : $infraction['reason']),
+				'REASON'			=> (!empty($infraction['topic_id']) ? "<strong><a href=\"./viewtopic.php?p={$infraction['post_id']}#p{$infraction['post_id']}\">{$infraction['post_subject']}</a></strong><br/>{$infraction['reason']}" : $infraction['reason']),
 				'POINTS_ISSUED'		=> $infraction['infraction_points'],
 				'TOTAL_POINTS'		=> $infraction['total_points'],
 				
